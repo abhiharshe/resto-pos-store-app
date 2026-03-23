@@ -1,0 +1,166 @@
+@startuml
+' Simple ERD for Franchise POS MVP
+hide circle
+
+entity "User" as User {
+  * id : uuid
+  --
+  name : string
+  email : string
+  phone : string
+  passwordHash : string
+  roleId : uuid
+  storeId : uuid? 
+  status : string
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity "Role" as Role {
+  * id : uuid
+  --
+  name : string
+  permissions : json
+}
+
+entity "Store" as Store {
+  * id : uuid
+  --
+  name : string
+  address : string
+  lat : decimal
+  lng : decimal
+  timezone : string
+  contactPhone : string
+  settings : json
+  isActive : boolean
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity "Category" as Category {
+  * id : uuid
+  --
+  name : string
+  parentCategoryId : uuid?
+  position : int
+  isActive : boolean
+}
+
+entity "MenuItem" as MenuItem {
+  * id : uuid
+  --
+  name : string
+  description : text
+  sku : string
+  basePrice : int
+  categoryId : uuid
+  imageUrl : string
+  taxExempt : boolean
+  isActive : boolean
+  createdAt : datetime
+  updatedAt : datetime
+}
+
+entity "MenuItemVariation" as Variation {
+  * id : uuid
+  --
+  menuItemId : uuid
+  name : string
+  priceDelta : int
+  serves : int
+  isDefault : boolean
+}
+
+entity "Modifier" as Modifier {
+  * id : uuid
+  --
+  name : string
+  type : string
+  required : boolean
+  options : json
+}
+
+entity "StoreMenuAvailability" as SMA {
+  * id : uuid
+  --
+  storeId : uuid
+  menuItemId : uuid
+  isAvailable : boolean
+  disabledBy : uuid
+  disabledAt : datetime
+  note : text
+}
+
+entity "Order" as Order {
+  * id : uuid
+  --
+  storeId : uuid
+  source : string
+  tableNo : string?
+  customerName : string?
+  customerPhone : string?
+  subtotal : int
+  taxes : int
+  discounts : int
+  deliveryCharge : int
+  total : int
+  paymentStatus : string
+  orderStatus : string
+  createdBy : uuid
+  placedAt : datetime
+  updatedAt : datetime
+}
+
+entity "OrderItem" as OrderItem {
+  * id : uuid
+  --
+  orderId : uuid
+  menuItemId : uuid
+  variationId : uuid?
+  qty : int
+  unitPrice : int
+  lineTotal : int
+  modifiers : json
+  status : string
+  notes : text
+}
+
+entity "Payment" as Payment {
+  * id : uuid
+  --
+  orderId : uuid
+  method : string
+  amount : int
+  currency : string
+  status : string
+  txnRef : string
+  processedAt : datetime
+}
+
+entity "AuditLog" as AuditLog {
+  * id : uuid
+  --
+  entityType : string
+  entityId : uuid
+  action : string
+  actorUserId : uuid
+  data : json
+  createdAt : datetime
+}
+
+' Relationships
+Role ||--o{ User : "has"
+Store ||--o{ User : "employs"
+Category ||--o{ MenuItem : "contains"
+MenuItem ||--o{ Variation : "has"
+MenuItem }o--o{ Modifier : "uses"
+Store ||--o{ SMA : "availability"
+MenuItem ||--o{ SMA : "availability"
+Store ||--o{ Order : "receives"
+Order ||--o{ OrderItem : "contains"
+Order ||--o{ Payment : "has"
+AuditLog ||--o{ MenuItem : "tracks"
+AuditLog ||--o{ SMA : "tracks"
+
+@enduml

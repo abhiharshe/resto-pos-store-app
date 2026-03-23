@@ -1,0 +1,362 @@
+openapi: 3.0.3
+info:
+  title: restopos Franchise POS (MVP) API
+  version: 1.0.0
+  description: Minimal API contract for Menu, Orders, and Store Menu Availability
+servers:
+  - url: /api
+paths:
+  /menu:
+    get:
+      summary: List menu items
+      parameters:
+        - name: categoryId
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: active
+          in: query
+          schema: { type: boolean }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MenuItem'
+  /menu/{menuItemId}:
+    get:
+      summary: Get menu item
+      parameters:
+        - name: menuItemId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+        '404':
+          description: Not found
+    patch:
+      summary: Update menu item (Main Admin)
+      parameters:
+        - name: menuItemId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MenuItemInput'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuItem'
+  /stores/{storeId}/menu-availability:
+    get:
+      summary: Get menu availability for store
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StoreMenuAvailability'
+  /stores/{storeId}/menu-availability/{menuItemId}:
+    put:
+      summary: Set menu availability for a store (Admin/StoreAdmin)
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema: { type: string }
+        - name: menuItemId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isAvailable: { type: boolean }
+                note: { type: string }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StoreMenuAvailability'
+  /orders:
+    post:
+      summary: Create order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Validation error
+        '409':
+          description: Item unavailable or conflict
+  /orders/{orderId}:
+    get:
+      summary: Get order
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+  /orders/{orderId}/items/{orderItemId}/status:
+    patch:
+      summary: Update order item status (KitchenChef)
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema: { type: string }
+        - name: orderItemId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [PENDING,PREPARING,READY,SERVED,CANCELLED]
+      responses:
+        '200': { description: Updated }
+  /orders/{orderId}/payments:
+    post:
+      summary: Add payment to order
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /stores/{storeId}/delivery-charge:
+    get:
+      summary: Delivery charge calculator (reference only)
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema: { type: string }
+        - name: lat
+          in: query
+          required: true
+          schema: { type: number }
+        - name: lng
+          in: query
+          required: true
+          schema: { type: number }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  distanceKm: { type: number }
+                  chargeCents: { type: integer }
+
+components:
+  schemas:
+    MenuItem:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        basePrice: { type: integer }
+        categoryId: { type: string }
+        isActive: { type: boolean }
+        variations:
+          type: array
+          items: { $ref: '#/components/schemas/MenuItemVariation' }
+        modifiers:
+          type: array
+          items: { $ref: '#/components/schemas/Modifier' }
+    MenuItemVariation:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        priceDelta: { type: integer }
+        serves: { type: integer }
+        isDefault: { type: boolean }
+    Modifier:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        type: { type: string }
+        required: { type: boolean }
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              label: { type: string }
+              priceDelta: { type: integer }
+    StoreMenuAvailability:
+      type: object
+      properties:
+        storeId: { type: string }
+        menuItemId: { type: string }
+        isAvailable: { type: boolean }
+        disabledBy: { type: string }
+        disabledAt: { type: string, format: date-time }
+        note: { type: string }
+    OrderCreate:
+      type: object
+      required: [storeId, source, items]
+      properties:
+        storeId: { type: string }
+        source:
+          type: string
+          enum: [DINEIN,TAKEAWAY,DRIVE_THROUGH,PHONE]
+        tableNo: { type: string }
+        customerName: { type: string }
+        customerPhone: { type: string }
+        items:
+          type: array
+          items:
+            type: object
+            required: [menuItemId, qty]
+            properties:
+              menuItemId: { type: string }
+              variationId: { type: string }
+              modifiers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    modifierId: { type: string }
+                    optionId: { type: string }
+                    qty: { type: integer }
+              qty: { type: integer }
+        payments:
+          type: array
+          items: { $ref: '#/components/schemas/PaymentInput' }
+    Order:
+      type: object
+      properties:
+        id: { type: string }
+        storeId: { type: string }
+        source: { type: string }
+        tableNo: { type: string }
+        customerName: { type: string }
+        subtotal: { type: integer }
+        taxes: { type: integer }
+        discounts: { type: integer }
+        deliveryCharge: { type: integer }
+        total: { type: integer }
+        paymentStatus: { type: string }
+        orderStatus: { type: string }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/OrderItem' }
+        placedAt: { type: string, format: date-time }
+    OrderItem:
+      type: object
+      properties:
+        id: { type: string }
+        menuItemId: { type: string }
+        variationId: { type: string }
+        qty: { type: integer }
+        unitPrice: { type: integer }
+        lineTotal: { type: integer }
+        modifiers: { type: array, items: {} }
+        status: { type: string }
+    PaymentInput:
+      type: object
+      required: [method, amount]
+      properties:
+        method: { type: string }
+        amount: { type: integer }
+        txnRef: { type: string }
+    Payment:
+      type: object
+      properties:
+        id: { type: string }
+        orderId: { type: string }
+        method: { type: string }
+        amount: { type: integer }
+        currency: { type: string }
+        status: { type: string }
+        txnRef: { type: string }
+        processedAt: { type: string, format: date-time }
+
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
