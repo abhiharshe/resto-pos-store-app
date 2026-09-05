@@ -4,6 +4,7 @@ import { DataTable } from '../../../components/common/DataTable';
 import { Button } from '../../../components/common/Button';
 import { StatusBadge } from '../../../components/common/StatusBadge';
 import { useStores } from '../../stores/api/storesApi';
+import { useAppSelector } from '../../../app/hooks';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '../../../components/common/IconButton';
@@ -14,12 +15,14 @@ import { toast } from 'react-hot-toast';
 import Datepicker from "react-tailwindcss-datepicker";
 
 const OrderList = () => {
+    const { user } = useAppSelector((state) => state.auth);
+    const isSuperAdmin = user?.role === 'SUPER_ADMIN';
     const { data: stores } = useStores();
     const navigate = useNavigate();
 
-    // Default to the first store if available
+    // Default: Super admin can see all stores (store_id: undefined), non-super admin defaults to their store
     const [filters, setFilters] = useState<OrderFilters>({
-        store_id: undefined,
+        store_id: isSuperAdmin ? undefined : user?.store_id || undefined,
         status: '',
         order_type: '',
         payment_method: '',
@@ -39,20 +42,12 @@ const OrderList = () => {
         setDateValue(newValue);
         setFilters((prev: any) => ({
             ...prev,
-            from_date: moment(newValue.startDate).format('YYYY-MM-DD 00:00:00'),
-            to_date: moment(newValue.endDate).format('YYYY-MM-DD 23:59:59'),
+            from_date: newValue?.startDate ? moment(newValue.startDate).format('YYYY-MM-DD 00:00:00') : '',
+            to_date: newValue?.endDate ? moment(newValue.endDate).format('YYYY-MM-DD 23:59:59') : '',
         }));
     };
 
-    // Update store_id once stores are loaded if not already set
-    useMemo(() => {
-        if (stores && stores.length > 0 && !filters.store_id) {
-            setFilters((prev: any) => ({ ...prev, store_id: stores[0].id }));
-        }
-    }, [stores]);
-
     const { data: orders, isLoading } = useOrders(filters);
-    // const updateStatusMutation = useUpdateOrderStatus();
     const deleteOrderMutation = useDeleteOrder();
 
     const selectedStore = stores?.find(s => s.id === filters.store_id);
@@ -63,7 +58,7 @@ const OrderList = () => {
 
     const clearFilters = () => {
         setFilters({
-            store_id: stores?.[0]?.id,
+            store_id: isSuperAdmin ? undefined : user?.store_id || undefined,
             status: '',
             order_type: '',
             payment_method: '',
@@ -105,13 +100,43 @@ const OrderList = () => {
             cell: (info) => info.row.original.guest_name || info.row.original.customer?.full_name || 'Guest'
         },
         {
+            accessorKey: 'subtotal',
+            header: 'Subtotal',
+            cell: (info) => {
+                const val = info.row.original.subtotal ?? info.row.original.sub_total ?? (info.row.original.total_amount - info.row.original.tax_amount - info.row.original.service_charge + info.row.original.discount_amount);
+                return <span className="font-medium text-zinc-600 dark:text-zinc-400">{selectedStore?.currency || 'Rs.'}{val.toFixed(2)}</span>;
+            }
+        },
+        {
+            accessorKey: 'tax_amount',
+            header: 'Tax',
+            cell: (info) => <span className="text-zinc-500 dark:text-zinc-400">{selectedStore?.currency || 'Rs.'}{(info.getValue() as number || 0).toFixed(2)}</span>
+        },
+        {
             accessorKey: 'total_amount',
             header: 'Total',
-            cell: (info) => <span className="font-semibold">{selectedStore?.currency || 'Rs.'}{(info.getValue() as number).toFixed(2)}</span>
+            cell: (info) => <span className="font-bold text-zinc-900 dark:text-white">{selectedStore?.currency || 'Rs.'}{(info.getValue() as number).toFixed(2)}</span>
+        },
+        {
+            accessorKey: 'payment_method',
+            header: 'Payment',
+            cell: (info) => {
+                const order = info.row.original;
+                return (
+                    <div className="flex flex-col">
+                        <span className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">{order.payment_method}</span>
+                        {order.payment_method === 'CASH' && order.cash_received != null && (
+                            <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                                Rec: {selectedStore?.currency || 'Rs.'}{order.cash_received.toFixed(2)} | Change: {selectedStore?.currency || 'Rs.'}{(order.change_amount ?? order.change ?? 0).toFixed(2)}
+                            </span>
+                        )}
+                    </div>
+                );
+            }
         },
         {
             accessorKey: 'status',
-            header: 'Order Status',
+            header: 'Status',
             cell: (info) => <StatusBadge status={info.getValue() as string} />
         },
         {
@@ -129,7 +154,6 @@ const OrderList = () => {
             header: 'Actions',
             cell: (info) => {
                 const status = info.row.original.status;
-                const canAdvance = ['PENDING', 'CONFIRMED', 'PREPARING', 'READY'].includes(status);
                 const canDelete = ['DRAFT', 'PENDING'].includes(status);
 
                 return (
@@ -138,7 +162,7 @@ const OrderList = () => {
                             icon="ri-eye-line"
                             variant="outline"
                             size="sm"
-                            onClick={() => handleViewOrder(info.row.original.id)}
+                            onClick={() => handleViewOrder(info.row.original.id as any)}
                             title="View Details"
                         />
                         {canDelete && (
@@ -146,7 +170,7 @@ const OrderList = () => {
                                 icon="ri-delete-bin-line"
                                 variant="danger"
                                 size="sm"
-                                onClick={() => setDeleteId(info.row.original.id)}
+                                onClick={() => setDeleteId(info.row.original.id as any)}
                                 title="Delete Order"
                                 disabled={deleteOrderMutation.isPending}
                             />
@@ -158,10 +182,10 @@ const OrderList = () => {
     ];
 
     return (
-        <div className="p-4 space-y-4">
+        <div className="space-y-6 transition-all duration-300 ease-in-out">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-black text-zinc-900 dark:text-white">Order History</h3>
+                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Order History</h3>
                     <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">Manage and track all orders across stores.</p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -183,13 +207,18 @@ const OrderList = () => {
 
             {isFilterVisible && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-2xl border dark:border-zinc-700 animate-in slide-in-from-top-2 duration-200">
-                    <Select
-                        label="Store"
-                        placeholder="Select Store"
-                        options={stores?.map(s => ({ label: s.name, value: s.id })) || []}
-                        value={filters.store_id}
-                        onChange={(val) => handleFilterChange('store_id', val)}
-                    />
+                    {isSuperAdmin && (
+                        <Select
+                            label="Store"
+                            placeholder="All Stores"
+                            options={[
+                                { label: 'All Stores', value: '' },
+                                ...(stores?.map(s => ({ label: s.name, value: s.id })) || []),
+                            ]}
+                            value={filters.store_id || ''}
+                            onChange={(val) => handleFilterChange('store_id', val || undefined)}
+                        />
+                    )}
                     <Select
                         label="Status"
                         placeholder="All Status"
@@ -247,7 +276,7 @@ const OrderList = () => {
                 </div>
             )}
 
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl border dark:border-zinc-800 shadow-sm overflow-hidden">
+            <div className='border border-zinc-200 dark:border-zinc-700 rounded-lg'>
                 <DataTable data={orders || []} columns={columns} isLoading={isLoading} />
             </div>
 

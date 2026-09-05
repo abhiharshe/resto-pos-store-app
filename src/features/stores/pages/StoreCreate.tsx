@@ -4,6 +4,7 @@ import { StoreForm } from '../components/StoreForm';
 import Card from '../../../components/common/Card';
 import { Button } from '../../../components/common/Button';
 import toast from 'react-hot-toast';
+import Container from '../../../components/shared/Container';
 
 const StoreCreatePage = () => {
     const navigate = useNavigate();
@@ -27,13 +28,13 @@ const StoreCreatePage = () => {
     };
 
     return (
-        <div className="p-4 space-y-6">
+        <Container>
             <StoreForm
                 title={`Create New Store`}
                 onSubmit={handleSubmit}
                 isLoading={createMutation.isPending}
             />
-        </div>
+        </Container>
     );
 };
 

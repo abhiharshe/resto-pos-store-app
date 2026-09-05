@@ -5,6 +5,7 @@ import { useMenus, Menu } from '../api/menuApi';
 import { DataTable } from '../../../components/common/DataTable';
 import { StatusBadge } from '../../../components/common/StatusBadge';
 import { ColumnDef } from '@tanstack/react-table';
+import { FloatingActionButton } from '../../../components/common/FloatingActionButton';
 
 const columns: ColumnDef<Menu>[] = [
     {
@@ -34,6 +35,7 @@ const columns: ColumnDef<Menu>[] = [
 
 import toast from 'react-hot-toast';
 import { useDeleteMenu } from '../api/menuApi';
+import Container from '../../../components/shared/Container';
 
 const ActionButtons = ({ menu }: { menu: Menu }) => {
     const navigate = useNavigate();
@@ -96,23 +98,30 @@ const MenuList = () => {
             icon: 'ri-list-settings-line',
             link: '/menu/addon-groups',
             countKey: 'addon_groups'
+        },
+        {
+            title: 'Deals & Combos',
+            description: 'Create meal bundles and choice-based offers',
+            icon: 'ri-percent-line',
+            link: '/deals',
+            countKey: 'deals'
         }
     ];
 
     return (
-        <div className="p-4 space-y-6 transition-all duration-300 ease-in-out">
-            <div className="flex items-center justify-between">
+        <Container>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Menu Overview</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">Manage categories, items, and menu schedules.</p>
+                    <p className="text-zinc-500 dark:text-zinc-400">Manage categories, items, deals and menu schedules.</p>
                 </div>
-                <Button onClick={() => navigate('/menu/new')} variant="primary">
+                <Button onClick={() => navigate('/menu/new')} variant="primary" className="hidden sm:flex">
                     <i className="ri-add-line mr-2"></i>
                     Add Menu
                 </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {sections.map((section) => (
                     <Card key={section.title} className="hover:border-indigo-500 transition-colors cursor-pointer" onClick={() => navigate(section.link || '/')}>
                         <div className="flex items-start gap-4">
@@ -134,9 +143,13 @@ const MenuList = () => {
                     <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Menu</h3>
                     <span className="text-xs text-zinc-500">Fetched: {menus?.length || 0} records</span>
                 </div>
-                <DataTable data={menus || []} columns={columns} isLoading={isLoading} />
+                <div className="border border-zinc-200 dark:border-zinc-700 rounded-lg">
+                    <DataTable data={menus || []} columns={columns} isLoading={isLoading} />
+                </div>
             </div>
-        </div>
+
+            <FloatingActionButton to="/menu/new" label="Add Menu" />
+        </Container>
     );
 };
 

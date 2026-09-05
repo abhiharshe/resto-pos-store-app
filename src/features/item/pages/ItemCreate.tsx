@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCreateMenuItem } from '../../menu/api/menuApi';
 import { ItemForm } from '../components/ItemForm';
 import toast from 'react-hot-toast';
+import Container from '../../../components/shared/Container';
 
 const ItemCreate = () => {
     const navigate = useNavigate();
@@ -10,11 +11,7 @@ const ItemCreate = () => {
     const handleSubmit = async (values: any) => {
         const promise = createMutation.mutateAsync({
             ...values,
-            variants: values.variants.map((v: any) => ({
-                ...v,
-                price: parseFloat(v.price)
-            })),
-            category_id: parseInt(values.category_id)
+            category_id: values.category_id
         });
 
         toast.promise(promise, {
@@ -24,21 +21,21 @@ const ItemCreate = () => {
         });
 
         try {
-            await promise;
-            navigate('/menu/items');
+            const createdItem = await promise;
+            navigate(`/menu/items/${createdItem.id}/pricing`);
         } catch (error) {
             console.error('Error creating item:', error);
         }
     };
 
     return (
-        <div className="p-4 space-y-6">
+        <Container>
             <ItemForm
                 title="Create New Item"
                 onSubmit={handleSubmit}
                 isLoading={createMutation.isPending}
             />
-        </div>
+        </Container>
     );
 };
 

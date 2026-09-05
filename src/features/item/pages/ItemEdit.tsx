@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMenuItems, useUpdateMenuItem } from '../../menu/api/menuApi';
 import { ItemForm } from '../components/ItemForm';
 import toast from 'react-hot-toast';
+import Container from '../../../components/shared/Container';
 
 const ItemEdit = () => {
     const { id } = useParams<{ id: string }>();
@@ -9,17 +10,13 @@ const ItemEdit = () => {
     const { data: items, isLoading: isFetching } = useMenuItems();
     const updateMutation = useUpdateMenuItem();
 
-    const item = items?.find(i => i.id === parseInt(id || '0'));
+    const item = items?.find(i => i.id === id);
 
     const handleSubmit = async (values: any) => {
         const promise = updateMutation.mutateAsync({
-            id: parseInt(id || '0'),
+            id: id || '',
             ...values,
-            variants: values.variants.map((v: any) => ({
-                ...v,
-                price: parseFloat(v.price)
-            })),
-            category_id: parseInt(values.category_id)
+            category_id: values.category_id
         });
 
         toast.promise(promise, {
@@ -30,7 +27,7 @@ const ItemEdit = () => {
 
         try {
             await promise;
-            navigate('/menu/items');
+            navigate(`/menu/items/${id}/pricing`);
         } catch (error) {
             console.error('Error updating item:', error);
         }
@@ -54,7 +51,7 @@ const ItemEdit = () => {
     }
 
     return (
-        <div className="p-4 space-y-6">
+        <Container>
             <ItemForm
                 title="Edit Menu Item"
                 initialValues={{
@@ -64,7 +61,7 @@ const ItemEdit = () => {
                 onSubmit={handleSubmit}
                 isLoading={updateMutation.isPending}
             />
-        </div>
+        </Container>
     );
 };
 

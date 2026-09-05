@@ -4,6 +4,8 @@ import GeneralSettings from '../components/GeneralSettings';
 import OrderSettings from '../components/OrderSettings';
 import EmailSettings from '../components/EmailSettings';
 import SystemSettings from '../components/SystemSettings';
+import AssetSettings from '../components/AssetSettings';
+import Container from '../../../components/shared/Container';
 
 const Settings = () => {
     const [activeTab, setActiveTab] = useState('general');
@@ -15,6 +17,7 @@ const Settings = () => {
         { id: 'general', label: 'General', icon: 'ri-settings-3-line' },
         { id: 'order', label: 'Order Settings', icon: 'ri-shopping-bag-3-line' },
         { id: 'email', label: 'Email Config', icon: 'ri-mail-send-line' },
+        { id: 'assets', label: 'Assets & Storage', icon: 'ri-image-line' },
         { id: 'system', label: 'System', icon: 'ri-server-line' },
     ];
 
@@ -27,10 +30,10 @@ const Settings = () => {
     }
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto h-full overflow-y-auto">
+        <Container>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Settings</h1>
+                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Settings</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">Manage your global application configurations.</p>
                 </div>
             </div>
@@ -61,9 +64,10 @@ const Settings = () => {
                     {activeTab === 'order' && <OrderSettings />}
                     {activeTab === 'email' && <EmailSettings />}
                     {activeTab === 'system' && <SystemSettings />}
+                    {activeTab === 'assets' && <AssetSettings />}
                 </div>
             </div>
-        </div>
+        </Container>
     );
 };
 

@@ -1,0 +1,570 @@
+import { useMenuItems, Asset } from '../../menu/api/menuApi';
+import { useStores } from '../../stores/api/storesApi';
+import Card from '../../../components/common/Card';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import AssetUpload from '../../../components/common/AssetUpload';
+import { useAssets } from '../../../hooks/useAssets';
+import { useState } from 'react';
+import * as Yup from 'yup';
+
+const DealSchema = Yup.object().shape({
+    title: Yup.string().required('Title is required').max(255),
+    store_prices: Yup.array().of(
+        Yup.object().shape({
+            store_id: Yup.number().required(),
+            price: Yup.number().when('is_active', {
+                is: true,
+                then: (schema) => schema.min(0, 'Price must be positive').required('Price is required'),
+                otherwise: (schema) => schema.optional(),
+            }),
+            is_active: Yup.boolean()
+        })
+    ).test(
+        'at-least-one-active',
+        'At least one store must be active for this deal',
+        (prices) => !!prices && prices.some(sp => sp.is_active === true)
+    ),
+    selection_groups: Yup.array().of(
+        Yup.object().shape({
+            name: Yup.string().required('Group name is required'),
+            min_selection: Yup.number().min(0).test('min-lte-max', 'Min cannot exceed Max', function (value) {
+                return (value || 0) <= (this.parent.max_selection || 0);
+            }).required(),
+            max_selection: Yup.number().min(1, 'Max must be at least 1').required(),
+            options: Yup.array().of(
+                Yup.object().shape({
+                    menu_item_id: Yup.number().moreThan(0, 'Item selection is required').required(),
+                    variant_id: Yup.number().moreThan(0, 'Variant selection is required').required(),
+                    additional_price: Yup.number().min(0).required(),
+                })
+            ).min(1, 'At least one option required per group')
+        })
+    ).min(2, 'A deal must have at least two selection groups')
+});
+
+interface DealEditFormProps {
+    initialData: Deal;
+    onSubmit: (values: DealCreate) => void;
+    isLoading?: boolean;
+    title: string;
+}
+
+export const DealEditForm: React.FC<DealEditFormProps> = ({
+    initialData,
+    onSubmit,
+    isLoading,
+    title
+}) => {
+    const navigate = useNavigate();
+    const [currentStep, setCurrentStep] = useState(1);
+    const { data: menuItems } = useMenuItems();
+    const { data: stores } = useStores();
+    const [showUploader, setShowUploader] = useState(false);
+
+    // Fetch assets for the deal
+    const { assets, deleteAsset, refetch } = useAssets('Deal', initialData.id);
+
+    const getItemOptions = () => [
+        { label: 'Select an item...', value: '' },
+        ...(menuItems?.map(item => ({ label: item.name, value: item.id })) || [])
+    ];
+
+    const getVariantOptions = (itemId: number) => {
+        const item = menuItems?.find(i => i.id === itemId);
+        return [
+            { label: 'Select variant...', value: '' },
+            ...(item?.variants.map(v => ({ label: `${v.name} (₹${v.price})`, value: v.id! })) || [])
+        ];
+    };
+
+    // Merge initialData store_prices with ALL stores:
+    // - stores that have a saved price keep their data
+    // - stores not on the deal are added with is_active: false and price: 0
+    const buildStorePrices = () => {
+        const allStores = stores || [];
+        return allStores.map(s => {
+            const existing = initialData.store_prices.find(sp => sp.store_id === s.id);
+            return existing
+                ? { store_id: existing.store_id, price: existing.price, is_active: existing.is_active }
+                : { store_id: s.id, price: 0, is_active: false };
+        });
+    };
+
+    const initialValues: DealCreate = useMemo(() => ({
+        title: initialData.title || '',
+        description: initialData.description || '',
+        is_active: initialData.is_active ?? true,
+        store_prices: buildStorePrices(),
+        selection_groups: initialData.selection_groups.map(g => ({
+            name: g.name,
+            min_selection: g.min_selection,
+            max_selection: g.max_selection,
+            is_required: g.is_required,
+            options: g.options.map(o => ({
+                menu_item_id: o.menu_item_id,
+                variant_id: o.variant_id,
+                additional_price: o.additional_price,
+                is_default: o.is_default
+            }))
+        })),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }), [stores, initialData]);
+
+
+    const steps = [
+        { id: 1, label: 'Basic Info', icon: 'ri-information-line' },
+        { id: 2, label: 'Store Support', icon: 'ri-store-2-line' },
+        { id: 3, label: 'Deal Groups', icon: 'ri-stack-line' }
+    ];
+
+    return (
+        <div className="w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 pb-6 border-b border-zinc-100 dark:border-zinc-800 gap-4">
+                <div>
+                    <h3 className="text-xl font-bold text-zinc-900 dark:text-white uppercase tracking-tight">{title}</h3>
+                    <p className="text-sm text-zinc-500 font-medium lowercase italic">Step {currentStep}: {steps[currentStep - 1].label}</p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    {steps.map((s, idx) => (
+                        <React.Fragment key={s.id}>
+                            <div
+                                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${currentStep >= s.id
+                                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
+                                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400'
+                                    }`}
+                            >
+                                <i className={s.icon}></i>
+                            </div>
+                            {idx < steps.length - 1 && (
+                                <div className={`w-8 h-[2px] ${currentStep > s.id ? 'bg-indigo-600' : 'bg-zinc-100 dark:bg-zinc-800'}`}></div>
+                            )}
+                        </React.Fragment>
+                    ))}
+                </div>
+            </div>
+
+            <Card className="w-full">
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={DealSchema}
+                    onSubmit={(values, { setSubmitting }) => {
+                        if (currentStep < 3) {
+                            setCurrentStep(currentStep + 1);
+                            setSubmitting(false);
+                            return;
+                        }
+                        onSubmit(values);
+                    }}
+                    enableReinitialize
+                >
+                    {({ values, errors, touched, setFieldValue, isSubmitting, handleChange, validateForm, submitCount }) => {
+                        // Show a toast when the user tries to submit but there are validation errors
+                        // React.useEffect(() => {
+                        //    if (submitCount > 0 && Object.keys(errors).length > 0) {
+                        //        toast.error("Please fix the validation errors before proceeding.");
+                        //    }
+                        // }, [submitCount]);
+
+                        return (
+                            <Form className="space-y-8">
+                                {/* STEP 1: BASIC INFO & IMAGES */}
+                                {currentStep === 1 && (
+                                    <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="md:col-span-2">
+                                                <Input
+                                                    label="Deal Title"
+                                                    name="title"
+                                                    placeholder="e.g., Burger & Fries Combo"
+                                                    required
+                                                    value={values.title}
+                                                    onChange={handleChange}
+                                                    error={touched.title && errors.title ? (errors.title as string) : undefined}
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-sm text-zinc-700 dark:text-zinc-300 mb-2 font-medium">Description (Optional)</label>
+                                                <textarea
+                                                    name="description"
+                                                    className="w-full h-32 px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none text-zinc-900 dark:text-white"
+                                                    placeholder="Describe what makes this combo special..."
+                                                    value={values.description}
+                                                    onChange={handleChange}
+                                                ></textarea>
+                                            </div>
+                                            {/* Deal Active Status - Proper Checkbox Look */}
+                                            <div className="md:col-span-2">
+                                                <div
+                                                    onClick={() => setFieldValue('is_active', !values.is_active)}
+                                                    className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${values.is_active
+                                                        ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-500/20'
+                                                        : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'
+                                                        }`}
+                                                >
+                                                    <div className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${values.is_active
+                                                        ? 'bg-emerald-500 border-emerald-500 text-white'
+                                                        : 'border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800'
+                                                        }`}>
+                                                        {values.is_active && <i className="ri-check-line font-bold" />}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <p className="text-sm font-bold text-zinc-900 dark:text-white leading-none mb-1">Active for POS</p>
+                                                        <p className="text-xs text-zinc-500 font-medium">Enable this to make the deal available in the ordering systems</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                                    Deal Gallery ({assets.length}/3)
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowUploader(!showUploader)}
+                                                    className="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
+                                                >
+                                                    <i className={showUploader ? "ri-close-line" : "ri-add-line"} />
+                                                    {showUploader ? 'Close Uploader' : 'Add Media'}
+                                                </button>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                                {assets.map((asset: any) => (
+                                                    <div key={asset.id} className="relative aspect-square rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 group animate-in zoom-in duration-200">
+                                                        <img
+                                                            src={asset.url}
+                                                            alt="Deal"
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => deleteAsset(asset.id)}
+                                                                className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"
+                                                                title="Delete image"
+                                                            >
+                                                                <i className="ri-delete-bin-line" />
+                                                            </button>
+                                                        </div>
+                                                        {asset.status !== 'ready' && (
+                                                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                                                                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+
+                                                <AssetUpload
+                                                    isOpen={showUploader}
+                                                    onClose={() => setShowUploader(false)}
+                                                    entityType="Deal"
+                                                    entityId={initialData.id}
+                                                    multiple={true}
+                                                    maxSize={5}
+                                                    allowedTypes={['image/*']}
+                                                    onUploadComplete={() => {
+                                                        refetch();
+                                                        if (assets.length + 1 >= 3) setShowUploader(false);
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* STEP 2: STORE SUPPORT & PRICING */}
+                                {currentStep === 2 && (
+                                    <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
+                                        <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/50 p-4 rounded-2xl flex gap-4">
+                                            <i className="ri-information-fill text-amber-500 text-xl"></i>
+                                            <p className="text-xs font-medium text-amber-700 dark:text-amber-400">
+                                                At least one store must be <strong>active</strong> for this deal. Disable a store to exclude it — its price will be preserved but ignored.
+                                            </p>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {stores?.map((store) => {
+                                                const spIndex = values.store_prices.findIndex(sp => sp.store_id === store.id);
+                                                const storePrice = values.store_prices[spIndex];
+                                                const isActive = storePrice?.is_active ?? false;
+
+                                                return (
+                                                    <div
+                                                        key={store.id}
+                                                        className={`p-5 rounded-2xl border transition-all duration-300 ${isActive
+                                                            ? 'bg-indigo-100/30 dark:bg-indigo-900/10 border-indigo-200 dark:border-indigo-800 shadow-sm ring-1 ring-indigo-500/10'
+                                                            : 'bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 opacity-60'
+                                                            }`}
+                                                    >
+                                                        <div className="flex items-center justify-between gap-4 mb-4">
+                                                            <div className="flex items-center gap-3">
+                                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-400'
+                                                                    }`}>
+                                                                    <i className="ri-store-2-line"></i>
+                                                                </div>
+                                                                <div>
+                                                                    <h4 className="font-bold text-zinc-900 dark:text-white leading-tight">{store.name}</h4>
+                                                                    <span className="text-[10px] uppercase font-black tracking-widest text-zinc-500 leading-none">{store.location || 'Default Location'}</span>
+                                                                </div>
+                                                            </div>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    const newPrices = [...values.store_prices];
+                                                                    if (spIndex !== -1) {
+                                                                        newPrices[spIndex] = { ...newPrices[spIndex], is_active: !isActive };
+                                                                    }
+                                                                    setFieldValue('store_prices', newPrices);
+                                                                }}
+                                                                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all shadow-sm ${isActive
+                                                                    ? 'bg-rose-100 text-rose-600 hover:bg-rose-200 dark:bg-rose-900/20 dark:text-rose-400'
+                                                                    : 'bg-emerald-100 text-emerald-600 hover:bg-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400'
+                                                                    }`}
+                                                            >
+                                                                {isActive ? 'Disable' : 'Enable'}
+                                                            </button>
+                                                        </div>
+
+                                                        <div className="relative">
+                                                            <Input
+                                                                label="Base Deal Price (₹)"
+                                                                type="number"
+                                                                value={storePrice?.price ?? 0}
+                                                                readOnly={!isActive}
+                                                                error={touched.store_prices?.[spIndex] && (errors.store_prices as any)?.[spIndex]?.price}
+                                                                onChange={(e) => {
+                                                                    if (!isActive) return;
+                                                                    const newPrices = [...values.store_prices];
+                                                                    if (spIndex !== -1) {
+                                                                        newPrices[spIndex] = { ...newPrices[spIndex], price: Number(e.target.value) };
+                                                                    }
+                                                                    setFieldValue('store_prices', newPrices);
+                                                                }}
+                                                            />
+                                                            {!isActive && (
+                                                                <div className="absolute inset-0 rounded-xl cursor-not-allowed bg-zinc-50/10 dark:bg-zinc-900/10" />
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                        {typeof errors.store_prices === 'string' && touched.store_prices && (
+                                            <p className="text-red-500 text-xs font-bold uppercase tracking-widest text-center py-2 bg-red-50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/30">
+                                                <i className="ri-error-warning-line mr-1"></i>{errors.store_prices}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* STEP 3: SELECTION GROUPS */}
+                                {currentStep === 3 && (
+                                    <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <label className="block text-sm font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-widest leading-none font-medium">Configure Selection Slots</label>
+                                                <span className="text-[10px] font-black bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full uppercase">Min 2 Groups Required</span>
+                                            </div>
+
+                                            <FieldArray name="selection_groups">
+                                                {({ push, remove }) => (
+                                                    <div className="space-y-6">
+                                                        {values.selection_groups.map((group, gIndex) => {
+                                                            const groupErrors = (errors.selection_groups as any)?.[gIndex];
+                                                            const groupTouched = (touched.selection_groups as any)?.[gIndex];
+
+                                                            return (
+                                                                <div key={gIndex} className={`p-6 bg-zinc-50 dark:bg-zinc-800/40 rounded-3xl border transition-all duration-300 relative group animate-in slide-in-from-bottom-2 duration-200 ${groupErrors ? 'border-red-200 dark:border-red-900/30 bg-red-50/5 dark:bg-red-900/5' : 'border-zinc-200 dark:border-zinc-700'
+                                                                    }`}>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => remove(gIndex)}
+                                                                        className="absolute -top-3 -right-3 w-8 h-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-md active:scale-90 z-10"
+                                                                    >
+                                                                        <i className="ri-close-line"></i>
+                                                                    </button>
+
+                                                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                                                        <div className="md:col-span-2">
+                                                                            <Input
+                                                                                label="Slot Name"
+                                                                                name={`selection_groups.${gIndex}.name`}
+                                                                                value={group.name}
+                                                                                onChange={handleChange}
+                                                                                error={groupTouched?.name && groupErrors?.name}
+                                                                                required
+                                                                            />
+                                                                        </div>
+                                                                        <Input
+                                                                            label="Min Pick"
+                                                                            name={`selection_groups.${gIndex}.min_selection`}
+                                                                            type="number"
+                                                                            value={group.min_selection}
+                                                                            onChange={handleChange}
+                                                                            error={groupTouched?.min_selection && groupErrors?.min_selection}
+                                                                            required
+                                                                        />
+                                                                        <Input
+                                                                            label="Max Pick"
+                                                                            name={`selection_groups.${gIndex}.max_selection`}
+                                                                            type="number"
+                                                                            value={group.max_selection}
+                                                                            onChange={handleChange}
+                                                                            error={groupTouched?.max_selection && groupErrors?.max_selection}
+                                                                            required
+                                                                        />
+
+                                                                        {/* Is Required Overlay-style Checkbox */}
+                                                                        <div className="md:col-span-4 flex items-center justify-between p-3 bg-white dark:bg-zinc-900/40 rounded-xl border border-zinc-100 dark:border-zinc-800/50 mt-1">
+                                                                            <div className="flex items-center gap-3">
+                                                                                <i className="ri-shield-check-line text-indigo-500"></i>
+                                                                                <span className="text-sm font-bold text-zinc-700 dark:text-white">Customer must make a selection</span>
+                                                                            </div>
+                                                                            <div
+                                                                                onClick={() => setFieldValue(`selection_groups.${gIndex}.is_required`, !group.is_required)}
+                                                                                className={`w-10 h-5 rounded-full transition-all relative cursor-pointer ${group.is_required ? 'bg-indigo-500' : 'bg-zinc-300 dark:bg-zinc-700'}`}
+                                                                            >
+                                                                                <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${group.is_required ? 'left-5.5' : 'left-0.5'}`} />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="space-y-3">
+                                                                        <div className="flex items-center justify-between mb-2 px-1">
+                                                                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest font-medium">Selectable Items & Upcharges</span>
+                                                                            <span className="h-[1px] flex-1 mx-4 bg-zinc-200 dark:bg-zinc-700 opacity-20"></span>
+                                                                        </div>
+
+                                                                        <FieldArray name={`selection_groups.${gIndex}.options`}>
+                                                                            {({ push: pushOpt, remove: removeOpt }) => (
+                                                                                <div className="space-y-3">
+                                                                                    {group.options.map((option, oIndex) => {
+                                                                                        const optionErrors = groupErrors?.options?.[oIndex];
+                                                                                        const optionTouched = groupTouched?.options?.[oIndex];
+
+                                                                                        return (
+                                                                                            <div key={oIndex} className={`flex flex-col lg:flex-row gap-3 items-start lg:items-end bg-white dark:bg-zinc-900/50 p-4 rounded-2xl border transition-all hover:shadow-sm ${optionErrors ? 'border-red-200 dark:border-red-900/30' : 'border-zinc-100 dark:border-zinc-800/50'
+                                                                                                }`}>
+                                                                                                <div className="flex-1 w-full">
+                                                                                                    <Select
+                                                                                                        label="Menu Item"
+                                                                                                        options={getItemOptions()}
+                                                                                                        value={option.menu_item_id}
+                                                                                                        error={optionTouched?.menu_item_id && optionErrors?.menu_item_id}
+                                                                                                        onChange={(val) => {
+                                                                                                            setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.menu_item_id`, val);
+                                                                                                            setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.variant_id`, 0);
+                                                                                                        }}
+                                                                                                    />
+                                                                                                </div>
+                                                                                                <div className="flex-1 w-full">
+                                                                                                    <Select
+                                                                                                        label="Variant"
+                                                                                                        options={getVariantOptions(option.menu_item_id)}
+                                                                                                        value={option.variant_id}
+                                                                                                        error={optionTouched?.variant_id && optionErrors?.variant_id}
+                                                                                                        onChange={(val) => setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.variant_id`, val)}
+                                                                                                        disabled={!option.menu_item_id}
+                                                                                                    />
+                                                                                                </div>
+                                                                                                <div className="w-full lg:w-32">
+                                                                                                    <Input
+                                                                                                        label="Upcharge (₹)"
+                                                                                                        name={`selection_groups.${gIndex}.options.${oIndex}.additional_price`}
+                                                                                                        type="number"
+                                                                                                        value={option.additional_price}
+                                                                                                        error={optionTouched?.additional_price && optionErrors?.additional_price}
+                                                                                                        onChange={handleChange}
+                                                                                                    />
+                                                                                                </div>
+                                                                                                <Button
+                                                                                                    type="button"
+                                                                                                    variant="ghost"
+                                                                                                    className="lg:mb-1 text-red-400 hover:text-red-500 hover:bg-red-50 h-10 w-10 !p-0"
+                                                                                                    onClick={() => removeOpt(oIndex)}
+                                                                                                    disabled={group.options.length <= 1}
+                                                                                                >
+                                                                                                    <i className="ri-delete-bin-line"></i>
+                                                                                                </Button>
+                                                                                            </div>
+                                                                                        );
+                                                                                    })}
+                                                                                    <Button
+                                                                                        type="button"
+                                                                                        variant="outline"
+                                                                                        size="sm"
+                                                                                        className="w-full py-3 border-dashed rounded-xl flex items-center justify-center gap-2 text-zinc-500 hover:text-indigo-600 hover:border-indigo-600 transition-all font-bold text-xs uppercase"
+                                                                                        onClick={() => pushOpt({ menu_item_id: 0, variant_id: 0, additional_price: 0, is_default: false })}
+                                                                                    >
+                                                                                        <i className="ri-add-circle-line"></i>
+                                                                                        <span>Add Choice Item</span>
+                                                                                    </Button>
+                                                                                </div>
+                                                                            )}
+                                                                        </FieldArray>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                        <Button
+                                                            type="button"
+                                                            className="w-full py-6 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-500 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3"
+                                                            onClick={() => push({ name: '', min_selection: 1, max_selection: 1, is_required: true, options: [{ menu_item_id: 0, variant_id: 0, additional_price: 0, is_default: false }] })}
+                                                        >
+                                                            <i className="ri-add-line text-lg"></i>
+                                                            Add Another Selection Slot
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                            </FieldArray>
+                                            {(typeof errors.selection_groups === 'string' && touched.selection_groups) && (
+                                                <p className="text-red-500 text-[10px] font-black uppercase tracking-widest text-center py-2 bg-red-50 dark:bg-red-900/10 rounded-xl mt-4 border border-red-100 dark:border-red-900/30">
+                                                    <i className="ri-error-warning-line mr-1"></i>{errors.selection_groups}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="flex justify-between items-center pt-8 border-t dark:border-zinc-800">
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        onClick={() => {
+                                            if (currentStep > 1) {
+                                                setCurrentStep(currentStep - 1);
+                                            } else {
+                                                navigate('/deals');
+                                            }
+                                        }}
+                                    >
+                                        {currentStep === 1 ? 'Cancel' : 'Previous Step'}
+                                    </Button>
+
+                                    <div className="flex gap-3">
+                                        <Button
+                                            type="submit"
+                                            isLoading={isLoading || isSubmitting}
+                                            icon={currentStep < 3 ? "ri-arrow-right-line" : "ri-save-line"}
+                                            onClick={() => {
+                                                if (Object.keys(errors).length > 0) {
+                                                    toast.error("Please fix the validation errors before proceeding.");
+                                                }
+                                            }}
+                                        >
+                                            {currentStep < 3 ? "Next Component" : "Update Combo Deal"}
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Form>
+                        );
+                    }}
+                </Formik>
+            </Card>
+        </div>
+    );
+};

@@ -2,9 +2,11 @@ import React, { useCallback, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { toggleTheme, toggleSidebar } from '../../features/ui/slices/uiSlice';
+import { selectBranding } from '../../features/settings/slices/settingsSlice';
 import moment from 'moment';
 import { AnimatePresence, motion } from 'motion/react';
 import { logOut } from '../../features/auth/slices/authSlice';
+import { getMediaURL } from '../../utils/api';
 
 const SessionLayout = () => {
     const dispatch = useAppDispatch();
@@ -12,6 +14,7 @@ const SessionLayout = () => {
     const location = useLocation();
     const { theme, isSidebarOpen } = useAppSelector((state) => state.ui);
     const { user } = useAppSelector((state) => state.auth);
+    const branding = useAppSelector(selectBranding);
     const [isProfileOpen, setIsProfileOpen] = React.useState(false);
     const profileRef = React.useRef<HTMLDivElement>(null);
 
@@ -86,50 +89,166 @@ const SessionLayout = () => {
         }, 60000); // Update every minute
 
         //change date at midnight
-
-
         return () => {
             clearInterval(timer);
         };
     }, []);
 
     return (
-        <div className="flex w-full h-screen bg-gray-50 dark:bg-zinc-900 transition-colors duration-200 overflow-hidden">
+        <div className={`flex relative w-full h-screen bg-gray-200 dark:bg-zinc-900 transition-colors duration-200 overflow-hidden`}>
+            {/* Backdrop for mobile */}
+            <AnimatePresence>
+                {isSidebarOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => dispatch(toggleSidebar())}
+                        className="fixed inset-0 bg-black/60 z-20 md:hidden backdrop-blur-sm"
+                    />
+                )}
+            </AnimatePresence>
+
             {/* Sidebar */}
             <aside
-                className={`inset-y-0 left-0 bg-white dark:bg-zinc-800 shadow-lg z-30 flex flex-col
-                    transform md:transform-none transition-all duration-300 ease-in-out
+                className={`fixed md:relative inset-y-0 left-0 z-30 flex flex-col h-full bg-white dark:bg-zinc-900
+                    transform transition-all duration-300 ease-in-out
                     ${isSidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-64 md:translate-x-0 md:w-20'}
                 `}
             >
-                <div className="h-16 flex items-center justify-center border-b border-zinc-200 dark:border-zinc-700">
-                    <h1 className={`font-bold text-2xl text-primary font-sans transition-opacity duration-300 ${!isSidebarOpen ? 'md:hidden opacity-0' : 'opacity-100'}`}>restopos</h1>
+                {/* Logo Section */}
+                <div className="h-16 flex items-center justify-center overflow-hidden">
+                    <div className="flex items-center min-w-[40px] justify-center">
+                        {branding.logoUrl ? (
+                            <img
+                                src={getMediaURL(branding.logoUrl)}
+                                alt="Logo"
+                                className="h-8 w-auto min-w-[32px] object-contain transition-transform duration-300 transform rounded"
+                            />
+                        ) : (
+                            <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center border border-primary/20">
+                                <span className="text-primary font-bold text-lg leading-none">
+                                    {branding.siteName?.[0] || 'R'}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className={`transition-all duration-300 ease-in-out ${isSidebarOpen ? 'ml-3 opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none w-0 overflow-hidden'
+                        }`}>
+                        <h1 className="font-bold text-lg text-zinc-900 dark:text-zinc-100 font-sans tracking-tight truncate max-w-[140px]">
+                            {branding.siteName}
+                        </h1>
+                    </div>
                 </div>
 
-                <nav className="mt-4 px-2 space-y-1 flex-1 overflow-y-auto">
-                    <NavItem to="/dashboard" icon="ri-dashboard-line" label="Dashboard" isOpen={isSidebarOpen} />
-                    <NavItem to="/pos" icon="ri-shopping-cart-line" label="POS" isOpen={isSidebarOpen} />
-                    <NavItem to="/orders" icon="ri-file-list-3-line" label="Orders" isOpen={isSidebarOpen} />
-                    <NavItem to="/kds" icon="ri-restaurant-2-line" label="KDS" isOpen={isSidebarOpen} />
-                    <NavItem to="/customers" icon="ri-user-line" label="Customers" isOpen={isSidebarOpen} />
-                    <div className="pt-4 pb-2">
-                        <p className={`px-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider ${!isSidebarOpen && 'hidden'}`}>
-                            Config
-                        </p>
-                    </div>
-                    <NavItem to="/stores" icon="ri-settings-4-line" label="Stores" isOpen={isSidebarOpen} />
-                    <NavItem to="/menu" icon="ri-stack-line" label="Menu" isOpen={isSidebarOpen} />
-                    <NavItem to="/menu/categories" icon="ri-folders-line" label="Categories" isOpen={isSidebarOpen} />
-                    <NavItem to="/menu/items" icon="ri-restaurant-line" label="Items" isOpen={isSidebarOpen} />
-                    <NavItem to="/users" icon="ri-settings-4-line" label="Users" isOpen={isSidebarOpen} />
-                    <NavItem to="/settings" icon="ri-settings-4-line" label="Settings" isOpen={isSidebarOpen} />
+                <nav className="flex-1 overflow-y-auto md:px-2 py-2">
+                    {isSidebarOpen ? (
+                        /* Grouped Sidebar - Default & Mobile */
+                        <div className="space-y-1">
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
+                                <NavItem to="/dashboard" icon="ri-dashboard-line" label="Dashboard" isOpen={isSidebarOpen} />
+                            )}
+
+                            <NavItemGroup icon="ri-shopping-basket-line" label="Operations" isOpen={isSidebarOpen}>
+                                {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && user?.store?.has_pos && (
+                                    <NavItem to="/pos" icon="ri-shopping-cart-line" label="POS Terminal" isOpen={isSidebarOpen} isSubItem />
+                                )}
+                                {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
+                                    <NavItem to="/orders" icon="ri-file-list-3-line" label="Orders List" isOpen={isSidebarOpen} isSubItem />
+                                )}
+                                {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'KITCHEN'].includes(user?.role) && user?.store?.has_kds && (
+                                    <NavItem to="/kds" icon="ri-restaurant-2-line" label="Kitchen Display" isOpen={isSidebarOpen} isSubItem />
+                                )}
+                                {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'KITCHEN'].includes(user?.role) && (
+                                    <NavItem to="/recipes" icon="ri-book-open-line" label="Recipes" isOpen={isSidebarOpen} isSubItem />
+                                )}
+                            </NavItemGroup>
+
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER'].includes(user?.role) && (
+                                <NavItemGroup icon="ri-stack-line" label="Menu Management" isOpen={isSidebarOpen}>
+                                    <NavItem to="/menu" icon="ri-dashboard-2-line" label="Menu Overview" isOpen={isSidebarOpen} isSubItem />
+                                    <NavItem to="/menu/categories" icon="ri-folders-line" label="Categories" isOpen={isSidebarOpen} isSubItem />
+                                    <NavItem to="/menu/items" icon="ri-restaurant-line" label="All Items" isOpen={isSidebarOpen} isSubItem />
+                                    <NavItem to="/deals" icon="ri-percent-line" label="Deals" isOpen={isSidebarOpen} isSubItem />
+                                </NavItemGroup>
+                            )}
+
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
+                                <NavItemGroup icon="ri-group-line" label="Marketing" isOpen={isSidebarOpen}>
+                                    <NavItem to="/customers" icon="ri-user-heart-line" label="Customers" isOpen={isSidebarOpen} isSubItem />
+                                    <NavItem to="/coupons" icon="ri-price-tag-3-line" label="Coupons" isOpen={isSidebarOpen} isSubItem />
+                                    <NavItem to="/promotions" icon="ri-megaphone-line" label="Promotions" isOpen={isSidebarOpen} isSubItem />
+                                </NavItemGroup>
+                            )}
+
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER'].includes(user?.role) && (
+                                <NavItemGroup icon="ri-settings-4-line" label="Administration" isOpen={isSidebarOpen}>
+                                    <NavItem to="/stores" icon="ri-store-2-line" label="Stores List" isOpen={isSidebarOpen} isSubItem />
+                                    <NavItem to="/users" icon="ri-user-settings-line" label="Staff Account" isOpen={isSidebarOpen} isSubItem />
+                                    <NavItem to="/assets" icon="ri-image-line" label="Media Library" isOpen={isSidebarOpen} isSubItem />
+                                    <NavItem to="/settings" icon="ri-equalizer-line" label="Store Settings" isOpen={isSidebarOpen} isSubItem />
+                                </NavItemGroup>
+                            )}
+                        </div>
+                    ) : (
+                        /* Flat Sidebar - Collapsed Desktop */
+                        <div className="hidden md:flex flex-col space-y-1 items-center">
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
+                                <NavItem to="/dashboard" icon="ri-dashboard-line" label="Dashboard" isOpen={false} />
+                            )}
+
+                            {/* Operations */}
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && user?.store?.has_pos && (
+                                <NavItem to="/pos" icon="ri-shopping-cart-line" label="POS" isOpen={false} />
+                            )}
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
+                                <NavItem to="/orders" icon="ri-file-list-3-line" label="Orders" isOpen={false} />
+                            )}
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'KITCHEN'].includes(user?.role) && user?.store?.has_kds && (
+                                <NavItem to="/kds" icon="ri-restaurant-2-line" label="KDS" isOpen={false} />
+                            )}
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'KITCHEN'].includes(user?.role) && (
+                                <NavItem to="/recipes" icon="ri-book-open-line" label="Recipes" isOpen={false} />
+                            )}
+
+                            {/* Menu */}
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER'].includes(user?.role) && (
+                                <>
+                                    <NavItem to="/menu" icon="ri-dashboard-2-line" label="Menu" isOpen={false} />
+                                    <NavItem to="/menu/categories" icon="ri-folders-line" label="Categories" isOpen={false} />
+                                    <NavItem to="/menu/items" icon="ri-restaurant-line" label="Items" isOpen={false} />
+                                    <NavItem to="/deals" icon="ri-percent-line" label="Deals" isOpen={false} />
+                                </>
+                            )}
+
+                            {/* Marketing */}
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
+                                <>
+                                    <NavItem to="/customers" icon="ri-user-heart-line" label="Customers" isOpen={false} />
+                                    <NavItem to="/coupons" icon="ri-price-tag-3-line" label="Coupons" isOpen={false} />
+                                    <NavItem to="/promotions" icon="ri-megaphone-line" label="Promotions" isOpen={false} />
+                                </>
+                            )}
+
+                            {/* Admin */}
+                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER'].includes(user?.role) && (
+                                <>
+                                    <NavItem to="/stores" icon="ri-store-2-line" label="Stores" isOpen={false} />
+                                    <NavItem to="/users" icon="ri-user-settings-line" label="Staff" isOpen={false} />
+                                    <NavItem to="/assets" icon="ri-image-line" label="Media" isOpen={false} />
+                                    <NavItem to="/settings" icon="ri-equalizer-line" label="Settings" isOpen={false} />
+                                </>
+                            )}
+                        </div>
+                    )}
                 </nav>
             </aside>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <div className="flex-1 flex flex-col min-w-0 overflow-hidden space-y-4 ">
                 {/* Topbar */}
-                <header className="bg-white dark:bg-zinc-800 shadow-sm z-20 h-16 flex items-center justify-between px-4 border-b border-zinc-200 dark:border-zinc-700 flex-shrink-0">
+                <header className="bg-white dark:bg-zinc-800 z-20 p-2 h-16 flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700">
                     <div className="flex items-center">
                         <button
                             title="Toggle Sidebar"
@@ -140,7 +259,7 @@ const SessionLayout = () => {
                         </button>
 
                         <div className="ml-4 flex items-center gap-2 text-xs cursor-default">
-                            <span className='rounded-2xl px-3 p-1 border border-amber-600 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-400'>{currentDate}</span>
+                            <span className='rounded-2xl px-3 p-1 border border-amber-600 hidden md:block bg-amber-50 dark:bg-amber-900/20 dark:text-amber-400'>{currentDate}</span>
                             <span className='rounded-2xl px-3 p-1 border border-blue-600 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-400'>{currentTime}</span>
                         </div>
 
@@ -217,21 +336,21 @@ const SessionLayout = () => {
                 </header>
 
                 {/* Page Content */}
-                <main className="flex-1 overflow-auto">
+                <main className="flex-1 overflow-auto px-4">
                     <AnimatePresence mode="wait" initial={false}>
                         <motion.div
                             key={location.pathname}
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.5, ease: "easeInOut" }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 1 }}
+                            transition={{ duration: 1, ease: "easeInOut" }}
                             className="flex-1">
                             <Outlet />
                         </motion.div>
                     </AnimatePresence>
                 </main>
             </div>
-        </div>
+        </div >
     );
 };
 
@@ -240,27 +359,127 @@ interface NavItemProps {
     icon: string;
     label: string;
     isOpen: boolean;
+    isSubItem?: boolean;
+    onClick?: () => void;
 }
 
-const NavItem = ({ to, icon, label, isOpen }: NavItemProps) => (
-    <NavLink
-        to={to}
-        className={({ isActive }) =>
-            `flex items-center px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${isActive
-                ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400'
-                : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-white'
-            }`
-        }
-    >
-        <i className={`${icon} text-lg ${isOpen ? 'mr-3' : 'mx-auto'}`} />
-        <span className={`whitespace-nowrap transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>{label}</span>
-    </NavLink>
+const NavItem = ({ to, icon, label, isOpen, isSubItem, onClick }: NavItemProps) => (
+    <div className="relative flex items-center">
+        <NavLink
+            to={to}
+            onClick={onClick}
+            className={({ isActive }) =>
+                `flex-1 flex items-center text-sm font-medium rounded-lg transition-all duration-200 group py-1 ${isSubItem ? 'pl-4 pr-4' : 'pl-2 pr-2'
+                } ${isActive
+                    ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400'
+                    : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100'
+                }`
+            }
+        >
+            <i className={`${icon} ${isSubItem ? 'text-base' : 'text-lg'} ${isOpen ? 'mr-3' : 'mx-auto'}`} />
+            <span className={`whitespace-nowrap transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>{label}</span>
+        </NavLink>
+    </div>
 );
+
+interface NavItemGroupProps {
+    icon: string;
+    label: string;
+    isOpen: boolean;
+    children: React.ReactNode;
+}
+
+const NavItemGroup = ({ icon, label, isOpen, children }: NavItemGroupProps) => {
+    const location = useLocation();
+    const [isHovered, setIsHovered] = React.useState(false);
+    const childrenArray = React.Children.toArray(children) as React.ReactElement[];
+
+    // Check if any child is active to auto-expand
+    const isAnyChildActive = childrenArray.some(child =>
+        location.pathname === child.props.to || location.pathname.startsWith(child.props.to + '/')
+    );
+
+    const [isExpanded, setIsExpanded] = React.useState(isAnyChildActive);
+
+    // Sync expansion if navigating via other means
+    React.useEffect(() => {
+        if (isAnyChildActive) setIsExpanded(true);
+    }, [isAnyChildActive]);
+
+    // Force collapse labels if sidebar is closed
+    if (!isOpen) {
+        return (
+            <div
+                className="relative flex flex-col items-center py-1 group/item"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                <div className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors duration-200 ${isAnyChildActive ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400' : 'text-zinc-400 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 group-hover/item:bg-zinc-100 dark:group-hover/item:bg-zinc-800'} cursor-pointer`}>
+                    <i className={`${icon} text-lg`} />
+                </div>
+
+                {/* Pop-out menu */}
+                <AnimatePresence>
+                    {isHovered && (
+                        <motion.div
+                            initial={{ opacity: 0, x: 10, scale: 0.95 }}
+                            animate={{ opacity: 1, x: 0, scale: 1 }}
+                            exit={{ opacity: 0, x: 10, scale: 0.95 }}
+                            transition={{ duration: 0.15, ease: 'easeOut' }}
+                            className="absolute left-full top-0 ml-3 w-52 bg-white dark:bg-zinc-800 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-zinc-100 dark:border-zinc-700 p-2 z-[100]"
+                        >
+                            <div className="px-3 py-1 border-b border-zinc-50 dark:border-zinc-700/50 mb-1">
+                                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{label}</span>
+                            </div>
+                            <div className="space-y-1">
+                                {React.Children.map(children, (child) => {
+                                    if (React.isValidElement(child)) {
+                                        return React.cloneElement(child as React.ReactElement<any>, {
+                                            isOpen: true,
+                                            isSubItem: true,
+                                            onClick: () => setIsHovered(false) // Close pop-out on click
+                                        });
+                                    }
+                                    return child;
+                                })}
+                            </div>
+                            {/* Invisible bridge to prevent hover gaps */}
+                            <div className="absolute top-0 -left-4 w-4 h-full" />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+        );
+    }
+
+    return (
+        <div className="">
+            <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className={`w-full flex items-center justify-between px-2 py-1 text-sm transition-colors duration-200 rounded-lg group text-zinc-600 hover:text-zinc-600 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800`}
+            >
+                <div className="flex items-center">
+                    <i className={`${icon} text-lg mr-3 ${isExpanded ? 'text-indigo-500' : 'text-zinc-400 group-hover:text-zinc-500'}`} />
+                    <span className="whitespace-nowrap">{label}</span>
+                </div>
+                <i className={`ri-arrow-down-s-line transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''} ${isExpanded ? 'text-indigo-500' : 'text-zinc-400'}`} />
+            </button>
+            <motion.div
+                initial={false}
+                animate={{ height: isExpanded ? 'auto' : 0, opacity: isExpanded ? 1 : 0 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="overflow-hidden bg-zinc-100/50 dark:bg-zinc-900/20 rounded-lg my-1 space-y-1"
+            >
+                {children}
+            </motion.div>
+        </div>
+    );
+};
 
 const DropdownItem = ({ icon, label, onClick }: { icon: string; label: string; onClick: () => void }) => (
     <button
         onClick={onClick}
-        className="flex items-center w-full px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors group"
+        className="flex items-center w-full px-2 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors group"
     >
         <i className={`${icon} mr-3 text-lg text-zinc-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors`} />
         {label}

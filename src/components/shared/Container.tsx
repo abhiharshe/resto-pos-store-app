@@ -1,0 +1,11 @@
+import React from 'react'
+
+const Container = ({ children }: { children: React.ReactNode }) => {
+    return (
+        <div className="w-full space-y-6 transition-all duration-300 ease-in-out">
+            {children}
+        </div>
+    )
+}
+
+export default Container

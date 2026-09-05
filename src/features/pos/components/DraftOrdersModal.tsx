@@ -86,14 +86,14 @@ const DraftOrdersModal: React.FC<DraftOrdersModalProps> = ({ isOpen, onClose }) 
     };
 
     return (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-70 flex items-center justify-center bg-slate-400/30 dark:bg-slate-900/30 backdrop-blur-sm p-4">
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden"
+                className="bg-white dark:bg-zinc-900 rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden border border-zinc-100 dark:border-zinc-800"
             >
-                <div className="p-6 border-b dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900/50">
+                <div className="p-6 border-b border-zinc-50 dark:border-zinc-800 flex justify-between items-center bg-zinc-50 dark:bg-zinc-900/50">
                     <div>
                         <h2 className="text-xl font-black dark:text-white">Draft Orders</h2>
                         <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Saved pending orders</p>
@@ -118,7 +118,7 @@ const DraftOrdersModal: React.FC<DraftOrdersModalProps> = ({ isOpen, onClose }) 
                                 key={draft.id}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="p-4 bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-2xl flex items-center justify-between group hover:border-indigo-500 transition-all hover:shadow-lg"
+                                className="p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl flex items-center justify-between group hover:border-indigo-500 transition-all hover:shadow-lg"
                             >
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">

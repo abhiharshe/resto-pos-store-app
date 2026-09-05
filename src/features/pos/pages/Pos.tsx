@@ -10,6 +10,8 @@ import { CartItem, setSelectedStore } from '../slices/cartSlice';
 import StoreSelectionModal from '../components/StoreSelectionModal';
 import { useEffect } from 'react';
 import CustomerDetailsModal from '../components/CustomerDetailsModal';
+import { useActivePromotions } from '../../promotions/api/promotionsApi';
+import { setPromotions } from '../slices/cartSlice';
 
 
 const Pos = () => {
@@ -17,6 +19,7 @@ const Pos = () => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isStoreModalOpen, setIsStoreModalOpen] = useState(false);
     const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
+    const [editingCartItem, setEditingCartItem] = useState<CartItem | null>(null);
     const dispatch = useAppDispatch();
 
     const cartItems = useAppSelector((state) => state.cart.items);
@@ -24,6 +27,14 @@ const Pos = () => {
     const user = useAppSelector((state) => state.auth.user);
 
     const cartCount = cartItems.reduce((acc: number, item: CartItem) => acc + item.quantity, 0);
+
+    const { data: activePromotions } = useActivePromotions(selectedStoreId || undefined);
+
+    useEffect(() => {
+        if (activePromotions) {
+            dispatch(setPromotions(activePromotions));
+        }
+    }, [activePromotions, dispatch]);
 
     useEffect(() => {
         // 1. If user has a fixed store_id, auto-select it and don't allow changes
@@ -36,6 +47,12 @@ const Pos = () => {
             setIsStoreModalOpen(true);
         }
     }, [user, selectedStoreId, cartItems.length, dispatch]);
+
+    const handleEditItem = (item: CartItem) => {
+        setEditingCartItem(item);
+        setStage(1);
+        setIsCartOpen(false);
+    };
 
     const renderLeftPanel = () => {
         switch (stage) {
@@ -50,7 +67,7 @@ const Pos = () => {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="h-full"
                         >
-                            <MenuItems onNext={() => setStage(2)} onBack={() => setStage(1)} />
+                            <MenuItems onNext={() => setStage(2)} onBack={() => setStage(1)} editingCartItem={editingCartItem} onEditComplete={() => setEditingCartItem(null)} />
                         </motion.div>
                     </AnimatePresence>
                 );
@@ -90,7 +107,7 @@ const Pos = () => {
     };
 
     return (
-        <div className="flex flex-col lg:flex-row h-full bg-gray-50 dark:bg-gray-900 relative">
+        <div className="flex flex-col lg:flex-row h-full bg-zinc-50 dark:bg-zinc-900 relative">
             <StoreSelectionModal
                 isOpen={isStoreModalOpen && !user?.store_id}
                 onClose={() => setIsStoreModalOpen(false)}
@@ -101,20 +118,21 @@ const Pos = () => {
             />
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-                <PosHeader 
-                    onStoreClick={() => !user?.store_id && setIsStoreModalOpen(true)} 
+                <PosHeader
+                    onStoreClick={() => !user?.store_id && setIsStoreModalOpen(true)}
                     onNewOrderClick={() => setIsCustomerModalOpen(true)}
                 />
-                <div className="flex-1 overflow-y-auto w-full">
+                <div className="flex-1 flex flex-col w-full h-full overflow-hidden">
                     {renderLeftPanel()}
                 </div>
             </div>
 
             {/* Desktop Order Cart Sidebar */}
-            <div className="hidden lg:block lg:w-80 xl:w-96 bg-gray-100 dark:bg-zinc-800 p-2 border-l dark:border-zinc-700 h-full">
-                <OrderCart 
-                    setIsCartOpen={setIsCartOpen} 
+            <div className="hidden lg:block lg:w-80 xl:w-96 bg-zinc-50 dark:bg-zinc-800 p-2 border-l border-zinc-100 dark:border-zinc-700 h-full">
+                <OrderCart
+                    setIsCartOpen={setIsCartOpen}
                     onCustomerClick={() => setIsCustomerModalOpen(true)}
+                    onEditItem={handleEditItem}
                 />
             </div>
 
@@ -143,7 +161,7 @@ const Pos = () => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsCartOpen(false)}
-                            className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+                            className="lg:hidden fixed inset-0 bg-slate-400/30 dark:bg-slate-900/30 backdrop-blur-sm z-50"
                         />
                         {/* Drawer */}
                         <motion.div
@@ -151,13 +169,14 @@ const Pos = () => {
                             animate={{ x: 0 }}
                             exit={{ x: "100%" }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="lg:hidden fixed right-0 top-0 h-full w-[90%] sm:w-[450px] bg-gray-100 dark:bg-zinc-800 z-[60] shadow-2xl overflow-hidden flex flex-col"
+                            className="lg:hidden fixed right-0 top-0 h-full w-[90%] sm:w-[450px] bg-zinc-50 dark:bg-zinc-800 z-60 shadow-2xl overflow-hidden flex flex-col border-l border-zinc-100 dark:border-zinc-700"
                         >
 
                             <div className="flex-1 overflow-hidden p-2">
-                                <OrderCart 
-                                    setIsCartOpen={setIsCartOpen} 
+                                <OrderCart
+                                    setIsCartOpen={setIsCartOpen}
                                     onCustomerClick={() => setIsCustomerModalOpen(true)}
+                                    onEditItem={handleEditItem}
                                 />
                             </div>
                         </motion.div>

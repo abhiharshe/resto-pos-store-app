@@ -1,24 +1,71 @@
-import React from "react";
-import { useAppSelector } from "../../../app/hooks";
-import { Button } from "../../../components/common/Button";
 import Card from "../../../components/common/Card";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { useCreateOrder, OrderCreateData } from "../../orders/api/ordersApi";
+import { clearCart } from "../slices/cartSlice";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface CheckoutProps {
     onBack: () => void;
 }
 
 const Checkout: React.FC<CheckoutProps> = ({ onBack }) => {
-    const { items, subtotal, tax, total } = useAppSelector((state) => state.cart);
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const createOrder = useCreateOrder();
+    
+    const { 
+        items, deals, subtotal, tax, total, 
+        customerName, customerPhone, customerAddress, 
+        orderType, paymentMode, couponCode, selectedStoreId 
+    } = useAppSelector((state) => state.cart);
 
-    const handlePlaceOrder = () => {
-        // Mock order placement
-        alert("Order placed successfully!");
-        // dispatch(clearCart());
-        // onBack(); // Go back to menu
+    const handlePlaceOrder = async () => {
+        if (!selectedStoreId) {
+            toast.error("Please select a store first");
+            return;
+        }
+
+        const orderData: OrderCreateData = {
+            store_id: selectedStoreId,
+            order_type: orderType,
+            payment_method: paymentMode,
+            status: 'PENDING',
+            guest_name: customerName,
+            guest_phone: customerPhone,
+            guest_address: customerAddress,
+            coupon_code: couponCode || undefined,
+            items: items.map(item => ({
+                menu_item_id: item.id,
+                variant_id: item.variantId,
+                quantity: item.quantity,
+                addons: item.selectedAddons.map(a => ({ addon_id: a.id }))
+            })),
+            deals: deals.map(deal => ({
+                deal_id: deal.id,
+                items: deal.items.map(item => ({
+                    menu_item_id: item.id,
+                    variant_id: item.variantId,
+                    quantity: item.quantity,
+                    addons: item.selectedAddons.map(a => ({ addon_id: a.id })),
+                    deal_selection_group_id: (item as any).deal_selection_group_id
+                }))
+            }))
+        };
+
+        try {
+            const result = await createOrder.mutateAsync(orderData);
+            toast.success(`Order #${result.id} placed successfully!`);
+            dispatch(clearCart());
+            navigate(`/orders/${result.id}`);
+        } catch (error: any) {
+            const errorMsg = error.response?.data?.detail || "Failed to place order";
+            toast.error(errorMsg);
+        }
     };
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto space-y-6">
+        <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto space-y-6 h-full overflow-y-auto">
             <div className="flex items-center gap-4 mb-8">
                 <Button variant="ghost" size="sm" onClick={onBack} className="p-2">
                     <i className="ri-arrow-left-line text-xl"></i>
@@ -32,20 +79,58 @@ const Checkout: React.FC<CheckoutProps> = ({ onBack }) => {
                     <div className="p-4 border-b dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800">
                         <h3 className="font-bold">Items</h3>
                     </div>
-                    <div className="divide-y dark:divide-zinc-700">
-                        {items.map((item) => (
-                            <div key={item.uniqueId} className="p-4 flex justify-between items-center bg-white dark:bg-zinc-900">
-                                <div>
-                                    <p className="font-medium">{item.name} <span className="text-sm text-gray-500">x{item.quantity}</span></p>
-                                    <p className="text-xs text-gray-400">
-                                        {item.selectedAddons.map(a => a.name).join(", ")}
-                                    </p>
+                    <div className="divide-y dark:divide-zinc-700 bg-white dark:bg-zinc-900">
+                        {/* Deals */}
+                        {deals.map((deal) => (
+                            <div key={deal.cartId} className="p-4 border-b border-emerald-100 dark:border-emerald-900/30 bg-emerald-50/10 dark:bg-emerald-900/10">
+                                <div className="flex justify-between items-start mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-8 h-8 bg-emerald-500 text-white rounded-lg flex items-center justify-center">
+                                            <i className="ri-magic-line"></i>
+                                        </div>
+                                        <div>
+                                            <p className="font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-tighter leading-none">{deal.name}</p>
+                                            <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-1">Deal Bundle</p>
+                                        </div>
+                                    </div>
+                                    <p className="font-black text-zinc-900 dark:text-white">Rs.{deal.totalDealPrice.toFixed(2)}</p>
                                 </div>
-                                <p className="font-bold">Rs.{item.totalItemPrice.toFixed(2)}</p>
+                                <div className="pl-10 space-y-2">
+                                    {deal.items.map((item, idx) => (
+                                        <div key={idx} className="flex justify-between text-xs">
+                                            <span className="text-zinc-500 font-medium">{item.quantity}x {item.name}</span>
+                                            {item.variantName !== 'Default' && (
+                                                <span className="text-zinc-400">({item.variantName})</span>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         ))}
-                        {items.length === 0 && (
-                            <div className="p-8 text-center text-gray-500">No items in cart</div>
+
+                        {/* Standalone Items */}
+                        {items.map((item) => (
+                            <div key={item.uniqueId} className="p-4 flex justify-between items-center">
+                                <div>
+                                    <p className="font-bold text-zinc-800 dark:text-zinc-200">{item.name} <span className="text-sm text-zinc-400 font-medium">x{item.quantity}</span></p>
+                                    <div className="flex gap-2 items-center mt-1">
+                                        {item.variantName !== 'Default' && (
+                                            <span className="text-[10px] bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-2 py-0.5 rounded-full font-black uppercase tracking-tighter">{item.variantName}</span>
+                                        )}
+                                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
+                                            {item.selectedAddons.map(a => a.name).join(", ")}
+                                        </p>
+                                    </div>
+                                </div>
+                                <p className="font-black text-zinc-900 dark:text-white">Rs.{item.totalItemPrice.toFixed(2)}</p>
+                            </div>
+                        ))}
+
+                        {items.length === 0 && deals.length === 0 && (
+                            <div className="p-12 text-center text-zinc-400 flex flex-col items-center gap-2">
+                                <i className="ri-shopping-basket-line text-4xl opacity-20"></i>
+                                <p className="font-bold uppercase tracking-widest text-xs">No items in cart</p>
+                            </div>
                         )}
                     </div>
                 </Card>
@@ -74,8 +159,9 @@ const Checkout: React.FC<CheckoutProps> = ({ onBack }) => {
                         onClick={handlePlaceOrder}
                         variant="primary"
                         size="lg"
-                        className="w-full py-6 text-lg shadow-xl shadow-indigo-200 dark:shadow-none"
-                        disabled={items.length === 0}
+                        className="w-full py-6 text-lg shadow-xl shadow-indigo-200 dark:shadow-none font-black tracking-tighter rounded-2xl transition-all scale-100 active:scale-95"
+                        disabled={items.length === 0 && deals.length === 0}
+                        isLoading={createOrder.isPending}
                     >
                         Confirm & Place Order
                         <i className="ri-check-double-line ms-2"></i>

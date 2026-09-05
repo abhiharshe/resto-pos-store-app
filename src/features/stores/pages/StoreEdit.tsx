@@ -1,14 +1,13 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStore, useUpdateStore, StoreFormValues } from '../api/storesApi';
 import { StoreForm } from '../components/StoreForm';
-import Card from '../../../components/common/Card';
-import { Button } from '../../../components/common/Button';
 import toast from 'react-hot-toast';
+import Container from '../../../components/shared/Container';
 
 const StoreEdit = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const storeId = parseInt(id || '0');
+    const storeId = id || '';
 
     const { data: store, isLoading: isFetching } = useStore(storeId);
     const updateMutation = useUpdateStore();
@@ -39,14 +38,14 @@ const StoreEdit = () => {
     }
 
     return (
-        <div className="p-4 space-y-6">
+        <Container>
             <StoreForm
                 title="Edit Store"
                 initialData={store}
                 onSubmit={handleSubmit}
                 isLoading={updateMutation.isPending}
             />
-        </div>
+        </Container>
     );
 };
 

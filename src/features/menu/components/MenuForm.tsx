@@ -62,92 +62,102 @@ const MenuForm = ({ title: title, initialValues: propInitialValues, onSubmit: pr
     };
 
     return (
-        <Card className="h-fit">
+        <div>
             <div className="flex items-center justify-between mb-6">
                 <div>
                     <h3 className="text-xl font-bold text-zinc-900 dark:text-white">{title}</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">{initialValues ? 'Edit menu' : 'Create new menu'}</p>
+                    <p className="text-zinc-500 dark:text-zinc-400">{propInitialValues ? 'Edit menu' : 'Create new menu'}</p>
                 </div>
                 <Button variant="ghost" onClick={() => navigate('/menu')} icon="ri-arrow-left-line">
                     Back to List
                 </Button>
             </div>
-
-            <Formik
-                initialValues={initialValues}
-                enableReinitialize
-                validationSchema={MenuSchema}
-                onSubmit={handleSubmit}
-            >
-                {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
-                    <Form className="space-y-4">
-                        <Input
-                            label="Menu Title"
-                            name="title"
-                            placeholder="Breakfast Menu"
-                            value={values.title}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            error={touched.title && errors.title ? (errors.title as string) : undefined}
-                            required
-                        />
-
-                        <div className="grid grid-cols-2 gap-4">
+            <Card className="w-full">
+                <Formik
+                    initialValues={initialValues}
+                    enableReinitialize
+                    validationSchema={MenuSchema}
+                    onSubmit={handleSubmit}
+                >
+                    {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
+                        <Form className="space-y-4">
                             <Input
-                                label="Serving From"
-                                name="serving_from"
-                                type="time"
-                                step="60"
-                                value={moment(values.serving_from, 'hh:mm A').format('HH:mm')}
-                                onChange={(e) => {
-                                    const time = moment(e.target.value, 'HH:mm').format('hh:mm A');
-                                    handleChange({ target: { name: 'serving_from', value: time } });
-                                }}
-                                onBlur={handleBlur}
-                                error={touched.serving_from && errors.serving_from ? (errors.serving_from as string) : undefined}
-                                required
-                            />
-                            <Input
-                                label="Serving To"
-                                name="serving_to"
-                                type="time"
-                                step="60"
-                                value={moment(values.serving_to, 'hh:mm A').format('HH:mm')}
-                                onChange={(e) => {
-                                    const time = moment(e.target.value, 'HH:mm').format('hh:mm A');
-                                    handleChange({ target: { name: 'serving_to', value: time } });
-                                }}
-                                onBlur={handleBlur}
-                                error={touched.serving_to && errors.serving_to ? (errors.serving_to as string) : undefined}
-                                required
-                            />
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="checkbox"
-                                name="is_active"
-                                id="is_active"
-                                checked={values.is_active}
+                                label="Menu Title"
+                                name="title"
+                                placeholder="Breakfast Menu"
+                                value={values.title}
                                 onChange={handleChange}
-                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-zinc-300 rounded"
+                                onBlur={handleBlur}
+                                error={touched.title && errors.title ? (errors.title as string) : undefined}
+                                required
                             />
-                            <label htmlFor="is_active" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                                Active
-                            </label>
-                        </div>
 
-                        <Button
-                            type="submit"
-                            className="w-full"
-                            isLoading={createMutation.isPending || isSubmitting || propIsLoading}
-                        >
-                            {propOnSubmit ? 'Update Menu' : 'Create Menu'}
-                        </Button>
-                    </Form>
-                )}
-            </Formik>
-        </Card>
+                            <div className="grid grid-cols-2 gap-4">
+                                <Input
+                                    label="Serving From"
+                                    name="serving_from"
+                                    type="time"
+                                    step="60"
+                                    value={moment(values.serving_from, 'hh:mm A').format('HH:mm')}
+                                    onChange={(e) => {
+                                        const time = moment(e.target.value, 'HH:mm').format('hh:mm A');
+                                        handleChange({ target: { name: 'serving_from', value: time } });
+                                    }}
+                                    onBlur={handleBlur}
+                                    error={touched.serving_from && errors.serving_from ? (errors.serving_from as string) : undefined}
+                                    required
+                                />
+                                <Input
+                                    label="Serving To"
+                                    name="serving_to"
+                                    type="time"
+                                    step="60"
+                                    value={moment(values.serving_to, 'hh:mm A').format('HH:mm')}
+                                    onChange={(e) => {
+                                        const time = moment(e.target.value, 'HH:mm').format('hh:mm A');
+                                        handleChange({ target: { name: 'serving_to', value: time } });
+                                    }}
+                                    onBlur={handleBlur}
+                                    error={touched.serving_to && errors.serving_to ? (errors.serving_to as string) : undefined}
+                                    required
+                                />
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="is_active"
+                                    id="is_active"
+                                    checked={values.is_active}
+                                    onChange={handleChange}
+                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-zinc-300 rounded"
+                                />
+                                <label htmlFor="is_active" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                    Active
+                                </label>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    type="submit"
+                                    isLoading={createMutation.isPending || isSubmitting || propIsLoading}
+                                >
+                                    {propOnSubmit ? 'Update Menu' : 'Create Menu'}
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => navigate('/menu')}
+                                    disabled={createMutation.isPending || isSubmitting || propIsLoading}
+                                >
+                                    Cancel
+                                </Button>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            </Card>
+        </div>
     );
 };
 

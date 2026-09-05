@@ -3,15 +3,17 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useStores, Store, useDeleteStore } from '../api/storesApi';
 import { DataTable } from '../../../components/common/DataTable';
 import { Button } from '../../../components/common/Button';
+import { FloatingActionButton } from '../../../components/common/FloatingActionButton';
 import { StatusBadge } from '../../../components/common/StatusBadge';
 import toast from 'react-hot-toast';
+import Container from '../../../components/shared/Container';
 
 const StoreList = () => {
     const navigate = useNavigate();
     const { data: stores, isLoading } = useStores();
     const deleteMutation = useDeleteStore();
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         if (window.confirm('Are you sure you want to delete this store? This will also affect users assigned to it.')) {
             const promise = deleteMutation.mutateAsync(id);
             toast.promise(promise, {
@@ -26,20 +28,42 @@ const StoreList = () => {
         {
             accessorKey: 'name',
             header: 'Store Name',
-            cell: (info) => <span className="font-medium text-zinc-900 dark:text-white">{info.getValue() as string}</span>
+            cell: (info) => (
+                <div className="flex flex-col">
+                    <span className="font-medium text-zinc-900 dark:text-white">{info.getValue() as string}</span>
+                    <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{info.row.original.prefix}</span>
+                </div>
+            )
         },
         {
             accessorKey: 'phone',
             header: 'Phone',
         },
         {
-            accessorKey: 'currency',
-            header: 'Currency',
-        },
-        {
-            accessorKey: 'tax_percentage',
-            header: 'Tax %',
-            cell: (info) => `${info.getValue()}%`
+            id: 'modules',
+            header: 'Modules',
+            cell: (info) => (
+                <div className="flex items-center gap-2">
+                    <span
+                        title={info.row.original.has_pos ? 'POS Enabled' : 'POS Disabled'}
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all ${info.row.original.has_pos
+                            ? 'bg-indigo-50 border-indigo-100 text-indigo-600 dark:bg-indigo-900/20 dark:border-indigo-800 dark:text-indigo-400'
+                            : 'bg-zinc-50 border-zinc-100 text-zinc-300 dark:bg-zinc-800/50 dark:border-zinc-800 dark:text-zinc-700'
+                            }`}
+                    >
+                        <i className="ri-shopping-cart-line text-sm" />
+                    </span>
+                    <span
+                        title={info.row.original.has_kds ? 'KDS Enabled' : 'KDS Disabled'}
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all ${info.row.original.has_kds
+                            ? 'bg-amber-50 border-amber-100 text-amber-600 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-400'
+                            : 'bg-zinc-50 border-zinc-100 text-zinc-300 dark:bg-zinc-800/50 dark:border-zinc-800 dark:text-zinc-700'
+                            }`}
+                    >
+                        <i className="ri-restaurant-2-line text-sm" />
+                    </span>
+                </div>
+            )
         },
         {
             accessorKey: 'is_active',
@@ -73,7 +97,7 @@ const StoreList = () => {
     ];
 
     return (
-        <div className="p-4 space-y-6">
+        <Container>
             <div className="flex items-center justify-between">
                 <div>
                     <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Stores</h3>
@@ -82,15 +106,18 @@ const StoreList = () => {
                 <Button
                     variant="primary"
                     onClick={() => navigate('/stores/new')}
+                    className="hidden sm:flex"
                 >
                     <i className="ri-add-line mr-2" /> Add Store
                 </Button>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+            <div className='border border-zinc-200 dark:border-zinc-700 rounded-lg'>
                 <DataTable data={stores || []} columns={columns} isLoading={isLoading} />
             </div>
-        </div>
+
+            <FloatingActionButton to="/stores/new" label="Add Store" />
+        </Container>
     );
 };
 

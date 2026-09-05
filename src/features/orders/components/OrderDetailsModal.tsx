@@ -12,19 +12,19 @@ interface OrderDetailsModalProps {
     currency?: string;
 }
 
-const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ isOpen, onClose, orderId, currency = '$' }) => {
+const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ isOpen, onClose, orderId, currency = 'Rs.' }) => {
     const { data: order, isLoading } = useOrder(orderId as number);
 
     if (!isOpen) return null;
 
     return (
         <AnimatePresence>
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-900/60 backdrop-blur-sm">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/60 backdrop-blur-sm">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                    className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden border border-zinc-200 dark:border-zinc-800"
+                    className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col overflow-hidden border border-zinc-200 dark:border-zinc-800"
                 >
                     {/* Header */}
                     <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
@@ -75,11 +75,10 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ isOpen, onClose, 
                                                 <span className="text-sm text-zinc-500">Payment</span>
                                                 <div className="flex flex-col items-end">
                                                     <span className="text-sm font-bold text-zinc-900 dark:text-white uppercase">{order.payment_method}</span>
-                                                    <span className={`text-[10px] font-black uppercase px-1.5 py-0.5 rounded ${
-                                                        order.payment_status === 'PAID' 
-                                                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                                            : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-                                                    }`}>
+                                                    <span className={`text-[10px] font-black uppercase px-1.5 py-0.5 rounded ${order.payment_status === 'PAID'
+                                                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                                        : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                                                        }`}>
                                                         {order.payment_status}
                                                     </span>
                                                 </div>
@@ -159,7 +158,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ isOpen, onClose, 
                     </div>
 
                     {/* Footer */}
-                    <div className="p-6 bg-zinc-50 dark:bg-zinc-900/50 border-t border-zinc-100 dark:border-zinc-800">
+                    <div className="p-6 border-t border-zinc-100 dark:border-zinc-800">
                         <p className="text-[10px] text-center font-bold text-zinc-400 uppercase tracking-widest italic">
                             Powered by restopos POS
                         </p>

@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useCategories, useUpdateCategory } from '../../menu/api/menuApi';
 import { CategoryForm } from '../components/CategoryForm';
 import toast from 'react-hot-toast';
+import Container from '../../../components/shared/Container';
 
 const CategoryEdit = () => {
     const { id } = useParams<{ id: string }>();
@@ -9,7 +10,7 @@ const CategoryEdit = () => {
     const { data: categories, isLoading: isFetching } = useCategories();
     const updateMutation = useUpdateCategory();
 
-    const category = categories?.find(c => c.id === Number(id));
+    const category = categories?.find(c => c.id === id);
 
     const handleSubmit = async (values: any) => {
         if (!id) return;
@@ -53,7 +54,7 @@ const CategoryEdit = () => {
     }
 
     return (
-        <div className="p-4 space-y-6">
+        <Container>
             <CategoryForm
                 title="Edit Category"
                 initialValues={category}
@@ -61,7 +62,7 @@ const CategoryEdit = () => {
                 isLoading={updateMutation.isPending}
                 onCancel={() => navigate('/menu/categories')}
             />
-        </div>
+        </Container>
     );
 };
 

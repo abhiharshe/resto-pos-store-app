@@ -21,13 +21,13 @@ const StoreSelectionModal: React.FC<StoreSelectionModalProps> = ({ isOpen, onClo
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-100 flex flex-col items-center justify-center bg-slate-400/30 dark:bg-slate-900/30 backdrop-blur-sm p-4">
             <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 className="bg-white dark:bg-zinc-900 rounded-xl shadow-2xl w-full max-w-md overflow-hidden border dark:border-zinc-800"
             >
-                <div className="p-4 flex flex-row items-center gap-2 bg-gradient-to-b from-indigo-50/50 to-transparent dark:from-indigo-900/10">
+                <div className="p-4 flex flex-row items-center gap-2 bg-linear-to-b from-indigo-50/50 to-transparent dark:from-indigo-900/10">
                     <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/40 rounded-2xl flex items-center justify-center">
                         <i className="ri-store-2-line text-3xl text-indigo-600 dark:text-indigo-400"></i>
                     </div>

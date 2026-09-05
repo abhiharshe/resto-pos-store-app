@@ -8,18 +8,20 @@ import {
     setPaymentMode,
     clearCart,
     CartItem,
-    updateCartItem
+    removeCoupon,
+    removeDealFromCart,
+    incrementDealQuantity,
+    decrementDealQuantity,
 } from "../slices/cartSlice";
 import { Button } from "../../../components/common/Button";
 import IconButton from "../../../components/common/IconButton";
 
 import { motion, AnimatePresence, useAnimation } from "motion/react";
-import CustomizationModal from "./CustomizationModal";
 import CheckoutModal from "./CheckoutModal";
 import DraftOrdersModal from "./DraftOrdersModal";
 import { useCreateOrder } from "../api/posApi";
 import { toast } from "react-hot-toast";
-import moment from "moment";
+
 
 interface CartItemCardProps {
     item: CartItem;
@@ -72,13 +74,12 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onEdit }) => {
 
             <motion.div
                 animate={controls}
-                drag="x"
+                drag={item.isPromoItem ? false : "x"}
                 dragConstraints={{ left: -80, right: 0 }}
                 dragElastic={0.05}
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 whileDrag={{ cursor: "grabbing" }}
                 onDragEnd={(_, info) => {
-                    // Snap back if not dragged far enough, or keep open
                     if (info.offset.x > -40) {
                         controls.start({ x: 0 });
                     } else {
@@ -86,12 +87,17 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onEdit }) => {
                     }
                 }}
                 exit={{ opacity: 0, x: -80, transition: { duration: 0.2 } }}
-                className="relative cursor-grab bg-white dark:bg-gray-700 rounded-xl p-2 shadow-sm border border-gray-100 dark:border-gray-600 z-10 touch-pan-y"
+                className={`relative cursor-grab bg-white dark:bg-gray-700 rounded-xl p-2 shadow-sm border z-10 touch-pan-y ${item.isPromoItem ? 'border-dashed border-indigo-300 dark:border-indigo-500/50 bg-indigo-50/30 dark:bg-indigo-900/10' : 'border-gray-100 dark:border-gray-600'}`}
                 onClick={handleResetPosition}
             >
                 <div className="flex justify-between items-start gap-2 text-gray-800 dark:text-gray-100">
                     <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-sm truncate">{item.name} <span className="text-gray-500 dark:text-gray-400 font-normal ml-1">({item.variantName})</span></h3>
+                        <div className="flex items-center gap-2">
+                            <h3 className="font-bold text-sm truncate">{item.name} <span className="text-gray-500 dark:text-gray-400 font-normal ml-1">({item.variantName})</span></h3>
+                            {item.isPromoItem && (
+                                <span className="text-[9px] font-black bg-indigo-600 text-white px-1.5 py-0.5 rounded-full uppercase tracking-tighter">Promo</span>
+                            )}
+                        </div>
                         {item.selectedAddons.length > 0 && (
                             <div className="mt-0.5 flex flex-wrap gap-1">
                                 {item.selectedAddons.map(addon => (
@@ -104,51 +110,110 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onEdit }) => {
                     </div>
                     <div className="text-right shrink-0">
                         <p className="text-sm font-bold">Rs.{item.totalItemPrice}</p>
+                        {item.discountedPrice !== undefined && (
+                            <p className="text-[10px] text-gray-400 line-through">Rs.{item.price * item.quantity}</p>
+                        )}
                     </div>
                 </div>
 
                 <div className="mt-2 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-2 bg-gray-100 dark:bg-zinc-800 rounded-lg p-1 border dark:border-zinc-700">
+                        <div className={`flex items-center gap-2 rounded-lg p-1 border ${item.isPromoItem ? 'bg-indigo-100/50 dark:bg-indigo-900/30 border-indigo-200/50' : 'bg-gray-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700'}`}>
                             <button
-                                onClick={() => {
-                                    console.log("cart-decrement", item);
-                                    dispatch(decrementQuantity(item.cartId))
-                                }}
-                                className="w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-zinc-900 shadow-sm text-indigo-600 dark:text-indigo-400 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
+                                onClick={() => !item.isPromoItem && dispatch(decrementQuantity(item.cartId))}
+                                disabled={item.isPromoItem}
+                                className={`w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-zinc-900 shadow-sm text-indigo-600 dark:text-indigo-400 transition-colors ${item.isPromoItem ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50 dark:hover:bg-zinc-800'}`}
                             >
                                 <i className="ri-subtract-line text-xs"></i>
                             </button>
                             <span className="text-xs font-bold min-w-6 text-center text-indigo-600 dark:text-indigo-400">{item.quantity}</span>
                             <button
-                                onClick={() => {
-                                    console.log("cart-increment", item);
-                                    dispatch(incrementQuantity(item.cartId))
-                                }}
-                                className="w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-zinc-900 shadow-sm text-indigo-600 dark:text-indigo-400 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
+                                onClick={() => !item.isPromoItem && dispatch(incrementQuantity(item.cartId))}
+                                disabled={item.isPromoItem}
+                                className={`w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-zinc-900 shadow-sm text-indigo-600 dark:text-indigo-400 transition-colors ${item.isPromoItem ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50 dark:hover:bg-zinc-800'}`}
                             >
                                 <i className="ri-add-line text-xs"></i>
                             </button>
                         </div>
-                        <button
-                            onClick={() => dispatch(removeFromCart(item.cartId))}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm"
-                            title="Remove item"
-                        >
-                            <i className="ri-delete-bin-line text-sm"></i>
-                        </button>
+                        {!item.isPromoItem && (
+                            <button
+                                onClick={() => dispatch(removeFromCart(item.cartId))}
+                                className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                                title="Remove item"
+                            >
+                                <i className="ri-delete-bin-line text-sm"></i>
+                            </button>
+                        )}
                     </div>
-                    <span className="text-[10px] text-gray-400 italic">Rs.{item.price + item.selectedAddons.reduce((a, b) => a + b.price, 0)} each</span>
+                    <span className="text-[10px] text-gray-400 italic">
+                        {item.isPromoItem ? 'Complimentary' : `Rs.${item.discountedPrice ?? item.price + item.selectedAddons.reduce((a, b) => a + b.price, 0)} each`}
+                    </span>
                 </div>
             </motion.div>
         </div>
     );
 };
 
-const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerClick?: () => void }> = ({ setIsCartOpen, onCustomerClick }) => {
+const CartDealCard: React.FC<{ deal: any }> = ({ deal }) => {
+    const dispatch = useAppDispatch();
+    return (
+        <div className="bg-emerald-50/30 dark:bg-emerald-900/10 rounded-xl p-3 border border-emerald-100 dark:border-emerald-900/20 space-y-2">
+            <div className="flex justify-between items-start">
+                <div className="flex-1 min-w-0">
+                    <h3 className="font-black text-sm text-emerald-700 dark:text-emerald-400 truncate flex items-center gap-2">
+                        <i className="ri-magic-line text-xs"></i>
+                        {deal.name}
+                    </h3>
+                    <div className="mt-1 space-y-1">
+                        {deal.items.map((item: any, idx: number) => (
+                            <div key={idx} className="flex items-center gap-2 text-[10px] text-zinc-500 dark:text-zinc-400">
+                                <span className="font-black opacity-40">•</span>
+                                <span className="truncate">{item.quantity}x {item.name} {item.variantName !== 'Default' ? `(${item.variantName})` : ''}</span>
+                                {item.selectedAddons?.length > 0 && (
+                                    <span className="text-emerald-600/60 font-medium">+{item.selectedAddons.length}</span>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="text-right shrink-0">
+                    <p className="text-sm font-black text-emerald-700 dark:text-emerald-400">Rs.{deal.totalDealPrice}</p>
+                    <p className="text-[10px] text-zinc-400 italic">Rs.{deal.price} base</p>
+                </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 rounded-lg p-1 bg-white/50 dark:bg-zinc-800 border border-emerald-100 dark:border-emerald-900/30">
+                    <button
+                        onClick={() => dispatch(decrementDealQuantity(deal.cartId))}
+                        className="w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-zinc-900 shadow-sm text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 transition-colors"
+                    >
+                        <i className="ri-subtract-line text-xs"></i>
+                    </button>
+                    <span className="text-xs font-black min-w-6 text-center text-emerald-600 dark:text-emerald-400">{deal.quantity}</span>
+                    <button
+                        onClick={() => dispatch(incrementDealQuantity(deal.cartId))}
+                        className="w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-zinc-900 shadow-sm text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 transition-colors"
+                    >
+                        <i className="ri-add-line text-xs"></i>
+                    </button>
+                </div>
+                <button
+                    onClick={() => dispatch(removeDealFromCart(deal.cartId))}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                >
+                    <i className="ri-delete-bin-line text-sm"></i>
+                </button>
+            </div>
+        </div>
+    );
+};
+
+const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerClick?: () => void, onEditItem?: (item: CartItem) => void }> = ({ setIsCartOpen, onCustomerClick, onEditItem }) => {
     const dispatch = useAppDispatch();
     const {
         items,
+        deals,
         customerName,
         customerPhone,
         customerAddress,
@@ -157,21 +222,23 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
         subtotal,
         tax,
         total,
+        discountAmount,
+        couponCode,
         selectedStoreId
     } = useAppSelector((state) => state.cart);
 
-    const cartItems = useAppSelector((state) => state.cart.items);
-    const cartCount = cartItems.reduce((acc: number, item: CartItem) => acc + item.quantity, 0);
+    const cartCount = items.reduce((acc: number, item: CartItem) => acc + item.quantity, 0) + 
+                      deals.reduce((acc: number, deal: any) => acc + deal.quantity, 0);
 
 
     const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
     const [isDraftModalOpen, setIsDraftModalOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState<CartItem | null>(null);
+
 
     const { mutateAsync: createOrder, isPending: isSavingDraft } = useCreateOrder();
 
     const handleSaveAsDraft = async () => {
-        if (items.length === 0) {
+        if (items.length === 0 && deals.length === 0) {
             toast.error("Cart is empty!");
             return;
         }
@@ -185,11 +252,25 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                 guest_name: customerName,
                 guest_phone: customerPhone,
                 guest_address: customerAddress,
+                subtotal: subtotal,
+                sub_total: subtotal,
+                tax_amount: tax,
+                total_amount: total,
                 items: items.map(item => ({
                     menu_item_id: item.id,
                     variant_id: item.variantId,
                     quantity: item.quantity,
                     addons: item.selectedAddons.map(a => ({ addon_id: a.id }))
+                })),
+                deals: deals.map(deal => ({
+                    deal_id: deal.id,
+                    items: deal.items.map(item => ({
+                        menu_item_id: item.id,
+                        variant_id: item.variantId,
+                        quantity: item.quantity,
+                        addons: item.selectedAddons.map(a => ({ addon_id: a.id })),
+                        deal_selection_group_id: item.deal_selection_group_id
+                    }))
                 }))
             };
 
@@ -203,28 +284,11 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
     };
 
     const handleCheckout = () => {
-        if (items.length === 0) return;
+        if (items.length === 0 && deals.length === 0) return;
         setIsCheckoutModalOpen(true);
     };
 
-    const handleUpdateItem = (variant: any, addons: any[], quantity: number) => {
-        if (editingItem) {
-            dispatch(updateCartItem({
-                cartId: editingItem.cartId,
-                newItem: {
-                    ...editingItem,
-                    variantId: variant.id,
-                    variantName: variant.name,
-                    price: variant.price,
-                    quantity,
-                    selectedAddons: addons,
-                    uniqueId: `item-${editingItem.id}-var-${variant.id}${addons.map(a => a.id).sort().join('-') ? `-${addons.map(a => a.id).sort().join('-')}` : ''}`,
-                    timeStamp: moment().unix()
-                }
-            }));
-            setEditingItem(null);
-        }
-    };
+
 
     return (
         <div className="flex flex-col h-full overflow-hidden">
@@ -277,14 +341,22 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
             {/* Cart Items List */}
             <div className="flex-1 overflow-y-auto pr-2 -mr-2 space-y-2">
                 <AnimatePresence initial={false}>
-                    {items.length > 0 ? (
-                        [...items].sort((a, b) => b.timeStamp - a.timeStamp).map((item) => (
-                            <CartItemCard
-                                key={item.cartId}
-                                item={item}
-                                onEdit={setEditingItem}
-                            />
-                        ))
+                    {items.length > 0 || deals.length > 0 ? (
+                        <>
+                            {[...items].sort((a, b) => b.timeStamp - a.timeStamp).map((item) => (
+                                <CartItemCard
+                                    key={item.cartId}
+                                    item={item}
+                                    onEdit={(item) => onEditItem?.(item)}
+                                />
+                            ))}
+                            {[...deals].sort((a, b) => b.timeStamp - a.timeStamp).map((deal) => (
+                                <CartDealCard
+                                    key={deal.cartId}
+                                    deal={deal}
+                                />
+                            ))}
+                        </>
                     ) : (
                         <motion.div
                             key="empty-cart"
@@ -372,6 +444,21 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                         <span>Tax (5%)</span>
                         <span className="text-zinc-900 dark:text-zinc-300">Rs.{tax.toFixed(2)}</span>
                     </div>
+                    {discountAmount > 0 && (
+                        <div className="flex justify-between text-md text-emerald-600 font-bold italic group relative">
+                            <span className="flex items-center gap-1">
+                                Discount ({couponCode})
+                                <button 
+                                    onClick={() => dispatch(removeCoupon())}
+                                    className="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity ml-1"
+                                    title="Remove Coupon"
+                                >
+                                    <i className="ri-close-circle-fill"></i>
+                                </button>
+                            </span>
+                            <span>- Rs.{discountAmount.toFixed(2)}</span>
+                        </div>
+                    )}
                     <div className="flex justify-between font-black text-lg text-zinc-900 dark:text-white pt-1.5 mt-1 border-t border-zinc-200 dark:border-zinc-700">
                         <span>Total</span>
                         <span className="text-indigo-600 dark:text-indigo-400">Rs.{total.toFixed(2)}</span>
@@ -381,7 +468,7 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                 <Button
                     variant="primary"
                     className="w-full py-2 text-sm font-bold shadow-lg shadow-indigo-100 dark:shadow-none rounded-2xl"
-                    disabled={items.length === 0}
+                    disabled={items.length === 0 && deals.length === 0}
                     onClick={handleCheckout}
                 >
                     Checkout
@@ -390,18 +477,7 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
             </div>
 
 
-            {editingItem && (
-                <CustomizationModal
-                    isOpen={!!editingItem}
-                    onClose={() => setEditingItem(null)}
-                    item={editingItem.originalItem}
-                    initialVariant={{ id: editingItem.variantId, name: editingItem.variantName, price: editingItem.price }}
-                    initialAddons={editingItem.selectedAddons}
-                    initialQuantity={editingItem.quantity}
-                    onAddToCart={handleUpdateItem}
-                    mode="edit"
-                />
-            )}
+
 
             <CheckoutModal
                 isOpen={isCheckoutModalOpen}

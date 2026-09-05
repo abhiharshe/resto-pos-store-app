@@ -5,6 +5,7 @@ import { AddonGroupForm } from '../components/AddonGroupForm';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
+import Container from '../../../components/shared/Container';
 
 const AddonGroupList = () => {
     const { data: groups, isLoading } = useAddonGroups();
@@ -34,13 +35,18 @@ const AddonGroupList = () => {
             header: 'Add-Ons',
             cell: (info) => {
                 const addons = (info.getValue() as any[]) || [];
+                const displayedAddons = addons.slice(0, 3);
+                const remaining = addons.length - displayedAddons.length;
                 return (
                     <div className="flex flex-wrap gap-1">
-                        {addons.map((addon) => (
+                        {displayedAddons.map((addon) => (
                             <span key={addon.id} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200">
                                 {addon.name} (₹{addon.price})
                             </span>
                         ))}
+                        {remaining > 0 && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300">…</span>
+                        )}
                     </div>
                 );
             }
@@ -83,7 +89,7 @@ const AddonGroupList = () => {
     ];
 
     return (
-        <div className="p-4 space-y-6">
+        <Container>
             <div className="flex items-center justify-between">
                 <div>
                     <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Add-On Groups</h3>
@@ -103,11 +109,11 @@ const AddonGroupList = () => {
                     onCancel={() => setIsFormOpen(false)}
                 />
             ) : (
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div>
                     <DataTable data={groups || []} columns={columns} isLoading={isLoading} />
                 </div>
             )}
-        </div>
+        </Container>
     );
 };
 

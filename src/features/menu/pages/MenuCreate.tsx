@@ -1,10 +1,11 @@
+import Container from '../../../components/shared/Container';
 import MenuForm from '../components/MenuForm';
 
 const MenuCreate = () => {
     return (
-        <div className="p-4 max-w-2xl mx-auto space-y-6">
+        <Container>
             <MenuForm title="Create New Menu" />
-        </div>
+        </Container>
     );
 };
 

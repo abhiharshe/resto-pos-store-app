@@ -1,6 +1,23 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #C2410C;
+  --color-primary-hover: #9A3412;
+  --color-primary-dark: #C2410C;
+  
+  --color-danger: #DC2626;
+  --color-success: #16A34A;
+  --color-alert: #D97706;
+  --color-info: #0284C7;
+
+  --color-drivethru: #ffb7a8;
+  --color-takeaway: #fccb90;
+  --color-dinein: #9bd0fd;
+  --color-delivery: #abdca5;
+}
+
+/* Enable class-based dark mode selector (restores v3 darkMode: 'class' functionality) */
+@variant dark (&:where(.dark, .dark *));
 
 html,body {
   font-family: "Figtree", serif;

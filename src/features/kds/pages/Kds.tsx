@@ -15,6 +15,7 @@ const KdsPage: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { theme } = useAppSelector((state) => state.ui);
+    const { user } = useAppSelector((state) => state.auth);
     const queryClient = useQueryClient();
     const { data: stores, isLoading: storesLoading } = useStores();
     const [selectedStoreId, setSelectedStoreId] = useState<number>(0);
@@ -24,9 +25,11 @@ const KdsPage: React.FC = () => {
     // Initial store selection
     useEffect(() => {
         if (stores && stores.length > 0 && !selectedStoreId) {
-            setSelectedStoreId(stores[0].id);
+            // Prioritize user's own store, fallback to first store in list
+            const initialStoreId = user?.store_id || stores[0].id;
+            setSelectedStoreId(initialStoreId);
         }
-    }, [stores, selectedStoreId]);
+    }, [stores, selectedStoreId, user]);
 
     // Fetch active orders (those not completed or cancelled)
     // We'll use useOrders but filter locally or ideally the API should support a KDS mode
@@ -40,7 +43,7 @@ const KdsPage: React.FC = () => {
 
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const host = window.location.hostname === 'localhost' ? 'localhost:8000' : window.location.host;
-        const wsUrl = `${protocol}//${host}/api/v1/ws/${selectedStoreId}`;
+        const wsUrl = `${protocol}//${host}/api/v1/ws/kitchen/${selectedStoreId}`;
 
         const ws = new WebSocket(wsUrl);
 
@@ -122,13 +125,13 @@ const KdsPage: React.FC = () => {
         <div className="h-full flex flex-col bg-zinc-50 dark:bg-black">
             {/* Header / Toolbar */}
             <div className="bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 p-4 sticky top-0 z-10">
-                <div className="mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div className="mx-auto flex flex-row justify-between items-center gap-4">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
                             <i className="ri-restaurant-2-line text-xl"></i>
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold text-zinc-900 dark:text-white leading-tight">Kitchen Display</h1>
+                            <h1 className="text-xl font-bold text-zinc-900 dark:text-white leading-tight">KDS</h1>
                             <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">{kdsOrders.length} active orders</p>
                         </div>
                         <div className="flex items-center gap-2 min-w-[240px]">

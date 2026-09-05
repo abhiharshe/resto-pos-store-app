@@ -5,7 +5,7 @@ import { OrderItem } from '../../orders/api/ordersApi';
 export type OrderItemStatus = 'PENDING' | 'PREPARING' | 'READY' | 'SERVED';
 
 export interface UpdateItemStatusParams {
-    orderItemId: number;
+    orderItemid: string;
     status: OrderItemStatus;
 }
 

@@ -91,7 +91,7 @@ export const Select: React.FC<SelectProps> = ({
                     className={`
                         w-full min-h-[40px] px-3 py-1.5 flex flex-wrap gap-1.5 items-center justify-between text-left
                         bg-white dark:bg-zinc-800 border rounded-lg transition-all
-                        ${error ? 'border-red-500' : 'border-zinc-200 dark:border-zinc-700'}
+                        ${error ? 'border-red-500' : 'border-zinc-100 dark:border-zinc-800'}
                         ${isOpen ? 'ring-2 ring-indigo-500/20 border-indigo-500' : ''}
                         ${disabled ? 'opacity-50 cursor-not-allowed bg-zinc-50 dark:bg-zinc-900' : 'cursor-pointer'}
                     `}
@@ -101,7 +101,7 @@ export const Select: React.FC<SelectProps> = ({
                             selectedOptions.map(opt => (
                                 <span
                                     key={opt.value}
-                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 text-xs font-medium border border-indigo-100 dark:border-indigo-800/50"
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 text-xs font-medium border border-indigo-100 dark:border-indigo-800"
                                 >
                                     {opt.label}
                                     {multiple && (
@@ -123,8 +123,8 @@ export const Select: React.FC<SelectProps> = ({
                 </div>
 
                 {isOpen && (
-                    <div className="absolute z-50 w-full mt-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-xl overflow-hidden animate-in fade-in zoom-in duration-200">
-                        <div className="p-2 border-b border-zinc-100 dark:border-zinc-700">
+                    <div className="absolute z-50 w-full mt-1 bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-800 rounded-lg shadow-xl overflow-hidden animate-in fade-in zoom-in duration-200">
+                        <div className="p-2 border-b border-zinc-50 dark:border-zinc-800">
                             <div className="relative">
                                 <i className="ri-search-line absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 text-sm" />
                                 <input

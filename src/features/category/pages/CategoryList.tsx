@@ -1,15 +1,34 @@
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCategories, useDeleteCategory, Category } from '../../menu/api/menuApi';
+import { useCategories, useDeleteCategory, Category, useMenus } from '../../menu/api/menuApi';
 import { DataTable } from '../../../components/common/DataTable';
 import { Button } from '../../../components/common/Button';
 import { StatusBadge } from '../../../components/common/StatusBadge';
+import { Input } from '../../../components/common/Input';
+import { Select } from '../../../components/common/Select';
 import { ColumnDef } from '@tanstack/react-table';
+import { FloatingActionButton } from '../../../components/common/FloatingActionButton';
 import toast from 'react-hot-toast';
+import Container from '../../../components/shared/Container';
 
 const CategoryList = () => {
     const navigate = useNavigate();
     const { data: categories, isLoading } = useCategories();
+    const { data: menus } = useMenus();
     const deleteMutation = useDeleteCategory();
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedMenuId, setSelectedMenuId] = useState<string>('');
+    const [isFilterVisible, setIsFilterVisible] = useState(false);
+
+    const filteredCategories = useMemo(() => {
+        if (!categories) return [];
+        return categories.filter((category) => {
+            const matchesSearch = category.name.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesMenu = selectedMenuId ? category.menu_id === selectedMenuId : true;
+            return matchesSearch && matchesMenu;
+        });
+    }, [categories, searchQuery, selectedMenuId]);
 
     const handleDelete = async (id: number) => {
         if (window.confirm('Are you sure you want to delete this category?')) {
@@ -31,22 +50,26 @@ const CategoryList = () => {
 
     const columns: ColumnDef<Category>[] = [
         {
-            accessorKey: 'image_url',
-            header: 'Image',
+            accessorKey: 'image.url',
+            header: 'Category',
             cell: (info) => (
-                <div className="w-10 h-10 rounded-md bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden">
-                    {info.getValue() ? (
-                        <img src={`http://127.0.0.1:8000${info.getValue()}`} alt="Category" className="w-full h-full object-cover" />
-                    ) : (
-                        <i className="ri-image-line text-zinc-400" />
-                    )}
+                <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0 border border-zinc-200 dark:border-zinc-700">
+                        {info.row.original.image?.url ? (
+                            <img src={info.row.original.image.url} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                                <i className="ri-image-line text-zinc-400 text-sm"></i>
+                            </div>
+                        )}
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="font-semibold text-zinc-900 dark:text-white">
+                            {info.row.original.name}
+                        </span>
+                    </div>
                 </div>
             )
-        },
-        {
-            accessorKey: 'name',
-            header: 'Category Name',
-            cell: (info) => <span className="font-medium text-zinc-900 dark:text-white">{info.getValue() as string}</span>
         },
         {
             accessorKey: 'menu.title',
@@ -85,21 +108,62 @@ const CategoryList = () => {
     ];
 
     return (
-        <div className="p-4 space-y-6">
-            <div className="flex items-center justify-between">
+        <Container>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Categories</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">Organize your menu items into logical groups.</p>
                 </div>
-                <Button onClick={() => navigate('/menu/categories/new')}>
-                    <i className="ri-add-line mr-2" /> Add Category
-                </Button>
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant={isFilterVisible ? 'secondary' : 'outline'}
+                        icon="ri-filter-3-line"
+                        onClick={() => setIsFilterVisible(!isFilterVisible)}
+                    >
+                        {isFilterVisible ? 'Hide Filters' : 'Show Filters'}
+                    </Button>
+                    <Button onClick={() => navigate('/menu/categories/new')} className="hidden sm:flex">
+                        <i className="ri-add-line mr-2" /> Add Category
+                    </Button>
+                </div>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
-                <DataTable data={categories || []} columns={columns} isLoading={isLoading} />
+            {isFilterVisible && (
+                <div className="flex flex-col sm:flex-row gap-4 mb-6 p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-200 dark:border-zinc-700">
+                    <div className="w-full sm:w-64">
+                        <Input
+                            name="search"
+                            placeholder="Search categories..."
+                            value={searchQuery}
+                            onChange={(e: any) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                    <div className="sm:w-64">
+                        <Select
+                            placeholder="All Menus"
+                            options={[{ label: 'All Menus', value: '' }, ...(menus?.map(m => ({ label: m.title, value: m.id })) || [])]}
+                            value={selectedMenuId}
+                            onChange={(val) => setSelectedMenuId(val as string)}
+                        />
+                    </div>
+                    {(searchQuery || selectedMenuId) && (
+                        <Button
+                            variant="ghost"
+                            className="text-red-500 hover:text-red-600 sm:w-auto"
+                            onClick={() => { setSearchQuery(''); setSelectedMenuId(''); }}
+                        >
+                            Clear Filters
+                        </Button>
+                    )}
+                </div>
+            )}
+
+            <div className='border border-zinc-200 dark:border-zinc-700 rounded-lg'>
+                <DataTable data={filteredCategories} columns={columns} isLoading={isLoading} />
             </div>
-        </div>
+
+            <FloatingActionButton to="/menu/categories/new" label="Add Category" />
+        </Container>
     );
 };
 

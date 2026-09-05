@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Input } from '../../../components/common/Input';
 import { useMutation } from '@tanstack/react-query';
 import api from '../../../utils/api';
@@ -8,7 +8,11 @@ import { setCredentials } from '../slices/authSlice';
 
 const SignIn = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
+    
+    const resetSuccess = searchParams.get('reset') === 'success';
+    
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -58,12 +62,21 @@ const SignIn = () => {
                     Sign in to your account
                 </h2>
                 <p className="mt-2 text-center text-sm text-gray-600 dark:text-zinc-400">
-                    Or{' '}
-                    <Link to="/auth/sign-up" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+                    Or
+                    <Link to="/auth/sign-up" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 ms-3">
                         create a new account
                     </Link>
                 </p>
             </div>
+
+            {resetSuccess && (
+                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-3 rounded-md">
+                    <p className="text-sm text-green-600 dark:text-green-400 flex items-center gap-2">
+                        <i className="ri-checkbox-circle-line text-lg" />
+                        Password reset successful. You can now sign in with your new password.
+                    </p>
+                </div>
+            )}
 
             {loginError && (
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 rounded-md">

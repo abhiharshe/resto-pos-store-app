@@ -5,6 +5,8 @@ import { useGetEmailSettingsQuery, useUpdateEmailSettingsMutation, useTestEmailM
 import { Button } from '../../../components/common/Button';
 import { Input } from '../../../components/common/Input';
 
+import { getApiErrorMessage } from '../../../utils/api';
+
 const EmailSettings = () => {
     const { data: emailSettings } = useGetEmailSettingsQuery();
     const updateEmailSettings = useUpdateEmailSettingsMutation();
@@ -26,7 +28,7 @@ const EmailSettings = () => {
                 {
                     loading: 'Saving email settings...',
                     success: 'Email settings saved successfully',
-                    error: 'Failed to save settings'
+                    error: (err) => getApiErrorMessage(err, 'Failed to save settings')
                 }
             );
         }
@@ -56,7 +58,7 @@ const EmailSettings = () => {
             {
                 loading: 'Sending test email...',
                 success: 'Test email sent successfully!',
-                error: (err: any) => err.response?.data?.detail || 'Failed to send test email',
+                error: (err: any) => getApiErrorMessage(err, 'Failed to send test email'),
             }
         );
     }

@@ -14,6 +14,7 @@ const GeneralSettings = () => {
         initialValues: {
             logo_url: settings?.logo_url || '',
             favicon_url: settings?.favicon_url || '',
+            currency: settings?.currency || '₹',
             meta_info: (settings?.meta_info as any) || { title: '', description: '' },
             social_links: (settings?.social_links as any) || { facebook: '', instagram: '', twitter: '' }
         },
@@ -126,6 +127,20 @@ const GeneralSettings = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         placeholder="https://twitter.com/..."
+                    />
+                </div>
+            </div>
+
+            <div className="border-t border-zinc-200 dark:border-zinc-700 pt-8 space-y-4">
+                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Regional Settings</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Input
+                        label="Currency Symbol"
+                        name="currency"
+                        value={formik.values.currency}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        placeholder="e.g. ₹ or $"
                     />
                 </div>
             </div>

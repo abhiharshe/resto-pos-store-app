@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMenus, useUpdateMenu } from '../api/menuApi';
 import MenuForm from '../components/MenuForm';
+import Container from '../../../components/shared/Container';
 
 const MenuEdit = () => {
     const { id } = useParams<{ id: string }>();
@@ -8,7 +9,7 @@ const MenuEdit = () => {
     const { data: menus, isLoading: isFetching } = useMenus();
     const updateMutation = useUpdateMenu();
 
-    const menu = menus?.find(m => m.id === Number(id));
+    const menu = menus?.find(m => m.id === (id));
 
     const handleSubmit = async (values: any) => {
         if (!id) return;
@@ -24,14 +25,14 @@ const MenuEdit = () => {
     if (!menu) return <div className="py-10 text-center">Menu not found.</div>;
 
     return (
-        <div className="p-4 max-w-2xl mx-auto space-y-6">
+        <Container>
             <MenuForm
                 title="Edit Menu"
                 initialValues={menu}
                 onSubmit={handleSubmit}
                 isLoading={updateMutation.isPending}
             />
-        </div>
+        </Container>
     );
 };
 

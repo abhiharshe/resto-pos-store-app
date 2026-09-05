@@ -173,4 +173,39 @@ export const getMediaURL = (path: string | undefined | null) => {
     return `${base}${cleanPath}`;
 };
 
+export const getApiErrorMessage = (error: any, fallbackMessage = 'An error occurred'): string => {
+    if (!error) return fallbackMessage;
+
+    const data = error.response?.data;
+    if (data) {
+        if (typeof data.detail === 'string') {
+            return data.detail;
+        }
+        if (Array.isArray(data.detail) && data.detail.length > 0) {
+            return data.detail
+                .map((errItem: any) => {
+                    if (typeof errItem === 'string') return errItem;
+                    if (errItem?.msg) {
+                        const field = Array.isArray(errItem.loc)
+                            ? errItem.loc.filter((l: any) => l !== 'body').join('.')
+                            : '';
+                        return field ? `${field}: ${errItem.msg}` : errItem.msg;
+                    }
+                    return JSON.stringify(errItem);
+                })
+                .join('; ');
+        }
+        if (typeof data.message === 'string') {
+            return data.message;
+        }
+    }
+
+    if (error.message && typeof error.message === 'string') {
+        return error.message;
+    }
+
+    return fallbackMessage;
+};
+
 export default api;
+

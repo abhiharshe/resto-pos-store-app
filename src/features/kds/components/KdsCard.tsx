@@ -111,9 +111,9 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
     };
 
     return (
-        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden flex flex-col h-full ring-1 ring-zinc-950/5">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm overflow-hidden flex flex-col h-full ring-1 ring-zinc-950/5">
             {/* Header */}
-            <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/30 flex justify-between items-start">
+            <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/30 flex justify-between items-start">
                 <div>
                     <div className="flex items-center gap-2 mb-1">
                         <span className="text-lg font-bold text-zinc-900 dark:text-white">
@@ -137,17 +137,56 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
             </div>
 
             {/* Items List */}
-            <div className="p-4 flex-grow overflow-y-auto space-y-3">
-                {order.items.map((item) => (
+            <div className="p-4 flex-grow overflow-y-auto space-y-4">
+                {/* Deals Sections */}
+                {order.deals && order.deals.length > 0 && order.deals.map((deal) => (
+                    <div key={deal.id} className="bg-emerald-50/30 dark:bg-emerald-900/10 rounded-xl p-3 border border-emerald-100 dark:border-emerald-900/20">
+                        <div className="flex items-center gap-2 mb-3 pb-2 border-b border-emerald-100/50 dark:border-emerald-900/20">
+                            <i className="ri-magic-line text-emerald-500"></i>
+                            <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-tighter">{deal.deal_name}</span>
+                        </div>
+                        <div className="space-y-3">
+                            {deal.items.map((item) => (
+                                <div key={item.id} className="flex justify-between items-center gap-2">
+                                    <div className="flex-grow min-w-0">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-bold text-sm text-zinc-900 dark:text-white truncate">
+                                                {item.quantity}x {item.name}
+                                            </span>
+                                        </div>
+                                        {item.variant_name && item.variant_name !== 'Default' && (
+                                            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block truncate font-bold">
+                                                {item.variant_name}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <button
+                                        onClick={() => handleItemStatusChange(item.id, item.status as OrderItemStatus)}
+                                        disabled={updateItemStatus.isPending || item.status === 'SERVED'}
+                                        className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-wider transition-all flex-shrink-0
+                                            ${getStatusColor(item.status)}
+                                            ${item.status !== 'SERVED' ? 'hover:scale-105 active:scale-95 cursor-pointer shadow-sm hover:shadow' : 'opacity-70'}
+                                        `}
+                                    >
+                                        {item.status}
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+
+                {/* Standalone Items */}
+                {order.items.filter(item => !item.order_deal_id).map((item) => (
                     <div key={item.id} className="flex justify-between items-center gap-2 group">
                         <div className="flex-grow min-w-0">
                             <div className="flex items-center gap-2">
-                                <span className="font-medium text-zinc-900 dark:text-white truncate">
+                                <span className="font-bold text-sm text-zinc-900 dark:text-white truncate">
                                     {item.quantity}x {item.name}
                                 </span>
                             </div>
-                            {item.variant_name && (
-                                <span className="text-xs text-zinc-500 dark:text-zinc-400 block truncate">
+                            {item.variant_name && item.variant_name !== 'Default' && (
+                                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-bold truncate">
                                     {item.variant_name}
                                 </span>
                             )}
@@ -157,7 +196,7 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
                             <button
                                 onClick={() => handleItemStatusChange(item.id, item.status as OrderItemStatus)}
                                 disabled={updateItemStatus.isPending || item.status === 'SERVED'}
-                                className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all
+                                className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-wider transition-all
                                     ${getStatusColor(item.status)}
                                     ${item.status !== 'SERVED' ? 'hover:scale-105 active:scale-95 cursor-pointer shadow-sm hover:shadow' : 'opacity-70'}
                                 `}
@@ -171,7 +210,7 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
 
             {/* Footer Actions */}
             {action && (
-                <div className="p-3 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-900/30">
+                <div className="p-3 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-900/30">
                     <Button 
                         variant={action.variant as any}
                         size="sm" 

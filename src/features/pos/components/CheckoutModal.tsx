@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { clearCart, setOrderType, setPaymentMode, updateCustomerDetails } from "../slices/cartSlice";
+import { 
+    clearCart, 
+    setOrderType, 
+    setPaymentMode, 
+    updateCustomerDetails, 
+    applyCoupon, 
+    removeCoupon,
+    toggleWalkIn
+} from "../slices/cartSlice";
 import { Button } from "../../../components/common/Button";
 import IconButton from "../../../components/common/IconButton";
+import { PhoneInput } from "../../../components/common/PhoneInput";
 import { useCreateOrder, useUpdateOrderStatus } from "../api/posApi";
+import { useValidateCoupon } from "../../coupons/api/couponsApi";
 import { toast } from "react-hot-toast";
 
 interface CheckoutModalProps {
@@ -19,36 +29,67 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
 
     const {
         items,
+        deals,
         activeOrderId,
         customerName,
         customerPhone,
         customerAddress,
+        isWalkIn,
         orderType,
         paymentMode,
         subtotal,
         tax,
         total,
+        discountAmount,
+        couponCode: appliedCouponCode,
         selectedStoreId
     } = useAppSelector((state) => state.cart);
 
     const [cashReceived, setCashReceived] = useState<string>("");
     const [change, setChange] = useState<number>(0);
-    const [couponCode, setCouponCode] = useState<string>("");
+    const [couponInput, setCouponInput] = useState<string>("");
     const [touched, setTouched] = useState({ name: false, phone: false, address: false });
     const [showErrors, setShowErrors] = useState(false);
 
+    // Only mandatory for PICKUP and DELIVERY
+    const isDetailsRequired = orderType !== 'DINE_IN' && !isWalkIn;
+
     const errors = {
-        name: !customerName.trim() ? "Customer name is required" : null,
-        phone: !customerPhone.trim() ? "Phone number is required" : null,
+        name: isDetailsRequired && !customerName.trim() ? "Customer name is required" : null,
+        phone: isDetailsRequired && !customerPhone.trim() ? "Phone number is required" : null,
         address: orderType === 'DELIVERY' && !customerAddress?.trim() ? "Delivery address is required" : null,
     };
 
     const isFormValid = !errors.name && !errors.phone && !errors.address;
+    const validateCouponMutation = useValidateCoupon();
 
     useEffect(() => {
         const received = parseFloat(cashReceived) || 0;
         setChange(Math.max(0, received - total));
     }, [cashReceived, total]);
+
+    const handleApplyCoupon = async () => {
+        if (!couponInput.trim()) return;
+
+        try {
+            const result = await validateCouponMutation.mutateAsync({
+                code: couponInput,
+                store_id: selectedStoreId || 1,
+                subtotal: subtotal,
+                customer_phone: customerPhone || undefined
+            });
+
+            if (result.is_valid) {
+                dispatch(applyCoupon({ code: couponInput, discount: result.discount_amount }));
+                toast.success(result.message);
+                setCouponInput("");
+            } else {
+                toast.error(result.message);
+            }
+        } catch (error) {
+            toast.error("Failed to validate coupon");
+        }
+    };
 
     if (!isOpen) return null;
 
@@ -67,6 +108,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
         }
 
         try {
+            const receivedVal = parseFloat(cashReceived) || 0;
+            const changeVal = paymentMode === 'CASH' ? Math.max(0, receivedVal - total) : 0;
+
             const orderData = {
                 store_id: selectedStoreId || 1,
                 order_type: orderType,
@@ -74,18 +118,34 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                 guest_name: customerName,
                 guest_phone: customerPhone,
                 guest_address: customerAddress,
+                coupon_code: appliedCouponCode || undefined,
+                subtotal: subtotal,
+                sub_total: subtotal,
+                tax_amount: tax,
+                total_amount: total,
+                cash_received: paymentMode === 'CASH' ? receivedVal : undefined,
+                change_amount: paymentMode === 'CASH' ? changeVal : undefined,
+                change: paymentMode === 'CASH' ? changeVal : undefined,
                 items: items.map(item => ({
                     menu_item_id: item.id,
                     variant_id: item.variantId,
                     quantity: item.quantity,
                     addons: item.selectedAddons.map(a => ({ addon_id: a.id }))
+                })),
+                deals: deals.map(deal => ({
+                    deal_id: deal.id,
+                    items: deal.items.map(item => ({
+                        menu_item_id: item.id,
+                        variant_id: item.variantId,
+                        quantity: item.quantity,
+                        addons: item.selectedAddons.map(a => ({ addon_id: a.id })),
+                        deal_selection_group_id: item.deal_selection_group_id
+                    }))
                 }))
             };
 
             await createOrderMutation.mutateAsync(orderData);
 
-            // If we were editing a draft, mark it as CANCELLED or COMPLETED
-            // Since we created a new order (with potentially new items), we cancel the old draft
             if (activeOrderId) {
                 await updateOrderStatusMutation.mutateAsync({
                     orderId: activeOrderId,
@@ -106,15 +166,15 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
     const isPayDisabled = (showErrors && !isFormValid) || (paymentMode === 'CASH' && isInsufficientCash);
 
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-400/30 dark:bg-slate-900/30 backdrop-blur-sm p-4">
             <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden"
+                className="bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col border border-zinc-100 dark:border-zinc-800"
             >
                 {/* Header */}
-                <div className="p-6 border-b dark:border-gray-700 flex justify-between items-center bg-indigo-600 dark:bg-gray-900">
+                <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center bg-indigo-600 dark:bg-zinc-900">
                     <div>
                         <h2 className="text-2xl font-black text-white">Checkout</h2>
                         <p className="text-indigo-100 text-sm">Finalize your order details</p>
@@ -128,21 +188,36 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x dark:divide-gray-700">
+                <div className="flex-1 overflow-y-auto flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x border-zinc-100 dark:divide-zinc-800">
                     {/* Left Side: Order & Customer Details */}
                     <div className="flex-1 p-6 space-y-8">
                         {/* Order Type */}
                         <section className="space-y-4">
-                            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                                <i className="ri-EBike-2-line"></i> Order Type
-                            </h3>
-                            <div className="flex gap-2 p-1 bg-gray-100 dark:bg-gray-900 rounded-2xl border dark:border-gray-700">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                    <i className="ri-EBike-2-line"></i> Order Type
+                                </h3>
+                                
+                                {/* Walk-in Toggle in Modal */}
+                                <button
+                                    onClick={() => dispatch(toggleWalkIn())}
+                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${
+                                        isWalkIn 
+                                        ? 'bg-indigo-600 border-indigo-600 text-white' 
+                                        : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-gray-500'
+                                    }`}
+                                >
+                                    <i className={`ri-walk-line ${isWalkIn ? 'text-white' : 'text-gray-400'}`}></i>
+                                    <span className="text-xs font-bold">Walk-In</span>
+                                </button>
+                            </div>
+                            <div className="flex gap-2 p-1 bg-zinc-50 dark:bg-zinc-900 rounded-2xl border border-zinc-100 dark:border-zinc-800">
                                 {(['DINE_IN', 'PICKUP', 'DELIVERY'] as const).map((type) => (
                                     <button
                                         key={type}
                                         onClick={() => dispatch(setOrderType(type))}
-                                        className={`flex-1 py-3 px-4 text-sm font-bold rounded-xl capitalize transition-all ${orderType === type
-                                            ? 'bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 shadow-lg border dark:border-gray-700'
+                                        className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all duration-200 ${orderType === type
+                                            ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-lg border border-zinc-100 dark:border-zinc-800'
                                             : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                                             }`}
                                     >
@@ -157,30 +232,28 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
                                 <i className="ri-user-heart-line"></i> Customer Details
                             </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
                                 <div className="space-y-1.5">
                                     <label className="text-xs font-bold text-gray-500 ml-1">Name</label>
                                     <input
                                         type="text"
                                         value={customerName}
+                                        disabled={isWalkIn}
                                         onBlur={() => setTouched(prev => ({ ...prev, name: true }))}
                                         onChange={(e) => dispatch(updateCustomerDetails({ name: e.target.value }))}
                                         placeholder="Enter customer name"
-                                        className={`w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border ${(showErrors || touched.name) && errors.name ? 'border-red-500' : 'border-transparent dark:border-gray-700'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-gray-800 transition-all outline-none text-sm font-medium`}
+                                        className={`w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border ${isWalkIn ? 'opacity-50' : ''} ${(showErrors || touched.name) && errors.name ? 'border-red-500' : 'border-zinc-100 dark:border-zinc-800'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none text-sm font-medium`}
                                     />
-                                    {(showErrors || touched.name) && errors.name && <p className="text-[10px] text-red-500 ml-1 font-medium">{errors.name}</p>}
+                                    {(showErrors || touched.name) && errors.name && <p className="text-[10px] text-red-500 ml-1 font-bold italic">{errors.name}</p>}
                                 </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-gray-500 ml-1">Phone</label>
-                                    <input
-                                        type="tel"
+                                <div className="space-y-1.5 overflow-visible">
+                                    <PhoneInput
+                                        label="Phone"
                                         value={customerPhone}
-                                        onBlur={() => setTouched(prev => ({ ...prev, phone: true }))}
-                                        onChange={(e) => dispatch(updateCustomerDetails({ phone: e.target.value }))}
-                                        placeholder="Enter phone number"
-                                        className={`w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border ${(showErrors || touched.phone) && errors.phone ? 'border-red-500' : 'border-transparent dark:border-gray-700'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-gray-800 transition-all outline-none text-sm font-medium`}
+                                        disabled={isWalkIn}
+                                        error={(showErrors || touched.phone) && errors.phone ? errors.phone : undefined}
+                                        onChange={(val) => dispatch(updateCustomerDetails({ phone: val }))}
                                     />
-                                    {(showErrors || touched.phone) && errors.phone && <p className="text-[10px] text-red-500 ml-1 font-medium">{errors.phone}</p>}
                                 </div>
                                 {orderType === 'DELIVERY' && (
                                     <div className="md:col-span-2 space-y-1.5">
@@ -191,9 +264,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                             onChange={(e) => dispatch(updateCustomerDetails({ address: e.target.value }))}
                                             placeholder="Enter full delivery address"
                                             rows={2}
-                                            className={`w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border ${(showErrors || touched.address) && errors.address ? 'border-red-500' : 'border-transparent dark:border-gray-700'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-gray-800 transition-all outline-none text-sm font-medium`}
+                                            className={`w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border ${(showErrors || touched.address) && errors.address ? 'border-red-500' : 'border-zinc-100 dark:border-zinc-800'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none text-sm font-medium`}
                                         />
-                                        {(showErrors || touched.address) && errors.address && <p className="text-[10px] text-red-500 ml-1 font-medium">{errors.address}</p>}
+                                        {(showErrors || touched.address) && errors.address && <p className="text-[10px] text-red-500 ml-1 font-bold italic">{errors.address}</p>}
                                     </div>
                                 )}
                             </div>
@@ -211,7 +284,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                         onClick={() => dispatch(setPaymentMode(mode))}
                                         className={`flex-1 flex items-center justify-center gap-3 p-4 rounded-2xl border-2 transition-all ${paymentMode === mode
                                             ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400'
-                                            : 'border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600'
+                                            : 'border-zinc-50 dark:border-zinc-800 hover:border-zinc-100 dark:hover:border-zinc-700'
                                             }`}
                                     >
                                         <i className={mode === 'CASH' ? 'ri-money-dollar-circle-line text-xl' : 'ri-bank-card-2-line text-xl'}></i>
@@ -223,7 +296,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     {/* Right Side: Summary & Payment */}
-                    <div className="w-full md:w-[380px] p-6 bg-gray-50 dark:bg-gray-900/30 flex flex-col border-l dark:border-gray-700">
+                    <div className="w-full md:w-[380px] p-6 bg-zinc-50/50 dark:bg-zinc-900/30 flex flex-col border-l border-zinc-100 dark:border-zinc-800">
                         <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Payment Summary</h3>
 
                         <div className="flex-1 space-y-6">
@@ -237,7 +310,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                     <span>Tax (5%)</span>
                                     <span className="font-bold">Rs. {tax.toFixed(2)}</span>
                                 </div>
-                                <div className="pt-4 border-t dark:border-gray-700 flex justify-between items-center">
+                                {discountAmount > 0 && (
+                                    <div className="flex justify-between text-sm text-green-600 font-bold italic">
+                                        <span>Discount ({appliedCouponCode})</span>
+                                        <span>- Rs. {discountAmount.toFixed(2)}</span>
+                                    </div>
+                                )}
+                                <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
                                     <span className="text-lg font-black dark:text-white uppercase">Grand Total</span>
                                     <span className="text-2xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight">Rs. {total.toFixed(2)}</span>
                                 </div>
@@ -250,11 +329,29 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                     <input
                                         type="text"
                                         placeholder="SAVE50"
-                                        value={couponCode}
-                                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                        className="flex-1 px-4 py-2 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl outline-none text-sm focus:border-indigo-500"
+                                        value={appliedCouponCode || couponInput}
+                                        disabled={!!appliedCouponCode}
+                                        onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                                        className="flex-1 px-4 py-2 bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-800 rounded-xl outline-none text-sm focus:border-indigo-500 disabled:opacity-50 disabled:bg-zinc-50 dark:disabled:bg-zinc-950"
                                     />
-                                    <Button variant="outline" className="py-2 px-4 text-xs font-bold">Apply</Button>
+                                    {appliedCouponCode ? (
+                                        <Button
+                                            variant="outline"
+                                            className="py-2 px-4 text-xs font-bold text-red-500 border-red-200"
+                                            onClick={() => dispatch(removeCoupon())}
+                                        >
+                                            Remove
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="outline"
+                                            className="py-2 px-4 text-xs font-bold"
+                                            onClick={handleApplyCoupon}
+                                            isLoading={validateCouponMutation.isPending}
+                                        >
+                                            Apply
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
 
@@ -263,7 +360,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                 <motion.div
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
-                                    className="space-y-4 pt-4 border-t dark:border-gray-700 overflow-hidden"
+                                    className="space-y-4 pt-4 border-t border-zinc-100 dark:border-zinc-800 overflow-hidden"
                                 >
                                     <div className="space-y-1.5">
                                         <label className="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter">Cash Received</label>
@@ -275,12 +372,12 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                                 autoFocus
                                                 value={cashReceived}
                                                 onChange={(e) => setCashReceived(e.target.value)}
-                                                className="w-full pl-11 pr-4 py-4 bg-white dark:bg-gray-800 border-2 border-indigo-100 dark:border-indigo-900 rounded-xl outline-none text-xl font-black focus:border-indigo-500 transition-all shadow-inner"
+                                                className="w-full pl-11 pr-4 py-4 bg-white dark:bg-zinc-800 border-2 border-indigo-50 dark:border-indigo-900/40 rounded-xl outline-none text-xl font-black focus:border-indigo-500 transition-all shadow-inner"
                                             />
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-700">
+                                    <div className="flex justify-between items-center p-4 bg-white dark:bg-zinc-800 rounded-2xl border-2 border-dashed border-zinc-100 dark:border-zinc-800">
                                         <div>
                                             <p className="text-[10px] font-bold text-gray-400 uppercase">Change Back</p>
                                             <p className={`text-2xl font-black ${change > 0 ? 'text-green-600' : 'text-gray-300 dark:text-gray-600'}`}>Rs. {change.toFixed(2)}</p>
@@ -295,7 +392,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                         <div className="mt-8">
                             <Button
                                 className="w-full py-5 text-lg font-black rounded-2xl shadow-xl shadow-indigo-200 dark:shadow-none translate-y-0 active:translate-y-0px"
-                                disabled={isPayDisabled || createOrderMutation.isPending || items.length === 0}
+                                disabled={isPayDisabled || createOrderMutation.isPending || (items.length === 0 && deals.length === 0)}
                                 onClick={handlePlaceOrder}
                             >
                                 {createOrderMutation.isPending ? (

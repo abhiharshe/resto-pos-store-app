@@ -23,14 +23,14 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
 
     return (
         <AnimatePresence>
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
                 {/* Backdrop */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={onClose}
-                    className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                    className="absolute inset-0 bg-slate-400/30 dark:bg-slate-900/30 backdrop-blur-sm"
                 />
 
                 {/* Modal Content */}
@@ -41,7 +41,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                     className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden"
                 >
                     {/* Header */}
-                    <div className="px-6 py-4 border-b dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/50">
+                    <div className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/50">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center rounded-xl">
                                 <i className="ri-user-smile-line text-xl"></i>
@@ -81,7 +81,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                                     Delivery Address
                                 </label>
                                 <textarea
-                                    className="w-full min-h-[100px] px-4 py-3 rounded-2xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all resize-none text-sm font-inter"
+                                    className="w-full min-h-[100px] px-4 py-3 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-800 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all resize-none text-sm font-inter"
                                     placeholder="Enter complete delivery address..."
                                     value={customerAddress}
                                     onChange={(e) => dispatch(updateCustomerDetails({ address: e.target.value }))}
@@ -90,7 +90,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                         )}
 
                         {!customerName && !customerPhone && (
-                            <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/30 p-3 rounded-2xl flex gap-3">
+                            <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/10 p-3 rounded-2xl flex gap-3">
                                 <i className="ri-information-line text-amber-500 text-lg"></i>
                                 <p className="text-xs text-amber-700 dark:text-amber-400 leading-normal">
                                     Adding customer details helps in tracking orders and providing a personalized experience.
@@ -100,7 +100,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                     </div>
 
                     {/* Footer */}
-                    <div className="p-4 bg-zinc-50 dark:bg-zinc-800/30 border-t dark:border-zinc-800">
+                    <div className="p-4 bg-zinc-50 dark:bg-zinc-800/30 border-t border-zinc-100 dark:border-zinc-800">
                         <Button
                             variant="primary"
                             className="w-full py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200 dark:shadow-none"

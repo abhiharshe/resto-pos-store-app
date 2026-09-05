@@ -8,11 +8,11 @@ import moment from "moment";
 
 interface ItemCardProps {
     item: MenuItemProps;
+    onSelect: () => void;
 }
 
-const ItemCard = ({ item }: ItemCardProps) => {
+const ItemCard = ({ item, onSelect }: ItemCardProps) => {
     const dispatch = useAppDispatch();
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // For items WITHOUT addons AND exactly 1 variant, we can find them in the cart easily by ID
     const { items, selectedStoreId } = useAppSelector((state) => state.cart);
@@ -21,10 +21,15 @@ const ItemCard = ({ item }: ItemCardProps) => {
     const requiresModal = hasAddons || hasMultipleVariants;
 
     // Find if this item (without specific addons) is in cart
-    // This only applies correctly to items without addons and only 1 variant.
     const cartItem = !requiresModal ? items.find((i: any) => i.id === item.id) : null;
 
     const menuItemImage = item.images && item.images.length > 0 ? item.images[0].image_url : defaultMenuItemImage;
+
+    const getVariantPrice = (variant: any) => {
+        if (!selectedStoreId) return variant.price;
+        const storePrice = variant.store_prices?.find((sp: any) => sp.store_id === selectedStoreId);
+        return storePrice ? storePrice.price : variant.price;
+    };
 
     const handleAddClick = () => {
         if (!selectedStoreId) {
@@ -32,7 +37,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
             return;
         }
         if (requiresModal) {
-            setIsModalOpen(true);
+            onSelect();
         } else {
             const variant = item.variants[0];
             dispatch(addToCart({
@@ -41,7 +46,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
                 name: item.name,
                 variantId: variant.id,
                 variantName: variant.name,
-                price: variant.price,
+                price: getVariantPrice(variant),
                 quantity: 1,
                 selectedAddons: [],
                 originalItem: item,
@@ -50,117 +55,87 @@ const ItemCard = ({ item }: ItemCardProps) => {
         }
     };
 
-    const handleModalAddToCart = (variant: any, selectedAddons: SelectedAddon[], quantity: number) => {
-        if (!selectedStoreId) {
-            alert("Please select a store first!");
-            return;
-        }
-        // Create a unique ID based on item ID and selected addons + variant
-        const addonsId = selectedAddons.map(a => a.id).sort().join('-');
-        const uniqueId = `item-${item.id}-var-${variant.id}${addonsId ? `-${addonsId}` : ''}`;
-
-        dispatch(addToCart({
-            uniqueId,
-            id: item.id,
-            name: item.name,
-            variantId: variant.id,
-            variantName: variant.name,
-            price: variant.price,
-            quantity,
-            selectedAddons,
-            originalItem: item,
-            timeStamp: moment().unix()
-        }));
-        setIsModalOpen(false);
-    };
-
     return (
-        <>
-            <div className="border border-gray-200 dark:border-gray-500 rounded-2xl p-3 flex flex-col gap-3 cursor-pointer transition-all duration-300 hover:shadow hover:shadow-indigo-300 bg-white dark:bg-gray-800 border-opacity-60">
-                <div className="flex flex-row gap-3">
-                    <div className="w-24 h-24 rounded-xl p-2 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden border dark:border-gray-700">
-                        <img
-                            src={menuItemImage}
-                            alt={item.name}
-                            onError={(e) => {
-                                e.currentTarget.src = defaultMenuItemImage;
-                            }}
-                            className="w-full h-full object-cover transition-transform hover:scale-110 duration-500"
-                        />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <h2 className="font-bold text-md text-gray-800 dark:text-gray-100 truncate">{item.name}</h2>
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 line-clamp-2 leading-relaxed">
-                            {item.description || "No description available for this delicious item."}
-                        </p>
-                        <div className="mt-2 text-indigo-600 dark:text-indigo-400 font-bold">
-                            {!item.variants || item.variants.length === 0 ? '-' :
-                                item.variants.length === 1 ? `Rs.${item.variants[0].price}` :
-                                    `Rs.${Math.min(...item.variants.map(v => v.price))} - Rs.${Math.max(...item.variants.map(v => v.price))}`
-                            }
-                        </div>
+        <div
+            onClick={handleAddClick}
+            className="group border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 flex flex-col gap-3 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-indigo-50 dark:hover:shadow-none bg-white dark:bg-zinc-900 border-opacity-60 relative overflow-hidden"
+        >
+            <div className="flex flex-row gap-4">
+                <div className="w-24 h-24 rounded-2xl p-2 bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-100 dark:border-zinc-800">
+                    <img
+                        src={menuItemImage}
+                        alt={item.name}
+                        onError={(e) => {
+                            e.currentTarget.src = defaultMenuItemImage;
+                        }}
+                        className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-500"
+                    />
+                </div>
+                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                    <h2 className="font-bold text-md text-zinc-900 dark:text-zinc-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.name}</h2>
+                    <p className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 line-clamp-2 leading-tight font-medium">
+                        {item.description || "Freshly prepared with the finest ingredients for your satisfaction."}
+                    </p>
+                    <div className="mt-2 text-indigo-600 dark:text-indigo-400 font-black text-lg tracking-tighter">
+                        {!item.variants || item.variants.length === 0 ? '-' :
+                            item.variants.length === 1 ? `Rs.${getVariantPrice(item.variants[0])}` :
+                                `Rs.${Math.min(...item.variants.map(v => getVariantPrice(v)))}+`
+                        }
                     </div>
                 </div>
+            </div>
 
-                <div className="flex flex-row items-center justify-between mt-auto pt-1">
-                    {requiresModal && (
-                        <span className="text-[10px] font-medium text-gray-400 uppercase tracking-tight">
-                            Customizable
-                        </span>
-                    )}
+            <div className="flex flex-row items-center justify-between mt-auto pt-1">
+                {requiresModal ? (
+                    <div className="flex items-center gap-1 text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest bg-indigo-50 dark:bg-indigo-900/20 px-2 py-0.5 rounded-full">
+                        <i className="ri-equalizer-line"></i>
+                        Customizable
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-1 text-[8px] font-black text-zinc-400 uppercase tracking-widest bg-zinc-50 dark:bg-zinc-800 px-2 py-0.5 rounded-full">
+                        <i className="ri-check-line"></i>
+                        Standard Item
+                    </div>
+                )}
 
-                    <div className="ml-auto">
-                        {!requiresModal && cartItem ? (
-                            <div className="flex items-center gap-3 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg px-2 py-1">
-                                <button
-                                    onClick={() => {
-                                        console.log("card-decrement", cartItem.cartId);
-                                        dispatch(decrementQuantity(cartItem.cartId));
-                                    }}
-                                    className="w-8 h-8 flex items-center justify-center rounded-md bg-white dark:bg-gray-800 text-indigo-600 shadow-sm border border-indigo-100 dark:border-indigo-900 hover:bg-indigo-500 hover:text-white transition-colors"
-                                >
-                                    <i className="ri-subtract-line font-bold"></i>
-                                </button>
-                                <span className="font-bold text-gray-800 dark:text-white min-w-4 text-center">{cartItem.quantity}</span>
-                                <button
-                                    onClick={() => {
-                                        console.log("card-increment", cartItem.cartId);
-                                        dispatch(incrementQuantity(cartItem.cartId))
-                                    }}
-                                    className="w-8 h-8 flex items-center justify-center rounded-md bg-white dark:bg-gray-800 text-indigo-600 shadow-sm border border-indigo-100 dark:border-indigo-900 hover:bg-indigo-500 hover:text-white transition-colors"
-                                >
-                                    <i className="ri-add-line font-bold"></i>
-                                </button>
-                            </div>
-                        ) : (
+                <div className="ml-auto">
+                    {!requiresModal && cartItem ? (
+                        <div className="flex items-center gap-3 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl px-1 py-1 shadow-sm border border-indigo-100 dark:border-indigo-800">
                             <button
-                                onClick={handleAddClick}
-                                className={`flex items-center gap-2 rounded-lg px-2 py-1 font-bold transition-all shadow-md border border-gray-200 dark:border-gray-500 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 hover:border-gray-400 dark:hover:border-gray-600`}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    dispatch(decrementQuantity(cartItem.cartId));
+                                }}
+                                className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-zinc-800 text-indigo-600 shadow-sm hover:bg-indigo-600 hover:text-white transition-all transform active:scale-90"
                             >
-                                {requiresModal ? (
-                                    <>
-                                        <i className="ri-equalizer-line"></i>
-                                        <span>Add</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <i className="ri-add-line"></i>
-                                        <span>Add</span>
-                                    </>
-                                )}
+                                <i className="ri-subtract-line font-black"></i>
                             </button>
-                        )}
-                    </div>
+                            <span className="font-black text-zinc-900 dark:text-white min-w-4 text-center">{cartItem.quantity}</span>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    dispatch(incrementQuantity(cartItem.cartId))
+                                }}
+                                className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-zinc-800 text-indigo-600 shadow-sm hover:bg-indigo-600 hover:text-white transition-all transform active:scale-90"
+                            >
+                                <i className="ri-add-line font-black"></i>
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleAddClick();
+                            }}
+                            className={`flex items-center gap-2 rounded-xl px-4 py-1.5 font-black text-xs transition-all shadow-sm border-2 border-indigo-100 dark:border-indigo-900 bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 group-active:scale-95`}
+                        >
+                            <i className={requiresModal ? "ri-equalizer-line" : "ri-add-line"}></i>
+                            <span>{requiresModal ? "CONFIGURE" : "ADD"}</span>
+                        </button>
+                    )}
                 </div>
-            </div >
-
-            <CustomizationModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                item={item}
-                onAddToCart={handleModalAddToCart}
-            />
-        </>
+            </div>
+        </div >
     );
 };
 

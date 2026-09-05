@@ -38,19 +38,19 @@ export function DataTable<T extends object>({ data, columns, isLoading }: DataTa
 
     if (isLoading) {
         return (
-            <div className="w-full overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-700 animate-pulse">
+            <div className="w-full overflow-hidden rounded-lg animate-pulse">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
                         <thead className="bg-zinc-50 dark:bg-zinc-800/50">
                             <tr>
                                 {Array.from({ length: columns.length }).map((_, idx) => (
-                                    <th key={idx} className="px-4 py-3 border-b border-zinc-200 dark:border-zinc-700">
+                                    <th key={idx} className="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800">
                                         <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-3/4"></div>
                                     </th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700 bg-white dark:bg-zinc-800">
+                        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 bg-white dark:bg-zinc-800">
                             {Array.from({ length: 5 }).map((_, rowIdx) => (
                                 <tr key={rowIdx}>
                                     {Array.from({ length: columns.length }).map((_, colIdx) => (
@@ -63,7 +63,7 @@ export function DataTable<T extends object>({ data, columns, isLoading }: DataTa
                         </tbody>
                     </table>
                 </div>
-                <div className="px-4 py-3 border-t border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 flex justify-between items-center">
+                <div className="px-4 py-3 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 flex justify-between items-center">
                     <div className="flex gap-2">
                         <div className="h-8 w-20 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
                         <div className="h-8 w-20 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
@@ -75,21 +75,21 @@ export function DataTable<T extends object>({ data, columns, isLoading }: DataTa
     }
 
     return (
-        <div className="w-full overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-700">
+        <div className="w-full overflow-hidden rounded-lg border border-zinc-100 dark:border-zinc-800">
             <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                     <thead className="bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 uppercase text-xs font-semibold">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <tr key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <th key={header.id} className="px-4 py-3 border-b border-zinc-200 dark:border-zinc-700">
+                                    <th key={header.id} className="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800">
                                         {flexRender(header.column.columnDef.header, header.getContext())}
                                     </th>
                                 ))}
                             </tr>
                         ))}
                     </thead>
-                    <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700 bg-white dark:bg-zinc-800">
+                    <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 bg-white dark:bg-zinc-800">
                         {table.getRowModel().rows.map((row) => (
                             <tr key={row.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors">
                                 {row.getVisibleCells().map((cell) => (
@@ -111,7 +111,7 @@ export function DataTable<T extends object>({ data, columns, isLoading }: DataTa
             </div>
 
             {/* Pagination */}
-            <div className="px-4 py-3 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50">
+            <div className="px-4 py-3 flex items-center justify-between border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50">
                 <div className="flex gap-2">
                     <Button
                         variant='outline'

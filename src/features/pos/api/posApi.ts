@@ -2,35 +2,37 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../utils/api";
 
 export interface SelectedAddon {
-    id: number;
+    id: string;
     name: string;
     price: number;
+    quantity: number;
 }
 
 export interface MenuItemVariant {
-    id: number;
+    id: string;
     name: string;
     price: number;
     is_serving: boolean;
+    store_prices?: { id: string; store_id: string; price: number }[];
 }
 
 export interface MenuItemProps {
-    id: number;
-    category_id: number;
+    id: string;
+    category_id: string;
     name: string;
     description?: string;
     variants: MenuItemVariant[];
     is_active: boolean;
-    images?: { id: number; image_url: string; menu_item_id: number }[],
-    addon_groups?: { id: number; name: string; min_selection: number; max_selection: number; addons: { id: number; name: string; price: number }[] }[],
+    images?: { id: string; image_url: string; menu_item_id: number }[],
+    addon_groups?: { id: string; name: string; min_selection: number; max_selection: number; addons: { id: string; name: string; price: number }[] }[],
     category?: {
-        id: number;
-        menu_id: number;
+        id: string;
+        menu_id: string;
         name: string;
         image_url?: string;
         is_active: boolean;
         menu?: {
-            id: number;
+            id: string;
             title: string;
             serving_from: string;
             serving_to: string;
@@ -40,23 +42,23 @@ export interface MenuItemProps {
 }
 
 export interface MenuCategoryProps {
-    id: number;
-    menu_id: number;
+    id: string;
+    menu_id: string;
     name: string;
     image_url?: string;
     is_active: boolean;
     items?: {
-        id: number;
+        id: string;
         name: string;
-        category_id: number;
+        category_id: string;
         description?: string;
-        images?: { id: number; image_url: string; menu_item_id: number }[],
-        addon_groups?: { id: number; name: string; min_selection: number; max_selection: number; addons: { id: number; name: string; price: number }[] }[],
+        images?: { id: string; image_url: string; menu_item_id: number }[],
+        addon_groups?: { id: string; name: string; min_selection: number; max_selection: number; addons: { id: string; name: string; price: number }[] }[],
     }[];
 }
 
 export interface MenuProps {
-    id: number;
+    id: string;
     title: string;
     serving_from: string;
     serving_to: string;
@@ -64,15 +66,51 @@ export interface MenuProps {
     categories?: MenuCategoryProps[];
 }
 
+export interface DealSelectionOption {
+    id: string;
+    group_id: string;
+    menu_item_id: string;
+    variant_id: string;
+    additional_price: number;
+    is_default: boolean;
+    menu_item?: MenuItemProps;
+    variant?: MenuItemVariant;
+}
+
+export interface DealSelectionGroup {
+    id: string;
+    deal_id: string;
+    name: string;
+    min_selection: number;
+    max_selection: number;
+    is_required: boolean;
+    options: DealSelectionOption[];
+}
+
+export interface Deal {
+    id: string;
+    title: string;
+    description?: string;
+    is_active: boolean;
+    images: { id: string; image_url: string }[];
+    store_prices: { id: string; store_id: string; price: number }[];
+    selection_groups: DealSelectionGroup[];
+}
+
 export interface OrderItemCreate {
-    menu_item_id: number;
-    variant_id: number;
     quantity: number;
     addons: { addon_id: number }[];
+    order_deal_id?: number;
+    deal_selection_group_id?: number;
+}
+
+export interface OrderDealCreate {
+    deal_id: string;
+    items: OrderItemCreate[];
 }
 
 export interface OrderCreate {
-    store_id: number;
+    store_id: string;
     order_type: 'DINE_IN' | 'PICKUP' | 'DELIVERY';
     payment_method: 'CASH' | 'CARD' | 'ONLINE';
     status?: 'DRAFT' | 'PENDING' | 'CONFIRMED' | 'PREPARING' | 'READY' | 'COMPLETED' | 'CANCELLED';
@@ -80,13 +118,28 @@ export interface OrderCreate {
     guest_name?: string;
     guest_phone?: string;
     guest_address?: string;
+    subtotal?: number;
+    sub_total?: number;
+    tax_amount?: number;
+    total_amount?: number;
+    cash_received?: number;
+    change_amount?: number;
+    change?: number;
     items: OrderItemCreate[];
+    deals?: OrderDealCreate[];
+    coupon_code?: string;
 }
 
 export interface OrderResponse {
-    id: number;
-    store_id: number;
+    id: string;
+    store_id: string;
+    subtotal?: number;
+    sub_total?: number;
+    tax_amount?: number;
     total_amount: number;
+    cash_received?: number;
+    change_amount?: number;
+    change?: number;
     status: string;
     order_type: string;
     payment_method: string;
@@ -97,7 +150,7 @@ export interface OrderResponse {
 }
 
 export interface StoreResponse {
-    id: number;
+    id: string;
     name: string;
     address?: string;
     phone?: string;
@@ -134,7 +187,17 @@ export const useStoreFrontMenuItems = (params?: { menu_id?: number; category_id?
     });
 };
 
-export const useOrders = (params: { store_id: number; status?: string }) => {
+export const useStoreFrontDeals = (params?: { store_id?: number; q?: string }) => {
+    return useQuery({
+        queryKey: ['store-front-deals', params],
+        queryFn: async () => {
+            const { data } = await api.get<Deal[]>('menu/deals/', { params });
+            return data;
+        },
+    });
+};
+
+export const useOrders = (params: { store_id: string; status?: string }) => {
     return useQuery({
         queryKey: ['orders', params],
         queryFn: async () => {
@@ -170,7 +233,7 @@ export const useStores = () => {
 export const useUpdateOrderStatus = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ orderId, status, paymentStatus }: { orderId: number; status: string; paymentStatus?: string }) => {
+        mutationFn: async ({ orderId, status, paymentStatus }: { orderid: string; status: string; paymentStatus?: string }) => {
             const { data } = await api.patch<OrderResponse>(`orders/${orderId}`, { status, payment_status: paymentStatus });
             return data;
         },

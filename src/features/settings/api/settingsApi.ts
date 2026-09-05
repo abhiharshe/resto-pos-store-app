@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../utils/api";
 
 export interface SettingResponse {
-    id: number;
+    id: string;
     logo_url?: string;
     favicon_url?: string;
     meta_info?: Record<string, any>;
@@ -14,10 +14,21 @@ export interface SettingResponse {
     order_success_email?: string;
     maintenance_mode?: boolean;
     pagination_records?: number;
+    currency?: string;
+    // Storage Configuration
+    storage_backend?: string;
+    s3_bucket?: string;
+    s3_region?: string;
+    s3_access_key?: string;
+    s3_secret_key?: string;
+    local_storage_path?: string;
+    cloudinary_cloud_name?: string;
+    cloudinary_api_key?: string;
+    cloudinary_api_secret?: string;
 }
 
 export interface EmailSettingResponse {
-    id: number;
+    id?: string | number;
     smtp_host?: string;
     smtp_port?: string;
     smtp_encryption?: string;
@@ -80,6 +91,19 @@ export const useUpdateSystemSettingsMutation = () => {
     return useMutation({
         mutationFn: async (settingsData: Partial<SettingResponse>) => {
             const { data } = await api.put<SettingResponse>('settings/system', settingsData);
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['settings'] });
+        },
+    });
+};
+
+export const useUpdateStorageSettingsMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (settingsData: Partial<SettingResponse>) => {
+            const { data } = await api.put<SettingResponse>('settings/storage', settingsData);
             return data;
         },
         onSuccess: () => {
