@@ -15,14 +15,14 @@ const DealItemsSchema = Yup.object().shape({
             name: Yup.string().required('Group name is required'),
             min_selection: Yup.number().min(0).test('min-lte-max', 'Min cannot exceed Max', function (value) {
                 return (value || 0) <= (this.parent.max_selection || 0);
-            }).required(),
-            max_selection: Yup.number().min(1, 'Max must be at least 1').required(),
+            }).required('Min selection is required'),
+            max_selection: Yup.number().min(1, 'Max must be at least 1').required('Max selection is required'),
             is_required: Yup.boolean(),
             options: Yup.array().of(
                 Yup.object().shape({
-                    menu_item_id: Yup.number().moreThan(0, 'Item is required').required(),
-                    variant_id: Yup.number().moreThan(0, 'Variant is required').required(),
-                    additional_price: Yup.number().min(0).required(),
+                    menu_item_id: Yup.string().required('Item is required').test('non-empty', 'Item is required', (val) => !!val && val !== '0'),
+                    variant_id: Yup.string().required('Variant is required').test('non-empty', 'Variant is required', (val) => !!val && val !== '0'),
+                    additional_price: Yup.number().min(0, 'Price must be 0 or positive').required(),
                 })
             ).min(1, 'At least one option required per group')
         })
@@ -47,14 +47,15 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
     const { data: menuItems } = useMenuItems();
 
     const getItemOptions = () => [
-        { label: 'Select Item', value: 0 },
+        { label: 'Select Item', value: '' },
         ...(menuItems?.map(item => ({ label: item.name, value: item.id })) || [])
     ];
 
-    const getVariantOptions = (itemId: number) => {
-        const item = menuItems?.find(i => i.id === itemId);
+    const getVariantOptions = (itemId: string | number | undefined) => {
+        if (!itemId || itemId === 0 || itemId === '0') return [{ label: 'Select Variant', value: '' }];
+        const item = menuItems?.find(i => String(i.id) === String(itemId));
         return [
-            { label: 'Select Variant', value: 0 },
+            { label: 'Select Variant', value: '' },
             ...(item?.variants.map(v => ({ label: `${v.name} (+₹${v.price})`, value: v.id! })) || [])
         ];
     };
@@ -165,7 +166,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                                     <div className="space-y-3">
                                                         <div className="flex items-center justify-between mb-2 px-1">
                                                             <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest leading-none">Items in Group</span>
-                                                            <span className="h-[1px] flex-1 mx-4 bg-zinc-200 dark:bg-zinc-800 opacity-30"></span>
+                                                            <span className="h-1 flex-1 mx-4 bg-zinc-200 dark:bg-zinc-800 opacity-30"></span>
                                                         </div>
 
                                                         <FieldArray name={`selection_groups.${gIndex}.options`}>
@@ -186,7 +187,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                                                                         error={optionTouched?.menu_item_id && optionErrors?.menu_item_id}
                                                                                         onChange={(val) => {
                                                                                             setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.menu_item_id`, val);
-                                                                                            setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.variant_id`, 0);
+                                                                                            setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.variant_id`, '');
                                                                                         }}
                                                                                     />
                                                                                 </div>
@@ -227,7 +228,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                                                         variant="outline"
                                                                         size="sm"
                                                                         className="w-full py-4 border-dashed rounded-2xl flex items-center justify-center gap-2 text-zinc-500 hover:text-indigo-600 hover:border-indigo-600 transition-all font-bold text-xs uppercase tracking-widest bg-zinc-50/50 dark:bg-zinc-800/30"
-                                                                        onClick={() => pushOpt({ menu_item_id: 0, variant_id: 0, additional_price: 0, is_default: false })}
+                                                                        onClick={() => pushOpt({ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false })}
                                                                     >
                                                                         <i className="ri-add-circle-line text-lg"></i>
                                                                         <span>Add Choice Item</span>
@@ -242,7 +243,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                         <Button
                                             type="button"
                                             className="w-full py-8 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-500 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3"
-                                            onClick={() => push({ name: '', min_selection: 1, max_selection: 1, is_required: true, options: [{ menu_item_id: 0, variant_id: 0, additional_price: 0, is_default: false }] })}
+                                            onClick={() => push({ name: '', min_selection: 1, max_selection: 1, is_required: true, options: [{ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false }] })}
                                         >
                                             <i className="ri-add-line text-xl"></i>
                                             Add Another Selection Slot

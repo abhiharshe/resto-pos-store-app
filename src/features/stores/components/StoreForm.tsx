@@ -132,7 +132,7 @@ export const StoreForm: React.FC<StoreFormProps> = ({ title, initialData, onSubm
 
                                     <div className="border-t border-zinc-200 dark:border-zinc-700 mt-6 pt-2">
                                         <h3 className="text-lg font-medium mb-4 text-zinc-900 dark:text-white">Configuration</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <Input
                                                 label="Opening Time"
                                                 name="opening_time"
@@ -147,7 +147,32 @@ export const StoreForm: React.FC<StoreFormProps> = ({ title, initialData, onSubm
                                                 value={values.closing_time}
                                                 onChange={(e) => setFieldValue('closing_time', e.target.value)}
                                             />
-
+                                            <Input
+                                                label="Tax Percentage (%)"
+                                                name="tax_percentage"
+                                                type="number"
+                                                step="0.01"
+                                                min={0}
+                                                max={100}
+                                                placeholder="0.00"
+                                                value={values.tax_percentage}
+                                                onChange={(e) => setFieldValue('tax_percentage', e.target.value === '' ? '' : Number(e.target.value))}
+                                                error={touched.tax_percentage && errors.tax_percentage ? (errors.tax_percentage as string) : undefined}
+                                                helper="Applicable GST / VAT rate (0 - 100%)"
+                                            />
+                                            <Input
+                                                label="Service Charge (%)"
+                                                name="service_charge_percentage"
+                                                type="number"
+                                                step="0.01"
+                                                min={0}
+                                                max={100}
+                                                placeholder="0.00"
+                                                value={values.service_charge_percentage}
+                                                onChange={(e) => setFieldValue('service_charge_percentage', e.target.value === '' ? '' : Number(e.target.value))}
+                                                error={touched.service_charge_percentage && errors.service_charge_percentage ? (errors.service_charge_percentage as string) : undefined}
+                                                helper="Optional service fee rate (0 - 100%)"
+                                            />
                                         </div>
                                     </div>
 

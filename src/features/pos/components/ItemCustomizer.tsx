@@ -13,6 +13,8 @@ interface ItemCustomizerProps {
     initialAddons?: SelectedAddon[];
     initialQuantity?: number;
     title?: string;
+    isDealItem?: boolean;
+    dealGroupOptions?: any[];
 }
 
 const DEFAULT_ADDONS: SelectedAddon[] = [];
@@ -24,7 +26,9 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
     initialVariant,
     initialAddons = DEFAULT_ADDONS,
     initialQuantity = 1,
-    title = "Customize Item"
+    title = "Customize Item",
+    isDealItem = false,
+    dealGroupOptions = [],
 }) => {
     const [selectedVariant, setSelectedVariant] = useState<any>(() => {
         if (initialVariant) {
@@ -54,17 +58,48 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
 
     const selectedStoreId = useAppSelector((state) => state.cart.selectedStoreId);
 
-    const getVariantPrice = (variant: any) => {
-        if (!selectedStoreId) return variant.price;
-        const storePrice = variant.store_prices?.find((sp: any) => sp.store_id === selectedStoreId);
-        return storePrice ? storePrice.price : variant.price;
+    const getVariantPriceInfo = (variant: any) => {
+        const regularPrice = (() => {
+            if (!selectedStoreId) return variant.price;
+            const storePrice = variant.store_prices?.find((sp: any) => String(sp.store_id) === String(selectedStoreId));
+            return storePrice ? storePrice.price : variant.price;
+        })();
+
+        if (!isDealItem) {
+            return {
+                effectivePrice: regularPrice,
+                displayLabel: `Rs.${regularPrice}`,
+                isDealOption: false
+            };
+        }
+
+        // Inside a Deal: check if this variant is explicitly configured in this deal's options
+        const matchingDealOpt = dealGroupOptions?.find(
+            (opt: any) => String(opt.menu_item_id) === String(item.id) && String(opt.variant_id) === String(variant.id)
+        );
+
+        if (matchingDealOpt) {
+            const upcharge = Number(matchingDealOpt.additional_price || 0);
+            return {
+                effectivePrice: upcharge,
+                displayLabel: upcharge > 0 ? `+ Rs.${upcharge}` : "INCLUDED",
+                isDealOption: true
+            };
+        } else {
+            // Unlisted variant in deal -> actual variant price applies as upcharge
+            return {
+                effectivePrice: regularPrice,
+                displayLabel: `+ Rs.${regularPrice}`,
+                isDealOption: false
+            };
+        }
     };
 
     useEffect(() => {
         const addonsPrice = selectedAddons.reduce((acc, addon) => acc + (addon.price * (addon.quantity || 1)), 0);
-        const variantPrice = selectedVariant ? getVariantPrice(selectedVariant) : 0;
+        const variantPrice = selectedVariant ? getVariantPriceInfo(selectedVariant).effectivePrice : 0;
         setTotalPrice((variantPrice + addonsPrice) * quantity);
-    }, [selectedVariant, selectedAddons, quantity, selectedStoreId]);
+    }, [selectedVariant, selectedAddons, quantity, selectedStoreId, isDealItem, dealGroupOptions]);
 
     const handleAddonToggle = (addon: { id: string, name: string, price: number }, group: any) => {
         const isSelected = selectedAddons.find(a => a.id === addon.id);
@@ -136,6 +171,7 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {item.variants.map((variant) => {
                                 const isSelected = selectedVariant?.id === variant.id;
+                                const priceInfo = getVariantPriceInfo(variant);
                                 return (
                                     <label
                                         key={variant.id}
@@ -151,10 +187,15 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                                                 onChange={() => setSelectedVariant(variant)}
                                                 className="w-4 h-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500"
                                             />
-                                            <span className="font-bold text-sm block truncate w-32">{variant.name}</span>
+                                            <div className="flex flex-col">
+                                                <span className="font-bold text-sm block truncate w-32">{variant.name}</span>
+                                                {isDealItem && !priceInfo.isDealOption && (
+                                                    <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold">Standard Variant</span>
+                                                )}
+                                            </div>
                                         </div>
-                                        <span className="text-indigo-600 dark:text-indigo-400 font-black text-sm">
-                                            Rs.{getVariantPrice(variant)}
+                                        <span className={`font-black text-sm ${priceInfo.displayLabel === 'INCLUDED' ? 'text-emerald-600 dark:text-emerald-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                                            {priceInfo.displayLabel}
                                         </span>
                                     </label>
                                 );
@@ -247,8 +288,12 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                         </button>
                     </div>
                     <div className="text-right">
-                        <p className="text-xs text-zinc-400 font-bold uppercase tracking-widest leading-none">Total Item Price</p>
-                        <p className="text-3xl font-black text-indigo-600 dark:text-indigo-400 tracking-tighter">Rs.{totalPrice}</p>
+                        <p className="text-xs text-zinc-400 font-bold uppercase tracking-widest leading-none">
+                            {isDealItem ? "Customization Upcharge" : "Total Item Price"}
+                        </p>
+                        <p className="text-3xl font-black text-indigo-600 dark:text-indigo-400 tracking-tighter">
+                            {isDealItem && totalPrice === 0 ? "INCLUDED" : `Rs.${totalPrice}`}
+                        </p>
                     </div>
                 </div>
                 <Button

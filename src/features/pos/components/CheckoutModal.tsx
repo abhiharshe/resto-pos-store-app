@@ -15,6 +15,7 @@ import IconButton from "../../../components/common/IconButton";
 import { PhoneInput } from "../../../components/common/PhoneInput";
 import { useCreateOrder, useUpdateOrderStatus } from "../api/posApi";
 import { useValidateCoupon } from "../../coupons/api/couponsApi";
+import { useCalculateOrderPreview } from "../../settings/api/chargesApi";
 import { toast } from "react-hot-toast";
 
 interface CheckoutModalProps {
@@ -26,6 +27,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
     const dispatch = useAppDispatch();
     const createOrderMutation = useCreateOrder();
     const updateOrderStatusMutation = useUpdateOrderStatus();
+    const calculatePreviewMutation = useCalculateOrderPreview();
 
     const {
         items,
@@ -42,14 +44,52 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
         total,
         discountAmount,
         couponCode: appliedCouponCode,
-        selectedStoreId
+        selectedStoreId,
+        selectedStore
     } = useAppSelector((state) => state.cart);
+
+    const [distanceKm, setDistanceKm] = useState<string>("5");
+    const [calculatedFees, setCalculatedFees] = useState<{
+        net_food_value: number;
+        packaging_charge: number;
+        packaging_charge_source: string;
+        delivery_charge: number;
+        delivery_charge_source: string;
+        tax_amount: number;
+        service_charge: number;
+        total_amount: number;
+    } | null>(null);
 
     const [cashReceived, setCashReceived] = useState<string>("");
     const [change, setChange] = useState<number>(0);
     const [couponInput, setCouponInput] = useState<string>("");
-    const [touched, setTouched] = useState({ name: false, phone: false, address: false });
+    const [touched, setTouched] = useState({ name: false, phone: false, address: false, distance: false });
     const [showErrors, setShowErrors] = useState(false);
+
+    // Fetch calculation preview whenever cart, orderType, or distanceKm changes
+    useEffect(() => {
+        if (!isOpen || !selectedStoreId) return;
+
+        const timer = setTimeout(async () => {
+            try {
+                const res = await calculatePreviewMutation.mutateAsync({
+                    store_id: String(selectedStoreId),
+                    order_type: orderType,
+                    subtotal: subtotal,
+                    discount_amount: discountAmount,
+                    distance_km: orderType === 'DELIVERY' ? parseFloat(distanceKm) || 0 : undefined,
+                    coupon_code: appliedCouponCode || undefined,
+                });
+                setCalculatedFees(res);
+            } catch (e) {
+                console.error("Preview calculation failed", e);
+            }
+        }, 200);
+
+        return () => clearTimeout(timer);
+    }, [isOpen, selectedStoreId, orderType, subtotal, discountAmount, distanceKm, appliedCouponCode]);
+
+    const effectiveTotal = calculatedFees ? calculatedFees.total_amount : total;
 
     // Only mandatory for PICKUP and DELIVERY
     const isDetailsRequired = orderType !== 'DINE_IN' && !isWalkIn;
@@ -58,15 +98,16 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
         name: isDetailsRequired && !customerName.trim() ? "Customer name is required" : null,
         phone: isDetailsRequired && !customerPhone.trim() ? "Phone number is required" : null,
         address: orderType === 'DELIVERY' && !customerAddress?.trim() ? "Delivery address is required" : null,
+        distance: orderType === 'DELIVERY' && (parseFloat(distanceKm) < 0 || isNaN(parseFloat(distanceKm))) ? "Valid distance is required" : null,
     };
 
-    const isFormValid = !errors.name && !errors.phone && !errors.address;
+    const isFormValid = !errors.name && !errors.phone && !errors.address && !errors.distance;
     const validateCouponMutation = useValidateCoupon();
 
     useEffect(() => {
         const received = parseFloat(cashReceived) || 0;
-        setChange(Math.max(0, received - total));
-    }, [cashReceived, total]);
+        setChange(Math.max(0, received - effectiveTotal));
+    }, [cashReceived, effectiveTotal]);
 
     const handleApplyCoupon = async () => {
         if (!couponInput.trim()) return;
@@ -95,21 +136,22 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
 
     const handlePlaceOrder = async () => {
         setShowErrors(true);
-        setTouched({ name: true, phone: true, address: true });
+        setTouched({ name: true, phone: true, address: true, distance: true });
 
         if (!isFormValid) {
             toast.error("Please fill in all required fields");
             return;
         }
 
-        if (paymentMode === 'CASH' && (parseFloat(cashReceived) || 0) < total) {
+        if (paymentMode === 'CASH' && (parseFloat(cashReceived) || 0) < effectiveTotal) {
             toast.error("Insufficient cash received");
             return;
         }
 
         try {
             const receivedVal = parseFloat(cashReceived) || 0;
-            const changeVal = paymentMode === 'CASH' ? Math.max(0, receivedVal - total) : 0;
+            const changeVal = paymentMode === 'CASH' ? Math.max(0, receivedVal - effectiveTotal) : 0;
+            const distNum = orderType === 'DELIVERY' ? parseFloat(distanceKm) || 0 : undefined;
 
             const orderData = {
                 store_id: selectedStoreId || 1,
@@ -118,11 +160,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                 guest_name: customerName,
                 guest_phone: customerPhone,
                 guest_address: customerAddress,
+                distance_km: distNum,
+                delivery_distance_km: distNum,
                 coupon_code: appliedCouponCode || undefined,
                 subtotal: subtotal,
                 sub_total: subtotal,
-                tax_amount: tax,
-                total_amount: total,
+                tax_amount: calculatedFees ? calculatedFees.tax_amount : tax,
+                total_amount: effectiveTotal,
                 cash_received: paymentMode === 'CASH' ? receivedVal : undefined,
                 change_amount: paymentMode === 'CASH' ? changeVal : undefined,
                 change: paymentMode === 'CASH' ? changeVal : undefined,
@@ -139,7 +183,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                         variant_id: item.variantId,
                         quantity: item.quantity,
                         addons: item.selectedAddons.map(a => ({ addon_id: a.id })),
-                        deal_selection_group_id: item.deal_selection_group_id
+                        deal_selection_group_id: item.groupId || item.deal_selection_group_id,
+                        deal_selection_option_id: item.optionId || item.deal_selection_option_id,
                     }))
                 }))
             };
@@ -162,7 +207,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
         }
     };
 
-    const isInsufficientCash = paymentMode === 'CASH' && (parseFloat(cashReceived) || 0) < total;
+    const isInsufficientCash = paymentMode === 'CASH' && (parseFloat(cashReceived) || 0) < effectiveTotal;
     const isPayDisabled = (showErrors && !isFormValid) || (paymentMode === 'CASH' && isInsufficientCash);
 
     return (
@@ -256,17 +301,33 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                     />
                                 </div>
                                 {orderType === 'DELIVERY' && (
-                                    <div className="md:col-span-2 space-y-1.5">
-                                        <label className="text-xs font-bold text-gray-500 ml-1">Delivery Address</label>
-                                        <textarea
-                                            value={customerAddress}
-                                            onBlur={() => setTouched(prev => ({ ...prev, address: true }))}
-                                            onChange={(e) => dispatch(updateCustomerDetails({ address: e.target.value }))}
-                                            placeholder="Enter full delivery address"
-                                            rows={2}
-                                            className={`w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border ${(showErrors || touched.address) && errors.address ? 'border-red-500' : 'border-zinc-100 dark:border-zinc-800'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none text-sm font-medium`}
-                                        />
-                                        {(showErrors || touched.address) && errors.address && <p className="text-[10px] text-red-500 ml-1 font-bold italic">{errors.address}</p>}
+                                    <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div className="md:col-span-2 space-y-1.5">
+                                            <label className="text-xs font-bold text-gray-500 ml-1">Delivery Address</label>
+                                            <textarea
+                                                value={customerAddress}
+                                                onBlur={() => setTouched(prev => ({ ...prev, address: true }))}
+                                                onChange={(e) => dispatch(updateCustomerDetails({ address: e.target.value }))}
+                                                placeholder="Enter full delivery address"
+                                                rows={2}
+                                                className={`w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border ${(showErrors || touched.address) && errors.address ? 'border-red-500' : 'border-zinc-100 dark:border-zinc-800'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none text-sm font-medium`}
+                                            />
+                                            {(showErrors || touched.address) && errors.address && <p className="text-[10px] text-red-500 ml-1 font-bold italic">{errors.address}</p>}
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-xs font-bold text-gray-500 ml-1">Distance (KM)</label>
+                                            <input
+                                                type="number"
+                                                min={0}
+                                                step="0.1"
+                                                value={distanceKm}
+                                                onBlur={() => setTouched(prev => ({ ...prev, distance: true }))}
+                                                onChange={(e) => setDistanceKm(e.target.value)}
+                                                placeholder="e.g. 5.0"
+                                                className={`w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border ${(showErrors || touched.distance) && errors.distance ? 'border-red-500' : 'border-zinc-100 dark:border-zinc-800'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none text-sm font-medium`}
+                                            />
+                                            {(showErrors || touched.distance) && errors.distance && <p className="text-[10px] text-red-500 ml-1 font-bold italic">{errors.distance}</p>}
+                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -301,24 +362,58 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
 
                         <div className="flex-1 space-y-6">
                             {/* Summary Rows */}
-                            <div className="space-y-3">
+                            <div className="space-y-2.5">
                                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                                    <span>Subtotal</span>
+                                    <span>Items Subtotal</span>
                                     <span className="font-bold">Rs. {subtotal.toFixed(2)}</span>
-                                </div>
-                                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                                    <span>Tax (5%)</span>
-                                    <span className="font-bold">Rs. {tax.toFixed(2)}</span>
                                 </div>
                                 {discountAmount > 0 && (
                                     <div className="flex justify-between text-sm text-green-600 font-bold italic">
-                                        <span>Discount ({appliedCouponCode})</span>
+                                        <span>Discount ({appliedCouponCode || 'Coupon'})</span>
                                         <span>- Rs. {discountAmount.toFixed(2)}</span>
+                                    </div>
+                                )}
+                                {discountAmount > 0 && (
+                                    <div className="flex justify-between text-xs text-zinc-400 font-medium">
+                                        <span>Net Food Value</span>
+                                        <span>Rs. {Math.max(0, subtotal - discountAmount).toFixed(2)}</span>
+                                    </div>
+                                )}
+                                {calculatedFees && (orderType === 'DELIVERY' || orderType === 'PICKUP') && (
+                                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 items-center">
+                                        <div className="flex items-center gap-1.5">
+                                            <span>Packaging Charge</span>
+                                            <span className="text-[10px] bg-zinc-200 dark:bg-zinc-700 px-1.5 py-0.5 rounded font-bold text-zinc-600 dark:text-zinc-300">
+                                                {calculatedFees.packaging_charge_source}
+                                            </span>
+                                        </div>
+                                        <span className="font-bold">Rs. {calculatedFees.packaging_charge.toFixed(2)}</span>
+                                    </div>
+                                )}
+                                {calculatedFees && orderType === 'DELIVERY' && (
+                                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 items-center">
+                                        <div className="flex items-center gap-1.5">
+                                            <span>Delivery Charge</span>
+                                            <span className="text-[10px] bg-zinc-200 dark:bg-zinc-700 px-1.5 py-0.5 rounded font-bold text-zinc-600 dark:text-zinc-300">
+                                                {calculatedFees.delivery_charge_source}
+                                            </span>
+                                        </div>
+                                        <span className="font-bold">Rs. {calculatedFees.delivery_charge.toFixed(2)}</span>
+                                    </div>
+                                )}
+                                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                                    <span>Tax</span>
+                                    <span className="font-bold">Rs. {(calculatedFees ? calculatedFees.tax_amount : tax).toFixed(2)}</span>
+                                </div>
+                                {calculatedFees && calculatedFees.service_charge > 0 && (
+                                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                                        <span>Service Charge</span>
+                                        <span className="font-bold">Rs. {calculatedFees.service_charge.toFixed(2)}</span>
                                     </div>
                                 )}
                                 <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
                                     <span className="text-lg font-black dark:text-white uppercase">Grand Total</span>
-                                    <span className="text-2xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight">Rs. {total.toFixed(2)}</span>
+                                    <span className="text-2xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight">Rs. {effectiveTotal.toFixed(2)}</span>
                                 </div>
                             </div>
 

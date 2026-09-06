@@ -8,12 +8,13 @@ import Container from '../../../components/shared/Container';
 const DealEdit = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { data: deal, isLoading: isFetching } = useDeal(Number(id));
+    const { data: deal, isLoading: isFetching } = useDeal(id);
     const updateMutation = useUpdateDeal();
 
     const handleSubmit = async (values: DealCreateType) => {
+        if (!id) return;
         try {
-            await updateMutation.mutateAsync({ id: Number(id), deal: values });
+            await updateMutation.mutateAsync({ id, deal: values });
             toast.success('Deal updated successfully!');
             navigate('/deals');
         } catch (err) {

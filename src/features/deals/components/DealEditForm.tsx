@@ -5,14 +5,19 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import AssetUpload from '../../../components/common/AssetUpload';
 import { useAssets } from '../../../hooks/useAssets';
-import { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import * as Yup from 'yup';
+import { DealCreate } from '../api/dealsApi';
+import { FieldArray, Form, Formik } from 'formik';
+import { Input } from '../../../components/common/Input';
+import { Button } from '../../../components/common/Button';
+import { Select } from '../../../components/common/Select';
 
 const DealSchema = Yup.object().shape({
     title: Yup.string().required('Title is required').max(255),
     store_prices: Yup.array().of(
         Yup.object().shape({
-            store_id: Yup.number().required(),
+            store_id: Yup.string().required('Store is required'),
             price: Yup.number().when('is_active', {
                 is: true,
                 then: (schema) => schema.min(0, 'Price must be positive').required('Price is required'),
@@ -30,13 +35,13 @@ const DealSchema = Yup.object().shape({
             name: Yup.string().required('Group name is required'),
             min_selection: Yup.number().min(0).test('min-lte-max', 'Min cannot exceed Max', function (value) {
                 return (value || 0) <= (this.parent.max_selection || 0);
-            }).required(),
-            max_selection: Yup.number().min(1, 'Max must be at least 1').required(),
+            }).required('Min selection is required'),
+            max_selection: Yup.number().min(1, 'Max must be at least 1').required('Max selection is required'),
             options: Yup.array().of(
                 Yup.object().shape({
-                    menu_item_id: Yup.number().moreThan(0, 'Item selection is required').required(),
-                    variant_id: Yup.number().moreThan(0, 'Variant selection is required').required(),
-                    additional_price: Yup.number().min(0).required(),
+                    menu_item_id: Yup.string().required('Item selection is required').test('non-empty', 'Item is required', (val) => !!val && val !== '0'),
+                    variant_id: Yup.string().required('Variant selection is required').test('non-empty', 'Variant is required', (val) => !!val && val !== '0'),
+                    additional_price: Yup.number().min(0, 'Price must be 0 or positive').required(),
                 })
             ).min(1, 'At least one option required per group')
         })
@@ -70,8 +75,9 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
         ...(menuItems?.map(item => ({ label: item.name, value: item.id })) || [])
     ];
 
-    const getVariantOptions = (itemId: number) => {
-        const item = menuItems?.find(i => i.id === itemId);
+    const getVariantOptions = (itemId: string | number | undefined) => {
+        if (!itemId || itemId === 0 || itemId === '0') return [{ label: 'Select variant...', value: '' }];
+        const item = menuItems?.find(i => String(i.id) === String(itemId));
         return [
             { label: 'Select variant...', value: '' },
             ...(item?.variants.map(v => ({ label: `${v.name} (₹${v.price})`, value: v.id! })) || [])
@@ -457,7 +463,7 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
                                                                                                         error={optionTouched?.menu_item_id && optionErrors?.menu_item_id}
                                                                                                         onChange={(val) => {
                                                                                                             setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.menu_item_id`, val);
-                                                                                                            setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.variant_id`, 0);
+                                                                                                            setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.variant_id`, '');
                                                                                                         }}
                                                                                                     />
                                                                                                 </div>
@@ -498,7 +504,7 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
                                                                                         variant="outline"
                                                                                         size="sm"
                                                                                         className="w-full py-3 border-dashed rounded-xl flex items-center justify-center gap-2 text-zinc-500 hover:text-indigo-600 hover:border-indigo-600 transition-all font-bold text-xs uppercase"
-                                                                                        onClick={() => pushOpt({ menu_item_id: 0, variant_id: 0, additional_price: 0, is_default: false })}
+                                                                                        onClick={() => pushOpt({ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false })}
                                                                                     >
                                                                                         <i className="ri-add-circle-line"></i>
                                                                                         <span>Add Choice Item</span>
@@ -513,7 +519,7 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
                                                         <Button
                                                             type="button"
                                                             className="w-full py-6 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-500 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3"
-                                                            onClick={() => push({ name: '', min_selection: 1, max_selection: 1, is_required: true, options: [{ menu_item_id: 0, variant_id: 0, additional_price: 0, is_default: false }] })}
+                                                            onClick={() => push({ name: '', min_selection: 1, max_selection: 1, is_required: true, options: [{ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false }] })}
                                                         >
                                                             <i className="ri-add-line text-lg"></i>
                                                             Add Another Selection Slot
@@ -521,9 +527,9 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
                                                     </div>
                                                 )}
                                             </FieldArray>
-                                            {(typeof errors.selection_groups === 'string' && touched.selection_groups) && (
+                                            {typeof errors.selection_groups === 'string' && touched.selection_groups && (
                                                 <p className="text-red-500 text-[10px] font-black uppercase tracking-widest text-center py-2 bg-red-50 dark:bg-red-900/10 rounded-xl mt-4 border border-red-100 dark:border-red-900/30">
-                                                    <i className="ri-error-warning-line mr-1"></i>{errors.selection_groups}
+                                                    {errors.selection_groups}
                                                 </p>
                                             )}
                                         </div>
@@ -546,18 +552,57 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
                                     </Button>
 
                                     <div className="flex gap-3">
-                                        <Button
-                                            type="submit"
-                                            isLoading={isLoading || isSubmitting}
-                                            icon={currentStep < 3 ? "ri-arrow-right-line" : "ri-save-line"}
-                                            onClick={() => {
-                                                if (Object.keys(errors).length > 0) {
-                                                    toast.error("Please fix the validation errors before proceeding.");
-                                                }
-                                            }}
-                                        >
-                                            {currentStep < 3 ? "Next Component" : "Update Combo Deal"}
-                                        </Button>
+                                        {currentStep < 3 ? (
+                                            <Button
+                                                type="button"
+                                                onClick={async () => {
+                                                    const stepErrors = await validateForm();
+                                                    const hasStep1Errors = currentStep === 1 && !!stepErrors.title;
+                                                    const hasStep2Errors = currentStep === 2 && (
+                                                        Array.isArray(stepErrors.store_prices) ? stepErrors.store_prices.some(e => !!e) : !!stepErrors.store_prices
+                                                    );
+
+                                                    if ((currentStep === 1 && hasStep1Errors) || (currentStep === 2 && hasStep2Errors)) {
+                                                        toast.error("Please fix the validation errors before proceeding.");
+                                                        return;
+                                                    }
+                                                    setCurrentStep(currentStep + 1);
+                                                }}
+                                                icon="ri-arrow-right-line"
+                                            >
+                                                Next Component
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                type="submit"
+                                                isLoading={isLoading || isSubmitting}
+                                                icon="ri-save-line"
+                                                onClick={async () => {
+                                                    const formErrors = await validateForm();
+                                                    if (Object.keys(formErrors).length > 0) {
+                                                        if (formErrors.title) {
+                                                            toast.error("Please enter a Deal Title (Step 1)");
+                                                            return;
+                                                        }
+                                                        if (formErrors.store_prices) {
+                                                            toast.error("Please ensure at least one store is active with a valid price (Step 2)");
+                                                            return;
+                                                        }
+                                                        if (formErrors.selection_groups) {
+                                                            if (typeof formErrors.selection_groups === 'string') {
+                                                                toast.error(formErrors.selection_groups);
+                                                            } else {
+                                                                toast.error("Please complete all selection group items and variants");
+                                                            }
+                                                            return;
+                                                        }
+                                                        toast.error("Please fix form errors before submitting");
+                                                    }
+                                                }}
+                                            >
+                                                Update Combo Deal
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
                             </Form>

@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useStore, useUpdateStore, StoreFormValues } from '../api/storesApi';
 import { StoreForm } from '../components/StoreForm';
+import { StoreChargesOverride } from '../components/StoreChargesOverride';
 import toast from 'react-hot-toast';
 import Container from '../../../components/shared/Container';
 
@@ -39,12 +40,24 @@ const StoreEdit = () => {
 
     return (
         <Container>
-            <StoreForm
-                title="Edit Store"
-                initialData={store}
-                onSubmit={handleSubmit}
-                isLoading={updateMutation.isPending}
-            />
+            <div className="space-y-8">
+                <StoreForm
+                    title="Edit Store"
+                    initialData={store}
+                    onSubmit={handleSubmit}
+                    isLoading={updateMutation.isPending}
+                />
+
+                <div className="border-t border-zinc-200 dark:border-zinc-800 pt-8">
+                    <div className="mb-6">
+                        <h3 className="text-xl font-bold text-zinc-900 dark:text-white">Store Delivery & Packaging Overrides</h3>
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                            Configure store-specific fee overrides or inherit the global configurations.
+                        </p>
+                    </div>
+                    <StoreChargesOverride storeId={store.id} storeName={store.name} />
+                </div>
+            </div>
         </Container>
     );
 };

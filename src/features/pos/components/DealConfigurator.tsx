@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { Deal, DealSelectionGroup, DealSelectionOption, MenuItemProps, SelectedAddon } from "../api/posApi";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { addDealToCart, CartItem } from "../slices/cartSlice";
+import { addDealToCart, CartDealItem } from "../slices/cartSlice";
 import { Button } from "../../../components/common/Button";
 import IconButton from "../../../components/common/IconButton";
 import moment from "moment";
@@ -16,13 +16,16 @@ interface DealConfiguratorProps {
 }
 
 export interface SelectionState {
-    [groupId: number]: {
-        [optionId: number]: {
+    [groupId: number | string]: {
+        [optionId: number | string]: {
             selected: boolean;
             quantity: number;
+            optionId: number | string;
+            groupId: number | string;
+            groupName?: string;
+            selectionUpcharge: number;
             variantId: string;
             variantName: string;
-            price: number;
             selectedAddons: SelectedAddon[];
             originalItem: MenuItemProps;
         }
@@ -43,75 +46,90 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
     const storePrice = deal.store_prices.find(p => p.store_id === selectedStoreId)?.price || 0;
 
     const groupCounts = useMemo(() => {
-        const counts: { [groupId: number]: number } = {};
+        const counts: { [groupId: string]: number } = {};
         Object.entries(selections).forEach(([groupId, opts]) => {
-            counts[Number(groupId)] = Object.values(opts).filter(o => o.selected).reduce((acc, o) => acc + o.quantity, 0);
+            counts[String(groupId)] = Object.values(opts).filter(o => o.selected).reduce((acc, o) => acc + (o.quantity || 1), 0);
         });
         return counts;
     }, [selections]);
 
     const isGroupValid = (group: DealSelectionGroup) => {
-        const count = groupCounts[group.id] || 0;
+        const count = groupCounts[String(group.id)] || 0;
         return count >= group.min_selection && count <= group.max_selection;
     };
 
     const isAllValid = deal.selection_groups.every(isGroupValid);
 
-    const totalPrice = useMemo(() => {
-        let extra = 0;
+    const { selectionUpchargesTotal, addonsTotal, totalPrice } = useMemo(() => {
+        let upcharges = 0;
+        let addons = 0;
+
         Object.entries(selections).forEach(([groupIdStr, opts]) => {
-            const groupId = Number(groupIdStr);
-            const group = deal.selection_groups.find(g => g.id === groupId);
+            const group = deal.selection_groups.find(g => String(g.id) === String(groupIdStr));
             Object.entries(opts).forEach(([optIdStr, state]) => {
                 if (state.selected) {
-                    const option = group?.options.find(o => o.id === Number(optIdStr));
-                    if (option) {
-                        extra += (option.additional_price + state.selectedAddons.reduce((acc, a) => acc + a.price, 0)) * state.quantity;
-                    }
+                    const option = group?.options.find(o => String(o.id) === String(optIdStr));
+                    const upcharge = option ? Number(option.additional_price || 0) : Number(state.selectionUpcharge || 0);
+                    const itemAddons = (state.selectedAddons || []).reduce((acc, a) => acc + Number(a.price || 0), 0);
+                    const qty = state.quantity || 1;
+
+                    upcharges += upcharge * qty;
+                    addons += itemAddons * qty;
                 }
             });
         });
-        return storePrice + extra;
+
+        return {
+            selectionUpchargesTotal: upcharges,
+            addonsTotal: addons,
+            totalPrice: storePrice + upcharges + addons
+        };
     }, [selections, deal.selection_groups, storePrice]);
 
     const handleToggleOption = (group: DealSelectionGroup, option: DealSelectionOption) => {
         setSelections(prev => {
-            const currentGroup = prev[group.id] || {};
-            const isSelected = !!currentGroup[option.id]?.selected;
+            const currentGroup = prev[String(group.id)] || {};
+            const isSelected = !!currentGroup[String(option.id)]?.selected;
 
             if (group.max_selection === 1 && !isSelected) {
                 const refreshedGroup: any = {};
                 if (option.menu_item) {
-                    refreshedGroup[option.id] = {
+                    refreshedGroup[String(option.id)] = {
                         selected: true,
                         quantity: 1,
+                        optionId: option.id,
+                        groupId: group.id,
+                        groupName: group.name,
+                        selectionUpcharge: Number(option.additional_price || 0),
                         variantId: option.variant_id,
                         variantName: option.variant?.name || 'Default',
-                        price: option.variant?.price || 0,
                         selectedAddons: [],
                         originalItem: option.menu_item
                     };
                 }
-                return { ...prev, [group.id]: refreshedGroup };
+                return { ...prev, [String(group.id)]: refreshedGroup };
             }
 
             if (isSelected) {
                 const newGroup = { ...currentGroup };
-                delete newGroup[option.id];
-                return { ...prev, [group.id]: newGroup };
+                delete newGroup[String(option.id)];
+                return { ...prev, [String(group.id)]: newGroup };
             } else {
-                if (groupCounts[group.id] >= group.max_selection) return prev;
+                if ((groupCounts[String(group.id)] || 0) >= group.max_selection) return prev;
                 if (!option.menu_item) return prev;
                 return {
                     ...prev,
-                    [group.id]: {
+                    [String(group.id)]: {
                         ...currentGroup,
-                        [option.id]: {
+                        [String(option.id)]: {
                             selected: true,
                             quantity: 1,
+                            optionId: option.id,
+                            groupId: group.id,
+                            groupName: group.name,
+                            selectionUpcharge: Number(option.additional_price || 0),
                             variantId: option.variant_id,
                             variantName: option.variant?.name || 'Default',
-                            price: option.variant?.price || 0,
                             selectedAddons: [],
                             originalItem: option.menu_item
                         }
@@ -124,37 +142,46 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
     const handleAddToCart = () => {
         if (!isAllValid) return;
 
-        const cartItems: CartItem[] = [];
+        const cartItems: CartDealItem[] = [];
         Object.entries(selections).forEach(([groupIdStr, opts]) => {
-            const groupId = Number(groupIdStr);
+            const group = deal.selection_groups.find(g => String(g.id) === String(groupIdStr));
             Object.entries(opts).forEach(([optIdStr, state]) => {
                 if (state.selected) {
+                    const upcharge = Number(state.selectionUpcharge || 0);
+                    const itemAddons = (state.selectedAddons || []).reduce((acc, a) => acc + Number(a.price || 0), 0);
+                    const qty = state.quantity || 1;
+
                     cartItems.push({
-                        cartId: `deal-item-${Date.now()}-${Math.random()}`,
-                        uniqueId: `deal-${deal.id}-item-${state.originalItem.id}-group-${groupId}`,
-                        id: state.originalItem.id,
+                        cartId: `deal-item-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+                        id: String(state.originalItem.id),
                         name: state.originalItem.name,
-                        variantId: state.variantId,
+                        variantId: String(state.variantId),
                         variantName: state.variantName,
-                        price: state.price,
-                        quantity: state.quantity,
-                        selectedAddons: state.selectedAddons,
-                        totalItemPrice: 0,
+                        groupId: groupIdStr,
+                        groupName: group?.name,
+                        optionId: optIdStr,
+                        selectionUpcharge: upcharge,
+                        selectedAddons: state.selectedAddons || [],
+                        addonsPrice: itemAddons,
+                        quantity: qty,
+                        totalItemPrice: (upcharge + itemAddons) * qty,
                         originalItem: state.originalItem,
-                        timeStamp: moment().unix(),
-                        order_deal_id: deal.id,
-                        deal_selection_group_id: groupId
+                        deal_selection_group_id: groupIdStr,
+                        deal_selection_option_id: optIdStr
                     });
                 }
             });
         });
 
         dispatch(addDealToCart({
-            id: deal.id,
+            id: String(deal.id),
             name: deal.title,
             price: storePrice,
             quantity: 1,
             items: cartItems,
+            selectionUpchargesTotal,
+            addonsTotal,
+            dealUnitPrice: totalPrice,
             timeStamp: moment().unix()
         }));
 
@@ -266,9 +293,21 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
 
             {/* Footer */}
             <div className="p-4 flex flex-row items-center justify-between border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/20">
-                <div className="flex flex-col items-start justify-between gap-2">
-                    <p className="text-xs text-zinc-400 font-bold uppercase tracking-widest">Incredible Bundle Price</p>
-                    <p className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">Rs.{totalPrice.toFixed(2)}</p>
+                <div className="flex flex-col items-start gap-1">
+                    <p className="text-xs text-zinc-400 font-bold uppercase tracking-widest">Deal Price Breakdown</p>
+                    <div className="flex items-baseline gap-2">
+                        <span className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">Rs.{totalPrice.toFixed(2)}</span>
+                        <div className="flex items-center gap-1.5 text-xs text-zinc-500 font-medium">
+                            <span>(Base Rs.{storePrice.toFixed(2)}</span>
+                            {selectionUpchargesTotal > 0 && (
+                                <span className="text-emerald-600 font-bold">+ Upcharges Rs.{selectionUpchargesTotal.toFixed(2)}</span>
+                            )}
+                            {addonsTotal > 0 && (
+                                <span className="text-indigo-600 font-bold">+ Addons Rs.{addonsTotal.toFixed(2)}</span>
+                            )}
+                            <span>)</span>
+                        </div>
+                    </div>
                 </div>
                 <div className="flex flex-col gap-2 items-end">
                     <p className={`text-xs text-amber-600 font-black flex items-center gap-1 uppercase tracking-tighter ${!isAllValid ? 'animate-pulse' : 'text-green-500'}`}>

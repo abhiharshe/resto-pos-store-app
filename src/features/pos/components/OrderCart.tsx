@@ -166,19 +166,30 @@ const CartDealCard: React.FC<{ deal: any }> = ({ deal }) => {
                     </h3>
                     <div className="mt-1 space-y-1">
                         {deal.items.map((item: any, idx: number) => (
-                            <div key={idx} className="flex items-center gap-2 text-[10px] text-zinc-500 dark:text-zinc-400">
-                                <span className="font-black opacity-40">•</span>
-                                <span className="truncate">{item.quantity}x {item.name} {item.variantName !== 'Default' ? `(${item.variantName})` : ''}</span>
+                            <div key={idx} className="flex flex-col text-[11px] text-zinc-600 dark:text-zinc-300">
+                                <div className="flex items-center gap-1.5">
+                                    <span className="font-black opacity-40">•</span>
+                                    <span className="font-semibold">{item.quantity}x {item.name} {item.variantName && item.variantName !== 'Default' ? `(${item.variantName})` : ''}</span>
+                                    {Number(item.selectionUpcharge) > 0 && (
+                                        <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">+Rs.{item.selectionUpcharge}</span>
+                                    )}
+                                </div>
                                 {item.selectedAddons?.length > 0 && (
-                                    <span className="text-emerald-600/60 font-medium">+{item.selectedAddons.length}</span>
+                                    <div className="ml-3.5 flex flex-wrap gap-1 text-[10px] text-zinc-500">
+                                        {item.selectedAddons.map((addon: any, aIdx: number) => (
+                                            <span key={aIdx} className="bg-white/80 dark:bg-zinc-800/80 px-1.5 py-0.5 rounded border border-emerald-100 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
+                                                +{addon.name} (+Rs.{addon.price})
+                                            </span>
+                                        ))}
+                                    </div>
                                 )}
                             </div>
                         ))}
                     </div>
                 </div>
-                <div className="text-right shrink-0">
-                    <p className="text-sm font-black text-emerald-700 dark:text-emerald-400">Rs.{deal.totalDealPrice}</p>
-                    <p className="text-[10px] text-zinc-400 italic">Rs.{deal.price} base</p>
+                <div className="text-right shrink-0 pl-2">
+                    <p className="text-sm font-black text-emerald-700 dark:text-emerald-400">Rs.{Number(deal.totalDealPrice || 0).toFixed(2)}</p>
+                    <p className="text-[10px] text-zinc-400">Rs.{Number(deal.price || 0).toFixed(2)} base</p>
                 </div>
             </div>
 
@@ -269,7 +280,8 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                         variant_id: item.variantId,
                         quantity: item.quantity,
                         addons: item.selectedAddons.map(a => ({ addon_id: a.id })),
-                        deal_selection_group_id: item.deal_selection_group_id
+                        deal_selection_group_id: item.groupId || item.deal_selection_group_id,
+                        deal_selection_option_id: item.optionId || item.deal_selection_option_id,
                     }))
                 }))
             };

@@ -5,6 +5,8 @@ import OrderSettings from '../components/OrderSettings';
 import EmailSettings from '../components/EmailSettings';
 import SystemSettings from '../components/SystemSettings';
 import AssetSettings from '../components/AssetSettings';
+import DeliverySettings from '../components/DeliverySettings';
+import PackagingSettings from '../components/PackagingSettings';
 import Container from '../../../components/shared/Container';
 
 const Settings = () => {
@@ -16,6 +18,8 @@ const Settings = () => {
     const tabs = [
         { id: 'general', label: 'General', icon: 'ri-settings-3-line' },
         { id: 'order', label: 'Order Settings', icon: 'ri-shopping-bag-3-line' },
+        { id: 'delivery', label: 'Delivery Charges', icon: 'ri-e-bike-2-line' },
+        { id: 'packaging', label: 'Packaging Charges', icon: 'ri-box-3-line' },
         { id: 'email', label: 'Email Config', icon: 'ri-mail-send-line' },
         { id: 'assets', label: 'Assets & Storage', icon: 'ri-image-line' },
         { id: 'system', label: 'System', icon: 'ri-server-line' },
@@ -62,6 +66,8 @@ const Settings = () => {
                 <div className="p-6">
                     {activeTab === 'general' && <GeneralSettings />}
                     {activeTab === 'order' && <OrderSettings />}
+                    {activeTab === 'delivery' && <DeliverySettings />}
+                    {activeTab === 'packaging' && <PackagingSettings />}
                     {activeTab === 'email' && <EmailSettings />}
                     {activeTab === 'system' && <SystemSettings />}
                     {activeTab === 'assets' && <AssetSettings />}

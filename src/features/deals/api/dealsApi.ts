@@ -66,7 +66,7 @@ export interface DealCreate {
     }[];
 }
 
-export const useDeals = (params?: { store_id?: number; is_active?: boolean; q?: string }) => {
+export const useDeals = (params?: { store_id?: string; is_active?: boolean; q?: string }) => {
     return useQuery({
         queryKey: ['deals', params],
         queryFn: async () => {
@@ -76,7 +76,7 @@ export const useDeals = (params?: { store_id?: number; is_active?: boolean; q?: 
     });
 };
 
-export const useDeal = (id: number) => {
+export const useDeal = (id?: string) => {
     return useQuery({
         queryKey: ['deals', id],
         queryFn: async () => {
@@ -160,7 +160,7 @@ export const useUpdateDealItems = () => {
 export const useDeleteDeal = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (id: number) => {
+        mutationFn: async (id: string) => {
             await api.delete(`/menu/deals/${id}`);
         },
         onSuccess: () => {

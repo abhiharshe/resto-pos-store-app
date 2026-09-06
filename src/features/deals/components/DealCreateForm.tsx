@@ -17,7 +17,7 @@ const DealSchema = Yup.object().shape({
     title: Yup.string().required('Title is required').max(255),
     store_prices: Yup.array().of(
         Yup.object().shape({
-            store_id: Yup.number().required(),
+            store_id: Yup.string().required('Store is required'),
             price: Yup.number().when('is_active', {
                 is: true,
                 then: (schema) => schema.min(0, 'Price must be positive').required('Price is required'),
@@ -35,13 +35,13 @@ const DealSchema = Yup.object().shape({
             name: Yup.string().required('Group name is required'),
             min_selection: Yup.number().min(0).test('min-lte-max', 'Min cannot exceed Max', function (value) {
                 return (value || 0) <= (this.parent.max_selection || 0);
-            }).required(),
-            max_selection: Yup.number().min(1, 'Max must be at least 1').required(),
+            }).required('Min selection is required'),
+            max_selection: Yup.number().min(1, 'Max must be at least 1').required('Max selection is required'),
             options: Yup.array().of(
                 Yup.object().shape({
-                    menu_item_id: Yup.number().moreThan(0, 'Item is required').required(),
-                    variant_id: Yup.number().moreThan(0, 'Variant is required').required(),
-                    additional_price: Yup.number().min(0).required(),
+                    menu_item_id: Yup.string().required('Item is required').test('non-empty', 'Item is required', (val) => !!val && val !== '0'),
+                    variant_id: Yup.string().required('Variant is required').test('non-empty', 'Variant is required', (val) => !!val && val !== '0'),
+                    additional_price: Yup.number().min(0, 'Price must be 0 or positive').required('Price is required'),
                 })
             ).min(1, 'At least one option required per group')
         })
@@ -69,8 +69,9 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
         ...(menuItems?.map(item => ({ label: item.name, value: item.id })) || [])
     ];
 
-    const getVariantOptions = (itemId: number) => {
-        const item = menuItems?.find(i => i.id === itemId);
+    const getVariantOptions = (itemId: string | number | undefined) => {
+        if (!itemId || itemId === 0 || itemId === '0') return [{ label: 'Select variant...', value: '' }];
+        const item = menuItems?.find(i => String(i.id) === String(itemId));
         return [
             { label: 'Select variant...', value: '' },
             ...(item?.variants.map(v => ({ label: `${v.name} (₹${v.price})`, value: v.id! })) || [])
@@ -89,14 +90,14 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                 min_selection: 1,
                 max_selection: 1,
                 is_required: true,
-                options: [{ menu_item_id: 0, variant_id: 0, additional_price: 0, is_default: false }]
+                options: [{ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false }]
             },
             {
                 name: 'Sides/Drinks',
                 min_selection: 1,
                 max_selection: 1,
                 is_required: true,
-                options: [{ menu_item_id: 0, variant_id: 0, additional_price: 0, is_default: false }]
+                options: [{ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false }]
             }
         ],
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -139,9 +140,11 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                 <Formik
                     initialValues={initialValues}
                     validationSchema={DealSchema}
-                    onSubmit={(values) => {
+                    enableReinitialize
+                    onSubmit={(values, { setSubmitting }) => {
                         if (currentStep < 3) {
                             setCurrentStep(currentStep + 1);
+                            setSubmitting(false);
                             return;
                         }
                         onSubmit(values);
@@ -166,7 +169,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                             />
                                         </div>
                                         <div className="md:col-span-2">
-                                            <label className="block text-sm text-zinc-700 dark:text-zinc-300 mb-2">Description (Optional)</label>
+                                            <label className="block text-sm text-zinc-700 dark:text-zinc-300 mb-2 font-medium">Description (Optional)</label>
                                             <textarea
                                                 name="description"
                                                 className="w-full h-32 px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none text-zinc-900 dark:text-white"
@@ -240,7 +243,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {stores?.map((store) => {
                                             const spIndex = values.store_prices.findIndex(sp => sp.store_id === store.id);
-                                            const storePrice = values.store_prices[spIndex];
+                                            const storePrice = spIndex !== -1 ? values.store_prices[spIndex] : { store_id: store.id, price: 0, is_active: true };
                                             const isActive = storePrice?.is_active ?? true;
 
                                             return (
@@ -255,20 +258,22 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                         <div className="flex items-center gap-3">
                                                             <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-400'
                                                                 }`}>
-                                                                <i className="ri-store-2-line"></i>
-                                                            </div>
+                                                            <i className="ri-store-2-line"></i>
+                                                        </div>
                                                             <div>
                                                                 <h4 className="font-bold text-zinc-900 dark:text-white">{store.name}</h4>
                                                                 <span className="text-[10px] uppercase font-black tracking-widest text-zinc-500">{store.location || 'Default Location'}</span>
                                                             </div>
                                                         </div>
-                                                        {/* Toggle is_active — keeps store in the array, just changes active status */}
+                                                        {/* Toggle is_active */}
                                                         <button
                                                             type="button"
                                                             onClick={() => {
                                                                 const newPrices = [...values.store_prices];
                                                                 if (spIndex !== -1) {
                                                                     newPrices[spIndex] = { ...newPrices[spIndex], is_active: !isActive };
+                                                                } else {
+                                                                    newPrices.push({ store_id: store.id, price: 0, is_active: !isActive });
                                                                 }
                                                                 setFieldValue('store_prices', newPrices);
                                                             }}
@@ -281,7 +286,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                         </button>
                                                     </div>
 
-                                                    {/* Price input — always shown, readonly when inactive */}
+                                                    {/* Price input */}
                                                     <div className="relative">
                                                         <Input
                                                             label="Base Deal Price (₹)"
@@ -294,6 +299,8 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                                 const newPrices = [...values.store_prices];
                                                                 if (spIndex !== -1) {
                                                                     newPrices[spIndex] = { ...newPrices[spIndex], price: Number(e.target.value) };
+                                                                } else {
+                                                                    newPrices.push({ store_id: store.id, price: Number(e.target.value), is_active: true });
                                                                 }
                                                                 setFieldValue('store_prices', newPrices);
                                                             }}
@@ -326,117 +333,146 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                         <FieldArray name="selection_groups">
                                             {({ push, remove }) => (
                                                 <div className="space-y-6">
-                                                    {values.selection_groups.map((group, gIndex) => (
-                                                        <div key={gIndex} className="p-6 bg-zinc-50 dark:bg-zinc-800/40 rounded-3xl border border-zinc-200 dark:border-zinc-700 relative group animate-in slide-in-from-bottom-2 duration-200">
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => remove(gIndex)}
-                                                                className="absolute -top-3 -right-3 w-8 h-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors shadow-sm active:scale-90"
-                                                            >
-                                                                <i className="ri-close-line"></i>
-                                                            </button>
+                                                    {values.selection_groups.map((group, gIndex) => {
+                                                        const groupErrors = (errors.selection_groups as any)?.[gIndex];
+                                                        const groupTouched = (touched.selection_groups as any)?.[gIndex];
 
-                                                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                                                <div className="md:col-span-2">
+                                                        return (
+                                                            <div key={gIndex} className={`p-6 bg-zinc-50 dark:bg-zinc-800/40 rounded-3xl border transition-all duration-300 relative group animate-in slide-in-from-bottom-2 duration-200 ${groupErrors ? 'border-red-200 dark:border-red-900/30' : 'border-zinc-200 dark:border-zinc-700'}`}>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => remove(gIndex)}
+                                                                    className="absolute -top-3 -right-3 w-8 h-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors shadow-sm active:scale-90"
+                                                                >
+                                                                    <i className="ri-close-line"></i>
+                                                                </button>
+
+                                                                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                                                    <div className="md:col-span-2">
+                                                                        <Input
+                                                                            label="Slot Name"
+                                                                            name={`selection_groups.${gIndex}.name`}
+                                                                            placeholder="e.g., Select Main Burger"
+                                                                            value={group.name}
+                                                                            onChange={handleChange}
+                                                                            error={groupTouched?.name && groupErrors?.name}
+                                                                            required
+                                                                        />
+                                                                    </div>
                                                                     <Input
-                                                                        label="Slot Name"
-                                                                        name={`selection_groups.${gIndex}.name`}
-                                                                        placeholder="e.g., Select Main Burger"
-                                                                        value={group.name}
+                                                                        label="Min Pick"
+                                                                        name={`selection_groups.${gIndex}.min_selection`}
+                                                                        type="number"
+                                                                        value={group.min_selection}
                                                                         onChange={handleChange}
+                                                                        error={groupTouched?.min_selection && groupErrors?.min_selection}
                                                                         required
                                                                     />
-                                                                </div>
-                                                                <Input
-                                                                    label="Min Pick"
-                                                                    name={`selection_groups.${gIndex}.min_selection`}
-                                                                    type="number"
-                                                                    value={group.min_selection}
-                                                                    onChange={handleChange}
-                                                                    required
-                                                                />
-                                                                <Input
-                                                                    label="Max Pick"
-                                                                    name={`selection_groups.${gIndex}.max_selection`}
-                                                                    type="number"
-                                                                    value={group.max_selection}
-                                                                    onChange={handleChange}
-                                                                    required
-                                                                />
-                                                            </div>
+                                                                    <Input
+                                                                        label="Max Pick"
+                                                                        name={`selection_groups.${gIndex}.max_selection`}
+                                                                        type="number"
+                                                                        value={group.max_selection}
+                                                                        onChange={handleChange}
+                                                                        error={groupTouched?.max_selection && groupErrors?.max_selection}
+                                                                        required
+                                                                    />
 
-                                                            <div className="space-y-3">
-                                                                <div className="flex items-center justify-between mb-2 px-1">
-                                                                    <span className="text-xs font-black text-zinc-400 uppercase tracking-widest">Selectable Items</span>
-                                                                    <span className="h-[1px] flex-1 mx-4 bg-zinc-200 dark:bg-zinc-700 opacity-30"></span>
-                                                                </div>
-
-                                                                <FieldArray name={`selection_groups.${gIndex}.options`}>
-                                                                    {({ push: pushOpt, remove: removeOpt }) => (
-                                                                        <div className="space-y-3">
-                                                                            {group.options.map((option, oIndex) => (
-                                                                                <div key={oIndex} className="flex flex-col lg:flex-row gap-3 items-start lg:items-end bg-white dark:bg-zinc-900/50 p-4 rounded-2xl border border-zinc-100 dark:border-zinc-800/50 shadow-sm relative transition-all hover:border-indigo-500/30">
-                                                                                    <div className="flex-1 w-full">
-                                                                                        <Select
-                                                                                            label="Menu Item"
-                                                                                            options={getItemOptions()}
-                                                                                            value={option.menu_item_id}
-                                                                                            onChange={(val) => {
-                                                                                                setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.menu_item_id`, val);
-                                                                                                setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.variant_id`, 0);
-                                                                                            }}
-                                                                                        />
-                                                                                    </div>
-                                                                                    <div className="flex-1 w-full">
-                                                                                        <Select
-                                                                                            label="Variant"
-                                                                                            options={getVariantOptions(option.menu_item_id)}
-                                                                                            value={option.variant_id}
-                                                                                            onChange={(val) => setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.variant_id`, val)}
-                                                                                            disabled={!option.menu_item_id}
-                                                                                        />
-                                                                                    </div>
-                                                                                    <div className="w-full lg:w-32">
-                                                                                        <Input
-                                                                                            label="Upcharge (₹)"
-                                                                                            name={`selection_groups.${gIndex}.options.${oIndex}.additional_price`}
-                                                                                            type="number"
-                                                                                            value={option.additional_price}
-                                                                                            onChange={handleChange}
-                                                                                            placeholder="0.00"
-                                                                                        />
-                                                                                    </div>
-                                                                                    <Button
-                                                                                        type="button"
-                                                                                        variant="ghost"
-                                                                                        className="lg:mb-1 text-red-400 hover:text-red-500 hover:bg-red-50 h-10 w-10 !p-0"
-                                                                                        onClick={() => removeOpt(oIndex)}
-                                                                                        disabled={group.options.length <= 1}
-                                                                                    >
-                                                                                        <i className="ri-delete-bin-line"></i>
-                                                                                    </Button>
-                                                                                </div>
-                                                                            ))}
-                                                                            <Button
-                                                                                type="button"
-                                                                                variant="outline"
-                                                                                size="sm"
-                                                                                className="w-full py-3 border-dashed rounded-xl flex items-center justify-center gap-2 text-zinc-500 hover:text-indigo-600 hover:border-indigo-600 transition-all font-bold text-xs uppercase"
-                                                                                onClick={() => pushOpt({ menu_item_id: 0, variant_id: 0, additional_price: 0, is_default: false })}
-                                                                            >
-                                                                                <i className="ri-add-circle-line"></i>
-                                                                                <span>Add Choice Item</span>
-                                                                            </Button>
+                                                                    <div className="md:col-span-4 flex items-center justify-between p-3 bg-white dark:bg-zinc-900/40 rounded-xl border border-zinc-100 dark:border-zinc-800/50 mt-1">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <i className="ri-shield-check-line text-indigo-500"></i>
+                                                                            <span className="text-sm font-bold text-zinc-700 dark:text-white">Customer must make a selection</span>
                                                                         </div>
-                                                                    )}
-                                                                </FieldArray>
+                                                                        <div
+                                                                            onClick={() => setFieldValue(`selection_groups.${gIndex}.is_required`, !group.is_required)}
+                                                                            className={`w-10 h-5 rounded-full transition-all relative cursor-pointer ${group.is_required ? 'bg-indigo-500' : 'bg-zinc-300 dark:bg-zinc-700'}`}
+                                                                        >
+                                                                            <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${group.is_required ? 'left-5.5' : 'left-0.5'}`} />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="space-y-3">
+                                                                    <div className="flex items-center justify-between mb-2 px-1">
+                                                                        <span className="text-xs font-black text-zinc-400 uppercase tracking-widest">Selectable Items</span>
+                                                                        <span className="h-[1px] flex-1 mx-4 bg-zinc-200 dark:bg-zinc-700 opacity-30"></span>
+                                                                    </div>
+
+                                                                    <FieldArray name={`selection_groups.${gIndex}.options`}>
+                                                                        {({ push: pushOpt, remove: removeOpt }) => (
+                                                                            <div className="space-y-3">
+                                                                                {group.options.map((option, oIndex) => {
+                                                                                    const optionErrors = groupErrors?.options?.[oIndex];
+                                                                                    const optionTouched = groupTouched?.options?.[oIndex];
+
+                                                                                    return (
+                                                                                        <div key={oIndex} className={`flex flex-col lg:flex-row gap-3 items-start lg:items-end bg-white dark:bg-zinc-900/50 p-4 rounded-2xl border transition-all hover:border-indigo-500/30 ${optionErrors ? 'border-red-200 dark:border-red-900/30' : 'border-zinc-100 dark:border-zinc-800/50'} shadow-sm relative`}>
+                                                                                            <div className="flex-1 w-full">
+                                                                                                <Select
+                                                                                                    label="Menu Item"
+                                                                                                    options={getItemOptions()}
+                                                                                                    value={option.menu_item_id}
+                                                                                                    error={optionTouched?.menu_item_id && optionErrors?.menu_item_id}
+                                                                                                    onChange={(val) => {
+                                                                                                        setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.menu_item_id`, val);
+                                                                                                        setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.variant_id`, '');
+                                                                                                    }}
+                                                                                                />
+                                                                                            </div>
+                                                                                            <div className="flex-1 w-full">
+                                                                                                <Select
+                                                                                                    label="Variant"
+                                                                                                    options={getVariantOptions(option.menu_item_id)}
+                                                                                                    value={option.variant_id}
+                                                                                                    error={optionTouched?.variant_id && optionErrors?.variant_id}
+                                                                                                    onChange={(val) => setFieldValue(`selection_groups.${gIndex}.options.${oIndex}.variant_id`, val)}
+                                                                                                    disabled={!option.menu_item_id}
+                                                                                                />
+                                                                                            </div>
+                                                                                            <div className="w-full lg:w-32">
+                                                                                                <Input
+                                                                                                    label="Upcharge (₹)"
+                                                                                                    name={`selection_groups.${gIndex}.options.${oIndex}.additional_price`}
+                                                                                                    type="number"
+                                                                                                    value={option.additional_price}
+                                                                                                    error={optionTouched?.additional_price && optionErrors?.additional_price}
+                                                                                                    onChange={handleChange}
+                                                                                                    placeholder="0.00"
+                                                                                                />
+                                                                                            </div>
+                                                                                            <Button
+                                                                                                type="button"
+                                                                                                variant="ghost"
+                                                                                                className="lg:mb-1 text-red-400 hover:text-red-500 hover:bg-red-50 h-10 w-10 !p-0"
+                                                                                                onClick={() => removeOpt(oIndex)}
+                                                                                                disabled={group.options.length <= 1}
+                                                                                            >
+                                                                                                <i className="ri-delete-bin-line"></i>
+                                                                                            </Button>
+                                                                                        </div>
+                                                                                    );
+                                                                                })}
+                                                                                <Button
+                                                                                    type="button"
+                                                                                    variant="outline"
+                                                                                    size="sm"
+                                                                                    className="w-full py-3 border-dashed rounded-xl flex items-center justify-center gap-2 text-zinc-500 hover:text-indigo-600 hover:border-indigo-600 transition-all font-bold text-xs uppercase"
+                                                                                    onClick={() => pushOpt({ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false })}
+                                                                                >
+                                                                                    <i className="ri-add-circle-line"></i>
+                                                                                    <span>Add Choice Item</span>
+                                                                                </Button>
+                                                                            </div>
+                                                                        )}
+                                                                    </FieldArray>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    ))}
+                                                        );
+                                                    })}
                                                     <Button
                                                         type="button"
                                                         className="w-full py-6 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-500 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3"
-                                                        onClick={() => push({ name: '', min_selection: 1, max_selection: 1, is_required: true, options: [{ menu_item_id: 0, variant_id: 0, additional_price: 0, is_default: false }] })}
+                                                        onClick={() => push({ name: '', min_selection: 1, max_selection: 1, is_required: true, options: [{ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false }] })}
                                                     >
                                                         <i className="ri-add-line text-lg"></i>
                                                         Add Another Selection Slot
@@ -490,7 +526,33 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                             Next Component
                                         </Button>
                                     ) : (
-                                        <Button type="submit" isLoading={isLoading || isSubmitting} icon="ri-save-line">
+                                        <Button
+                                            type="submit"
+                                            isLoading={isLoading || isSubmitting}
+                                            icon="ri-save-line"
+                                            onClick={async () => {
+                                                const formErrors = await validateForm();
+                                                if (Object.keys(formErrors).length > 0) {
+                                                    if (formErrors.title) {
+                                                        toast.error("Please enter a Deal Title (Step 1)");
+                                                        return;
+                                                    }
+                                                    if (formErrors.store_prices) {
+                                                        toast.error("Please ensure at least one store is active with a valid price (Step 2)");
+                                                        return;
+                                                    }
+                                                    if (formErrors.selection_groups) {
+                                                        if (typeof formErrors.selection_groups === 'string') {
+                                                            toast.error(formErrors.selection_groups);
+                                                        } else {
+                                                            toast.error("Please complete all selection group items and variants");
+                                                        }
+                                                        return;
+                                                    }
+                                                    toast.error("Please fix form errors before submitting");
+                                                }
+                                            }}
+                                        >
                                             Save & Publish Deal
                                         </Button>
                                     )}
@@ -500,6 +562,6 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                     )}
                 </Formik>
             </Card>
-        </div >
+        </div>
     );
 };

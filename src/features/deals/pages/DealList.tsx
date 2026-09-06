@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { getMediaURL } from '../../../utils/api';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { useDeals, useDeleteDeal, Deal } from '../api/dealsApi';
@@ -29,7 +28,7 @@ const DealList = () => {
     const { data: stores } = useStores();
     const deleteMutation = useDeleteDeal();
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         if (window.confirm('Are you sure you want to delete this deal?')) {
             await toast.promise(deleteMutation.mutateAsync(id), {
                 loading: 'Deleting deal...',

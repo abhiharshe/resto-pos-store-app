@@ -8,13 +8,14 @@ import toast from 'react-hot-toast';
 const DealItemsEdit = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { data: deal, isLoading: isFetching } = useDeal(Number(id));
+    const { data: deal, isLoading: isFetching } = useDeal(id);
     const updateMutation = useUpdateDealItems();
 
     const handleSubmit = async (values: any) => {
+        if (!id) return;
         try {
             await updateMutation.mutateAsync({ 
-                id: Number(id), 
+                id, 
                 items: values 
             });
             toast.success('Deal items updated successfully!');

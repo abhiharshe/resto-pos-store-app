@@ -36,7 +36,7 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
     // Configuration State
     const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
     const [dealSelections, setDealSelections] = useState<SelectionState>({});
-    const [customizingItem, setCustomizingItem] = useState<{ groupId?: number, option?: DealSelectionOption, item: MenuItemProps } | null>(null);
+    const [customizingItem, setCustomizingItem] = useState<{ groupId: number | string, option: DealSelectionOption, item: MenuItemProps, groupOptions: DealSelectionOption[] } | null>(null);
     const [standaloneItem, setStandaloneItem] = useState<MenuItemProps | null>(null);
 
     const selectedStoreId = useAppSelector((state) => state.cart.selectedStoreId);
@@ -88,15 +88,18 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
         // Initialize selections with defaults
         const initial: SelectionState = {};
         deal.selection_groups.forEach(group => {
-            initial[group.id as number] = {};
+            initial[String(group.id)] = {};
             group.options.forEach(opt => {
                 if (opt.is_default && opt.menu_item) {
-                    initial[group.id as number][opt.id as number] = {
+                    initial[String(group.id)][String(opt.id)] = {
                         selected: true,
                         quantity: 1,
+                        optionId: opt.id,
+                        groupId: group.id,
+                        groupName: group.name,
+                        selectionUpcharge: Number(opt.additional_price || 0),
                         variantId: opt.variant_id,
                         variantName: opt.variant?.name || 'Default',
-                        price: opt.variant?.price || 0,
                         selectedAddons: [],
                         originalItem: opt.menu_item
                     };
@@ -113,9 +116,15 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
         setView('ITEM_CUSTOMIZE');
     };
 
-    const handleCustomizeDealItem = (groupId: number, option: DealSelectionOption, currentState: any) => {
+    const handleCustomizeDealItem = (groupId: number | string, option: DealSelectionOption, currentState: any) => {
         if (!option.menu_item) return;
-        setCustomizingItem({ groupId, option, item: option.menu_item });
+        const group = selectedDeal?.selection_groups.find(g => String(g.id) === String(groupId));
+        setCustomizingItem({
+            groupId,
+            option,
+            item: option.menu_item,
+            groupOptions: group?.options || []
+        });
         setView('ITEM_CUSTOMIZE');
     };
 
@@ -176,21 +185,43 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
             setStandaloneItem(null);
             setView('GRID');
         } else if (customizingItem) {
-            const { groupId, option } = customizingItem;
-            setDealSelections(prev => ({
-                ...prev,
-                [groupId! as number]: {
-                    ...prev[groupId! as number],
-                    [option!.id as number]: {
-                        ...prev[groupId! as number][option!.id as number],
-                        variantId: variant.id,
-                        variantName: variant.name,
-                        price: variant.price,
-                        selectedAddons: addons,
-                        quantity
+            const { groupId, option, groupOptions, item } = customizingItem;
+            // Check if selected variant matches a deal option in the group
+            const matchingOption = groupOptions?.find(
+                opt => String(opt.menu_item_id) === String(item.id) && String(opt.variant_id) === String(variant.id)
+            );
+
+            const selectionUpcharge = matchingOption
+                ? Number(matchingOption.additional_price || 0)
+                : Number((() => {
+                    if (!selectedStoreId) return variant.price;
+                    const sp = variant.store_prices?.find((p: any) => String(p.store_id) === String(selectedStoreId));
+                    return sp ? sp.price : variant.price;
+                })());
+
+            const resolvedOptionId = matchingOption ? matchingOption.id : option.id;
+
+            setDealSelections(prev => {
+                const currentOpt = prev[String(groupId)]?.[String(option.id)];
+                return {
+                    ...prev,
+                    [String(groupId)]: {
+                        ...prev[String(groupId)],
+                        [String(option.id)]: {
+                            ...currentOpt,
+                            selected: true,
+                            optionId: resolvedOptionId,
+                            groupId: groupId,
+                            selectionUpcharge: selectionUpcharge,
+                            variantId: variant.id,
+                            variantName: variant.name,
+                            selectedAddons: addons,
+                            quantity: quantity || 1,
+                            originalItem: currentOpt?.originalItem || option.menu_item!
+                        }
                     }
-                }
-            }));
+                };
+            });
             setCustomizingItem(null);
             setView('DEAL_CONFIG');
         }
@@ -376,9 +407,11 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
                             onBack={handleBack}
                             onSave={handleItemSave}
                             title={customizingItem ? "Customize Deal Item" : "Configure Customizations"}
-                            initialVariant={customizingItem ? dealSelections[customizingItem.groupId! as number][customizingItem.option!.id as number].variantId : (editingCartItem ? editingCartItem.variantId : undefined)}
-                            initialAddons={customizingItem ? dealSelections[customizingItem.groupId! as number][customizingItem.option!.id as number].selectedAddons : (editingCartItem ? editingCartItem.selectedAddons : undefined)}
-                            initialQuantity={customizingItem ? dealSelections[customizingItem.groupId! as number][customizingItem.option!.id as number].quantity : (editingCartItem ? editingCartItem.quantity : undefined)}
+                            isDealItem={!!customizingItem}
+                            dealGroupOptions={customizingItem?.groupOptions}
+                            initialVariant={customizingItem ? dealSelections[String(customizingItem.groupId)]?.[String(customizingItem.option.id)]?.variantId : (editingCartItem ? editingCartItem.variantId : undefined)}
+                            initialAddons={customizingItem ? dealSelections[String(customizingItem.groupId)]?.[String(customizingItem.option.id)]?.selectedAddons : (editingCartItem ? editingCartItem.selectedAddons : undefined)}
+                            initialQuantity={customizingItem ? dealSelections[String(customizingItem.groupId)]?.[String(customizingItem.option.id)]?.quantity : (editingCartItem ? editingCartItem.quantity : undefined)}
                         />
                     </motion.div>
                 )}

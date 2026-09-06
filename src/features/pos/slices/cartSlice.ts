@@ -25,13 +25,35 @@ export interface CartItem {
     promotionId?: number;
 }
 
+export interface CartDealItem {
+    cartId: string;
+    id: string; // menu_item_id
+    name: string; // menu item name
+    variantId: string;
+    variantName: string;
+    groupId: number | string;
+    groupName?: string;
+    optionId: number | string;
+    selectionUpcharge: number; // option.additional_price
+    selectedAddons: SelectedAddon[];
+    addonsPrice: number;
+    quantity: number;
+    totalItemPrice: number;
+    originalItem?: any;
+    deal_selection_group_id?: number | string;
+    deal_selection_option_id?: number | string;
+}
+
 export interface CartDeal {
     cartId: string;
     id: string; // deal_id
     name: string;
-    price: number; // store_price.price
+    price: number; // store base deal price
     quantity: number;
-    items: CartItem[];
+    items: CartDealItem[];
+    selectionUpchargesTotal?: number;
+    addonsTotal?: number;
+    dealUnitPrice?: number;
     totalDealPrice: number;
     timeStamp: number;
 }
@@ -59,6 +81,7 @@ export interface CartState {
     subtotal: number;
     tax: number;
     total: number;
+    deliveryDistanceKm?: number;
 }
 
 const initialState: CartState = {
@@ -79,6 +102,7 @@ const initialState: CartState = {
     subtotal: 0,
     tax: 0,
     total: 0,
+    deliveryDistanceKm: 0,
 };
 
 const applyPromotions = (state: CartState) => {
@@ -155,11 +179,24 @@ const calculateTotals = (state: CartState) => {
 
     // Calculate deals total
     state.deals.forEach(deal => {
-        const dealItemsAddonsPrice = deal.items.reduce((acc, item) => {
-            const addonsPrice = item.selectedAddons.reduce((aacc, a) => aacc + a.price, 0);
-            return acc + (addonsPrice * item.quantity); // Though usually deal variants have additional_price handled elsewhere, we calculate addons if allowed
-        }, 0);
-        deal.totalDealPrice = (deal.price * deal.quantity) + dealItemsAddonsPrice;
+        let selectionUpchargesTotal = 0;
+        let addonsTotal = 0;
+
+        deal.items.forEach(item => {
+            const upcharge = Number(item.selectionUpcharge || 0);
+            const addonsPrice = (item.selectedAddons || []).reduce((sum, a) => sum + Number(a.price || 0), 0);
+            item.addonsPrice = addonsPrice;
+            item.totalItemPrice = (upcharge + addonsPrice) * (item.quantity || 1);
+
+            selectionUpchargesTotal += upcharge * (item.quantity || 1);
+            addonsTotal += addonsPrice * (item.quantity || 1);
+        });
+
+        deal.selectionUpchargesTotal = selectionUpchargesTotal;
+        deal.addonsTotal = addonsTotal;
+        const dealUnitPrice = Number(deal.price || 0) + selectionUpchargesTotal + addonsTotal;
+        deal.dealUnitPrice = dealUnitPrice;
+        deal.totalDealPrice = dealUnitPrice * (deal.quantity || 1);
     });
     const dealsTotal = state.deals.reduce((acc, deal) => acc + deal.totalDealPrice, 0);
 
@@ -240,6 +277,9 @@ const cartSlice = createSlice({
         },
         setOrderType: (state, action: PayloadAction<CartState['orderType']>) => {
             state.orderType = action.payload;
+        },
+        setDeliveryDistance: (state, action: PayloadAction<number>) => {
+            state.deliveryDistanceKm = action.payload;
         },
         setPaymentMode: (state, action: PayloadAction<CartState['paymentMode']>) => {
             state.paymentMode = action.payload;
@@ -337,6 +377,7 @@ export const {
     updateCustomerDetails,
     updateCartItem,
     setOrderType,
+    setDeliveryDistance,
     setPaymentMode,
     applyCoupon,
     removeCoupon,
