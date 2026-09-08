@@ -10,6 +10,7 @@ import ScopeBadge from '../../approvals/components/ScopeBadge';
 import ApprovalStatusBadge from '../../approvals/components/ApprovalStatusBadge';
 import toast from 'react-hot-toast';
 import Container from '../../../components/shared/Container';
+import { getMediaURL } from '../../../utils/api';
 
 const ItemList = () => {
     const navigate = useNavigate();
@@ -36,11 +37,12 @@ const ItemList = () => {
             header: 'Item',
             cell: (info) => {
                 const image = info.getValue() as Asset;
+                const imageUrl = image?.variants?.thumbnail || image?.url;
                 return (
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-200 dark:border-zinc-700">
-                            {image?.url ? (
-                                <img src={image.url} alt="Item" className="w-full h-full object-cover" />
+                            {imageUrl ? (
+                                <img src={getMediaURL(imageUrl)} alt="Item" className="w-full h-full object-cover" />
                             ) : (
                                 <i className="ri-image-line text-zinc-400" />
                             )}

@@ -14,6 +14,7 @@ import PromotionForm from './PromotionForm';
 import { ColumnDef } from '@tanstack/react-table';
 import toast from 'react-hot-toast';
 import { useStores } from '../../stores/api/storesApi';
+import { getMediaURL } from '../../../utils/api';
 
 const PromotionManagement = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
@@ -66,7 +67,7 @@ const PromotionManagement = () => {
             cell: (info) => (
                 <div className="flex items-center gap-3">
                     {info.row.original.image_url && (
-                        <img src={info.row.original.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" />
+                        <img src={getMediaURL(info.row.original.image_url)} alt="" className="w-10 h-10 rounded-lg object-cover" />
                     )}
                     <span className="font-semibold text-zinc-900 dark:text-white uppercase tracking-tight">{info.getValue() as string}</span>
                 </div>

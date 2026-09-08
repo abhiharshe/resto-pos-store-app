@@ -12,6 +12,7 @@ import { Input } from '../../../components/common/Input';
 import { Button } from '../../../components/common/Button';
 import { Select } from '../../../components/common/Select';
 import { toast } from 'react-hot-toast';
+import { getMediaURL } from '../../../utils/api';
 
 const DealSchema = Yup.object().shape({
     title: Yup.string().required('Title is required').max(255),
@@ -235,7 +236,7 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
                                                 {assets.map((asset: any) => (
                                                     <div key={asset.id} className="relative aspect-square rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 group animate-in zoom-in duration-200">
                                                         <img
-                                                            src={asset.url}
+                                                            src={getMediaURL(asset.variants?.medium || asset.url)}
                                                             alt="Deal"
                                                             className="w-full h-full object-cover"
                                                         />

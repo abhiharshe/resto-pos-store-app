@@ -376,8 +376,12 @@ const SessionLayout = () => {
                                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                                 className={`flex items-center gap-2 p-1.5 pr-3 border border-zinc-200 dark:border-zinc-700 rounded-full transition-all duration-200 focus:outline-none ${isProfileOpen ? 'bg-zinc-100 dark:bg-zinc-700' : 'hover:bg-zinc-50 dark:hover:bg-zinc-800'}`}
                             >
-                                <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-semibold uppercase border border-indigo-200 dark:border-indigo-800">
-                                    {user?.name?.[0] || user?.username?.[0] || 'A'}
+                                <div className="w-8 h-8 rounded-full overflow-hidden bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-semibold uppercase border border-indigo-200 dark:border-indigo-800">
+                                    {user?.avatar?.url ? (
+                                        <img src={getMediaURL(user.avatar.variants?.thumbnail || user.avatar.url)} alt="" className="w-full h-full object-cover" />
+                                    ) : (
+                                        user?.name?.[0] || user?.username?.[0] || 'A'
+                                    )}
                                 </div>
                                 <div className="hidden sm:flex flex-col items-start leading-tight">
                                     <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">

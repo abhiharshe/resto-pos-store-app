@@ -9,6 +9,7 @@ import Card from '../../../components/common/Card';
 import AssetUpload from '../../../components/common/AssetUpload';
 import { useAssets } from '../../../hooks/useAssets';
 import { useState } from 'react';
+import { getMediaURL } from '../../../utils/api';
 
 const CategorySchema = Yup.object().shape({
     name: Yup.string().required('Category name is required').min(2, 'Too short'),
@@ -89,7 +90,7 @@ export const CategoryForm = ({ initialValues, onSubmit, isLoading, onCancel, tit
                                     <div className="relative group">
                                         <div className="w-full aspect-video max-w-[400px] rounded-xl overflow-hidden border-2 border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 flex items-center justify-center">
                                             {categoryImage?.url ? (
-                                                <img src={categoryImage.url} alt="Category" className="w-full h-full object-cover" />
+                                                <img src={getMediaURL(categoryImage.variants?.medium || categoryImage.url)} alt="Category" className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="flex flex-col items-center text-zinc-400 p-16">
                                                     <i className="ri-image-line text-4xl mb-2"></i>

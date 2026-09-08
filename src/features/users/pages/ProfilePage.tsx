@@ -7,6 +7,7 @@ import Card from '../../../components/common/Card';
 import { Input } from '../../../components/common/Input';
 import { Button } from '../../../components/common/Button';
 import AssetUpload from '../../../components/common/AssetUpload';
+import { getMediaURL } from '../../../utils/api';
 
 const ProfileSchema = Yup.object().shape({
     full_name: Yup.string()
@@ -43,7 +44,7 @@ const ProfilePage: React.FC = () => {
         }
     };
 
-    const avatarUrl = user?.avatar?.url;
+    const avatarUrl = user?.avatar?.variants?.medium || user?.avatar?.url;
 
     return (
         <div className="max-w-5xl mx-auto py-10 px-4">
@@ -58,7 +59,7 @@ const ProfilePage: React.FC = () => {
                     <div className="relative group">
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden border-8 border-white dark:border-zinc-900 shadow-2xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
                             {avatarUrl ? (
-                                <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500" />
+                                <img src={getMediaURL(avatarUrl)} alt="Avatar" className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500" />
                             ) : (
                                 <i className="ri-user-line text-6xl text-zinc-300 dark:text-zinc-600"></i>
                             )}

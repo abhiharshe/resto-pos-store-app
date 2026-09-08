@@ -3,6 +3,7 @@ import defaultMenuItemImage from "../../../assets/img/default/menu-item.png";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { addToCart, decrementQuantity, incrementQuantity } from "../slices/cartSlice";
 import moment from "moment";
+import { getMediaURL } from "../../../utils/api";
 
 interface ItemCardProps {
     item: MenuItemProps;
@@ -21,7 +22,7 @@ const ItemCard = ({ item, onSelect }: ItemCardProps) => {
     // Find if this item (without specific addons) is in cart
     const cartItem = !requiresModal ? items.find((i: any) => i.id === item.id) : null;
 
-    const menuItemImage = item.images && item.images.length > 0 ? item.images[0].image_url : defaultMenuItemImage;
+    const menuItemImage = item.images && item.images.length > 0 ? getMediaURL(item.images[0].image_url) : defaultMenuItemImage;
 
     const getVariantPrice = (variant: any) => {
         if (!selectedStoreId) return variant.price;

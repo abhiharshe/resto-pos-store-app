@@ -10,6 +10,7 @@ import AssetUpload from '../../../components/common/AssetUpload';
 import { useAssets } from '../../../hooks/useAssets';
 import { useState } from 'react';
 import { Formik, Form } from 'formik';
+import { getMediaURL } from '../../../utils/api';
 
 const ItemSchema = Yup.object().shape({
     name: Yup.string()
@@ -157,7 +158,7 @@ export const ItemForm = ({ initialValues, onSubmit, isLoading, title }: ItemForm
                                     {assets.map((asset: any) => (
                                         <div key={asset.id} className="relative aspect-square rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 group">
                                             <img
-                                                src={asset.url}
+                                                src={getMediaURL(asset.variants?.medium || asset.url)}
                                                 alt="Gallery"
                                                 className="w-full h-full object-cover"
                                             />

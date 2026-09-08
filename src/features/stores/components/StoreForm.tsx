@@ -7,6 +7,7 @@ import { Store, StoreFormValues } from '../api/storesApi';
 import Card from '../../../components/common/Card';
 import { useNavigate } from 'react-router-dom';
 import AssetUpload from '../../../components/common/AssetUpload';
+import { getMediaURL } from '../../../utils/api';
 
 interface StoreFormProps {
     title: string;
@@ -217,7 +218,7 @@ export const StoreForm: React.FC<StoreFormProps> = ({ title, initialData, onSubm
                                 <Card className='space-y-4'>
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Logo</label>
-                                        {values.logo_url && <img src={values.logo_url} alt="Logo" className="h-16 w-16 object-cover rounded mb-2" />}
+                                        {values.logo_url && <img src={getMediaURL(values.logo_url)} alt="Logo" className="h-16 w-16 object-cover rounded mb-2" />}
                                         <AssetUpload
                                             entityType="Store"
                                             entityId={initialData?.id || 'temp'}
@@ -230,7 +231,7 @@ export const StoreForm: React.FC<StoreFormProps> = ({ title, initialData, onSubm
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium text-gray-700 dark:text-zinc-300">Banner</label>
-                                        {values.banner_url && <img src={values.banner_url} alt="Banner" className="h-16 w-32 object-cover rounded mb-2" />}
+                                        {values.banner_url && <img src={getMediaURL(values.banner_url)} alt="Banner" className="h-16 w-32 object-cover rounded mb-2" />}
                                         <AssetUpload
                                             entityType="Store"
                                             entityId={initialData?.id || 'temp'}

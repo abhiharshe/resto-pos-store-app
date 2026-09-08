@@ -11,7 +11,7 @@ import { useStores } from '../../stores/api/storesApi';
 import IconButton from '../../../components/common/IconButton';
 import { Select } from '../../../components/common/Select';
 import { Input } from '../../../components/common/Input';
-import { getApiErrorMessage } from '../../../utils/api';
+import { getApiErrorMessage, getMediaURL } from '../../../utils/api';
 import AdminResetPasswordModal from '../components/AdminResetPasswordModal';
 import PasswordResetRequestsModal from '../components/PasswordResetRequestsModal';
 import { useAppSelector } from '../../../app/hooks';
@@ -72,23 +72,26 @@ const UserList = () => {
         {
             accessorKey: 'full_name',
             header: 'Name',
-            cell: (info) => (
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0 border border-zinc-200 dark:border-zinc-700">
-                        {info.row.original.avatar?.url ? (
-                            <img src={info.row.original.avatar.url} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                                <i className="ri-user-line text-zinc-400 text-sm"></i>
-                            </div>
-                        )}
+            cell: (info) => {
+                const avatarSrc = info.row.original.avatar?.variants?.thumbnail || info.row.original.avatar?.url;
+                return (
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0 border border-zinc-200 dark:border-zinc-700">
+                            {avatarSrc ? (
+                                <img src={getMediaURL(avatarSrc)} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <i className="ri-user-line text-zinc-400 text-sm"></i>
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="font-semibold text-zinc-900 dark:text-white">{info.getValue() as string}</span>
+                            <span className="text-xs text-zinc-500 dark:text-zinc-400">{info.row.original.email}</span>
+                        </div>
                     </div>
-                    <div className="flex flex-col">
-                        <span className="font-semibold text-zinc-900 dark:text-white">{info.getValue() as string}</span>
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400">{info.row.original.email}</span>
-                    </div>
-                </div>
-            )
+                );
+            }
         },
         {
             accessorKey: 'role',

@@ -10,6 +10,7 @@ import Card from '../../../components/common/Card';
 import AssetUpload from '../../../components/common/AssetUpload';
 import { useAssets } from '../../../hooks/useAssets';
 import { useState } from 'react';
+import { getMediaURL } from '../../../utils/api';
 
 import { useAppSelector } from '../../../app/hooks';
 
@@ -107,7 +108,7 @@ export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }
                     <div className="relative group">
                         <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-zinc-800 shadow-lg bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center">
                             {avatar?.url ? (
-                                <img src={avatar.url} alt="Avatar" className="w-full h-full object-cover" />
+                                <img src={getMediaURL(avatar.variants?.medium || avatar.url)} alt="Avatar" className="w-full h-full object-cover" />
                             ) : (
                                 <i className="ri-user-line text-5xl text-zinc-400"></i>
                             )}

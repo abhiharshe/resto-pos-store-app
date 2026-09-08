@@ -167,9 +167,36 @@ api.interceptors.response.use(
 
 export const getMediaURL = (path: string | undefined | null) => {
     if (!path) return '';
-    if (path.startsWith('http')) return path;
-    const base = getBaseURL().replace('/api/v1/', '');
-    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    if (
+        path.startsWith('http://') ||
+        path.startsWith('https://') ||
+        path.startsWith('blob:') ||
+        path.startsWith('data:')
+    ) {
+        return path;
+    }
+    const base = getBaseURL().replace(/\/api\/v1\/?$/, '');
+    let cleanPath = path.trim();
+    if (!cleanPath.startsWith('/')) {
+        cleanPath = `/${cleanPath}`;
+    }
+    // If it's a relative path that doesn't start with /uploads, but is an asset key
+    // like /User/... or /MenuItem/... or /Store/..., prepend /uploads
+    if (
+        !cleanPath.startsWith('/uploads') &&
+        (
+            cleanPath.startsWith('/User/') ||
+            cleanPath.startsWith('/Store/') ||
+            cleanPath.startsWith('/MenuItem/') ||
+            cleanPath.startsWith('/MenuCategory/') ||
+            cleanPath.startsWith('/Promotion/') ||
+            cleanPath.startsWith('/Product/') ||
+            cleanPath.startsWith('/Setting/') ||
+            cleanPath.startsWith('/variants/')
+        )
+    ) {
+        cleanPath = `/uploads${cleanPath}`;
+    }
     return `${base}${cleanPath}`;
 };
 

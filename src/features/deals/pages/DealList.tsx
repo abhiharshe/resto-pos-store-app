@@ -12,6 +12,7 @@ import ScopeBadge from '../../approvals/components/ScopeBadge';
 import ApprovalStatusBadge from '../../approvals/components/ApprovalStatusBadge';
 import toast from 'react-hot-toast';
 import Container from '../../../components/shared/Container';
+import { getMediaURL } from '../../../utils/api';
 
 const DealList = () => {
     const navigate = useNavigate();
@@ -49,7 +50,7 @@ const DealList = () => {
             cell: (info) => (
                 <div className="w-16 h-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-200 dark:border-zinc-700">
                     {info.row.original.featured_image ? (
-                        <img src={info.row.original.featured_image} alt="Deal" className="w-full h-full object-cover" />
+                        <img src={getMediaURL(info.row.original.featured_image)} alt="Deal" className="w-full h-full object-cover" />
                     ) : (
                         <i className="ri-percent-line text-zinc-400" />
                     )}

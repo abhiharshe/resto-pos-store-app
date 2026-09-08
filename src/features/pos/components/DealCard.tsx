@@ -2,6 +2,7 @@ import React from "react";
 import { Deal } from "../api/posApi";
 import { useAppSelector } from "../../../app/hooks";
 import defaultDealImage from "../../../assets/img/default/menu-item.png";
+import { getMediaURL } from "../../../utils/api";
 
 interface DealCardProps {
     deal: Deal;
@@ -15,7 +16,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, onSelect }) => {
     const storePriceObj = deal.store_prices.find(p => String(p.store_id) === String(selectedStoreId));
     const price = storePriceObj ? storePriceObj.price : 0;
 
-    const dealImage = deal.images && deal.images.length > 0 ? deal.images[0].image_url : defaultDealImage;
+    const dealImage = deal.images && deal.images.length > 0 ? getMediaURL(deal.images[0].image_url) : defaultDealImage;
 
     const handleAddClick = () => {
         if (!selectedStoreId) {

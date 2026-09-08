@@ -13,6 +13,7 @@ import ScopeBadge from '../../approvals/components/ScopeBadge';
 import ApprovalStatusBadge from '../../approvals/components/ApprovalStatusBadge';
 import toast from 'react-hot-toast';
 import Container from '../../../components/shared/Container';
+import { getMediaURL } from '../../../utils/api';
 
 const CategoryList = () => {
     const navigate = useNavigate();
@@ -58,24 +59,27 @@ const CategoryList = () => {
         {
             accessorKey: 'image.url',
             header: 'Category',
-            cell: (info) => (
-                <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0 border border-zinc-200 dark:border-zinc-700">
-                        {info.row.original.image?.url ? (
-                            <img src={info.row.original.image.url} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                                <i className="ri-image-line text-zinc-400 text-sm"></i>
-                            </div>
-                        )}
+            cell: (info) => {
+                const imgUrl = info.row.original.image?.variants?.thumbnail || info.row.original.image?.url;
+                return (
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0 border border-zinc-200 dark:border-zinc-700">
+                            {imgUrl ? (
+                                <img src={getMediaURL(imgUrl)} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <i className="ri-image-line text-zinc-400 text-sm"></i>
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="font-semibold text-zinc-900 dark:text-white">
+                                {info.row.original.name}
+                            </span>
+                        </div>
                     </div>
-                    <div className="flex flex-col">
-                        <span className="font-semibold text-zinc-900 dark:text-white">
-                            {info.row.original.name}
-                        </span>
-                    </div>
-                </div>
-            )
+                );
+            }
         },
         {
             accessorKey: 'menu.title',

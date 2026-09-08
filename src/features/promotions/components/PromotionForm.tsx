@@ -9,6 +9,7 @@ import { useMenuItems, useUploadImage } from '../../menu/api/menuApi';
 import { useStores } from '../../stores/api/storesApi';
 import Card from '../../../components/common/Card';
 import { useNavigate } from 'react-router-dom';
+import { getMediaURL } from '../../../utils/api';
 
 const PromotionSchema = Yup.object().shape({
     title: Yup.string().required('Title is required').max(255),
@@ -167,7 +168,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                 <div className="flex items-center gap-6 p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-700">
                                     {values.image_url ? (
                                         <div className="relative group">
-                                            <img src={values.image_url} alt="Promotion" className="w-24 h-24 object-cover rounded-xl shadow-md" />
+                                            <img src={getMediaURL(values.image_url)} alt="Promotion" className="w-24 h-24 object-cover rounded-xl shadow-md" />
                                             <button
                                                 type="button"
                                                 onClick={() => setFieldValue('image_url', '')}
