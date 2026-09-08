@@ -3,7 +3,7 @@ import Tooltip from '../common/Tooltip';
 import MaintenanceOverlay from '../common/MaintenanceOverlay';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { useHasPermission } from '../../hooks/usePermission';
+import { checkUserPermission } from '../../hooks/usePermission';
 import { toggleTheme, toggleSidebar } from '../../features/ui/slices/uiSlice';
 import { selectBranding } from '../../features/settings/slices/settingsSlice';
 import moment from 'moment';
@@ -99,30 +99,30 @@ const SessionLayout = () => {
     }, []);
 
     // Dynamic Permission Checks
-    const canDashboard = useHasPermission('dashboard:view');
-    const canPos = useHasPermission('pos:access') && (user?.role === 'SUPER_ADMIN' || user?.store?.has_pos);
-    const canOrders = useHasPermission('orders:manage');
-    const canKds = useHasPermission('kds:access') && (user?.role === 'SUPER_ADMIN' || user?.store?.has_kds);
-    const canRecipes = useHasPermission('recipes:manage');
+    const canDashboard = checkUserPermission(user, 'dashboard:view');
+    const canPos = checkUserPermission(user, 'pos:access') && (user?.role === 'SUPER_ADMIN' || user?.store?.has_pos);
+    const canOrders = checkUserPermission(user, 'orders:manage');
+    const canKds = checkUserPermission(user, 'kds:access') && (user?.role === 'SUPER_ADMIN' || user?.store?.has_kds);
+    const canRecipes = checkUserPermission(user, 'recipes:manage');
 
-    const canMenu = useHasPermission('menu:manage');
-    const canDeals = useHasPermission('deals:manage');
+    const canMenu = checkUserPermission(user, 'menu:manage');
+    const canDeals = checkUserPermission(user, 'deals:manage');
     const hasMenuSection = canMenu || canDeals;
 
-    const canCustomers = useHasPermission('customers:view');
-    const canCoupons = useHasPermission('coupons:manage');
-    const canPromotions = useHasPermission('promotions:manage');
+    const canCustomers = checkUserPermission(user, 'customers:view');
+    const canCoupons = checkUserPermission(user, 'coupons:manage');
+    const canPromotions = checkUserPermission(user, 'promotions:manage');
     const hasMarketingSection = canCustomers || canCoupons || canPromotions;
 
     const canStores = user?.role === 'SUPER_ADMIN';
-    const canApprovals = user?.role === 'SUPER_ADMIN' || user?.role === 'STORE_ADMIN' || useHasPermission('approvals:manage');
-    const canUsers = useHasPermission('users:manage');
-    const canAssets = useHasPermission('assets:manage');
-    const canSettings = useHasPermission('settings:manage') || (user?.role === 'STORE_ADMIN' && useHasPermission('stores:manage'));
-    const canPermissions = useHasPermission('permissions:manage');
+    const canApprovals = user?.role === 'SUPER_ADMIN' || user?.role === 'STORE_ADMIN' || checkUserPermission(user, 'approvals:manage');
+    const canUsers = checkUserPermission(user, 'users:manage');
+    const canAssets = checkUserPermission(user, 'assets:manage');
+    const canSettings = checkUserPermission(user, 'settings:manage') || (user?.role === 'STORE_ADMIN' && checkUserPermission(user, 'stores:manage'));
+    const canPermissions = checkUserPermission(user, 'permissions:manage');
     const hasAdminSection = canStores || canApprovals || canUsers || canAssets || canSettings || canPermissions;
 
-    const { data: approvalStats } = useApprovalStats(user?.role === 'SUPER_ADMIN' ? undefined : user?.store_id);
+    const { data: approvalStats } = useApprovalStats(user?.role === 'SUPER_ADMIN' ? undefined : (user?.store_id || undefined));
 
     return (
         <div className={`flex relative w-full h-screen bg-gray-200 dark:bg-zinc-900 transition-colors duration-200 overflow-hidden`}>
