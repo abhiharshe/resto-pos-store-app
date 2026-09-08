@@ -11,6 +11,8 @@ import AssetUpload from '../../../components/common/AssetUpload';
 import { useAssets } from '../../../hooks/useAssets';
 import { useState } from 'react';
 
+import { useAppSelector } from '../../../app/hooks';
+
 const UserSchema = Yup.object().shape({
     full_name: Yup.string().required('Full name is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
@@ -37,6 +39,7 @@ interface UserFormProps {
 
 export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }: UserFormProps) => {
     const navigate = useNavigate();
+    const { user: currentUser } = useAppSelector((state) => state.auth);
     const { data: stores } = useStores();
     const [showUploader, setShowUploader] = useState(false);
 
@@ -45,12 +48,22 @@ export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }
 
     const avatar = assets?.[0]; // Assume first asset is the avatar for now
 
-    const storeOptions = [
-        { label: 'No Specific Store', value: '' },
-        ...(stores?.map(store => ({ label: store.name, value: store.id })) || [])
-    ];
+    const isSuperAdmin = currentUser?.role === 'SUPER_ADMIN';
+    const isTargetSuperAdmin = initialValues?.role === 'SUPER_ADMIN';
+    const isSelf = currentUser?.id === initialValues?.id;
 
-    const roleOptions = [
+    // Store options: Super Admin can choose any store; others are locked to their own store
+    const storeOptions = isSuperAdmin
+        ? [
+            { label: 'No Specific Store', value: '' },
+            ...(stores?.map(store => ({ label: store.name, value: store.id })) || [])
+        ]
+        : (stores?.filter(s => s.id === currentUser?.store_id).map(store => ({ label: store.name, value: store.id })) || [
+            { label: 'My Store', value: currentUser?.store_id || '' }
+        ]);
+
+    // Role options based on currentUser role
+    let roleOptions = [
         { label: 'Super Admin', value: 'SUPER_ADMIN' },
         { label: 'Store Admin', value: 'STORE_ADMIN' },
         { label: 'Manager', value: 'MANAGER' },
@@ -58,12 +71,20 @@ export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }
         { label: 'Kitchen', value: 'KITCHEN' }
     ];
 
+    if (!isSuperAdmin) {
+        if (currentUser?.role === 'STORE_ADMIN') {
+            roleOptions = roleOptions.filter(r => r.value !== 'SUPER_ADMIN');
+        } else if (currentUser?.role === 'MANAGER') {
+            roleOptions = roleOptions.filter(r => !['SUPER_ADMIN', 'STORE_ADMIN'].includes(r.value));
+        }
+    }
+
     const defaultInitialValues = {
         full_name: '',
         email: '',
         password: '',
         role: 'CASHIER',
-        store_id: initialValues?.store_id || '',
+        store_id: initialValues?.store_id || (!isSuperAdmin ? currentUser?.store_id || '' : ''),
         is_active: true,
         isNew: !initialValues?.id,
         ...initialValues
@@ -73,7 +94,7 @@ export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }
         <div className="max-w-4xl">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-xl font-bold text-zinc-900 dark:text-white">{title}</h3>
+                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">{initialValues?.id ? 'Update details for ' + initialValues.full_name : 'Fill the form to create a new user'}</p>
                 </div>
                 <Button variant="ghost" onClick={() => navigate('/users')} icon="ri-arrow-left-line">
@@ -117,6 +138,13 @@ export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }
 
                     {!initialValues?.id && (
                         <p className="mt-2 text-xs text-zinc-500 italic">Avatar can be uploaded after user creation.</p>
+                    )}
+
+                    {isTargetSuperAdmin && !isSelf && (
+                        <div className="w-full mt-4 p-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-xl text-amber-800 dark:text-amber-200 text-sm flex items-center gap-2">
+                            <i className="ri-shield-user-line text-lg text-amber-600" />
+                            <span>This is a Super Admin user. Only this Super Admin can update their own account information.</span>
+                        </div>
                     )}
                 </div>
 
@@ -211,6 +239,7 @@ export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }
                                 <Button
                                     type="submit"
                                     isLoading={isLoading || isSubmitting}
+                                    disabled={isTargetSuperAdmin && !isSelf}
                                 >
                                     Save User
                                 </Button>

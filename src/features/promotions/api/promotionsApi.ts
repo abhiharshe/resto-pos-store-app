@@ -25,7 +25,10 @@ export interface Promotion {
     start_date?: string;
     end_date?: string;
     is_active: boolean;
-    store_id: string;
+    store_id?: string;
+    approval_status?: 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED';
+    rejection_reason?: string;
+    is_global?: boolean;
 
     buy_item?: MenuItem;
     get_item?: MenuItem;
@@ -46,7 +49,7 @@ export interface PromotionCreate {
     start_date?: string;
     end_date?: string;
     is_active: boolean;
-    store_id: string;
+    store_id?: string;
 }
 
 export const usePromotions = (params?: { store_id?: string; skip?: number; limit?: number }) => {

@@ -35,20 +35,19 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ onNext, onBack }) => {
                                 <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 flex items-center justify-center rounded-2xl">
                                     <i className="ri-user-smile-line text-2xl"></i>
                                 </div>
-                                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Customer Profile</h2>
+                                <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Customer Profile</h2>
                             </div>
 
                             {/* Walk-in Toggle */}
                             <button
                                 onClick={() => dispatch(toggleWalkIn())}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all group ${
-                                    isWalkIn 
-                                    ? 'bg-indigo-600 border-indigo-600 text-white' 
-                                    : 'border-zinc-100 dark:border-zinc-700 text-gray-500 hover:border-indigo-200'
-                                }`}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all group ${isWalkIn
+                                        ? 'bg-indigo-600 border-indigo-600 text-white'
+                                        : 'border-zinc-100 dark:border-zinc-700 text-gray-500 hover:border-indigo-200'
+                                    }`}
                             >
                                 <i className={`ri-walk-line text-lg ${isWalkIn ? 'text-white' : 'text-gray-400 group-hover:text-indigo-400'}`}></i>
-                                <span className="text-sm font-bold">Walk-In Guest</span>
+                                <span className="text-sm font-semibold">Walk-In Guest</span>
                                 {isWalkIn && <i className="ri-checkbox-circle-fill ml-1"></i>}
                             </button>
                         </div>
@@ -63,7 +62,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ onNext, onBack }) => {
                                 onChange={(e) => dispatch(updateCustomerDetails({ name: e.target.value }))}
                                 className={isWalkIn ? 'opacity-60' : ''}
                             />
-                            
+
                             <PhoneInput
                                 label="Phone Number"
                                 placeholder="Phone number"
@@ -74,7 +73,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ onNext, onBack }) => {
                             />
 
                             {isWalkIn && (
-                                <motion.div 
+                                <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className="p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-zinc-100 dark:border-zinc-800 flex items-start gap-3 mt-2"

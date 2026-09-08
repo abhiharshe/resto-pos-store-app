@@ -92,7 +92,7 @@ const AddonGroupList = () => {
         <Container>
             <div className="flex items-center justify-between">
                 <div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Add-On Groups</h3>
+                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Add-On Groups</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">Manage customizable options for your menu items.</p>
                 </div>
                 <Button onClick={() => {

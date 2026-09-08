@@ -112,7 +112,7 @@ const MenuList = () => {
         <Container>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Menu Overview</h3>
+                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Menu Overview</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">Manage categories, items, deals and menu schedules.</p>
                 </div>
                 <Button onClick={() => navigate('/menu/new')} variant="primary" className="hidden sm:flex">
@@ -129,7 +129,7 @@ const MenuList = () => {
                                 <i className={`${section.icon} text-indigo-600 dark:text-indigo-400 text-2xl`} />
                             </div>
                             <div className="flex-1">
-                                <h3 className="text-lg font-bold text-zinc-900 dark:text-white">{section.title}</h3>
+                                <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">{section.title}</h3>
                                 <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-4">{section.description}</p>
                                 <Button variant="outline" size="sm">Manage {section.title}</Button>
                             </div>
@@ -140,7 +140,7 @@ const MenuList = () => {
 
             <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Menu</h3>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">Menu</h3>
                     <span className="text-xs text-zinc-500">Fetched: {menus?.length || 0} records</span>
                 </div>
                 <div className="border border-zinc-200 dark:border-zinc-700 rounded-lg">

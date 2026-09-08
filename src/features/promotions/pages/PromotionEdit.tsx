@@ -34,8 +34,8 @@ const PromotionEdit = () => {
         return (
             <div className="text-center p-8 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-100 dark:border-zinc-800">
                 <i className="ri-error-warning-line text-4xl text-red-500 mb-4"></i>
-                <h2 className="text-xl font-bold dark:text-white mb-2">Promotion Not Found</h2>
-                <button onClick={() => navigate('/promotions')} className="text-indigo-600 font-bold hover:underline">
+                <h2 className="text-xl font-semibold dark:text-white mb-2">Promotion Not Found</h2>
+                <button onClick={() => navigate('/promotions')} className="text-indigo-600 font-semibold hover:underline">
                     Back to Promotions
                 </button>
             </div>

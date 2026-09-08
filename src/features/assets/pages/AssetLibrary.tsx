@@ -7,7 +7,7 @@ const AssetLibrary: React.FC = () => {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Media Library</h1>
+                    <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Media Library</h1>
                     <p className="text-zinc-500 dark:text-zinc-400">Manage all uploaded assets across the system</p>
                 </div>
             </div>

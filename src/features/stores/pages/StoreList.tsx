@@ -68,7 +68,16 @@ const StoreList = () => {
         {
             accessorKey: 'is_active',
             header: 'Status',
-            cell: (info) => <StatusBadge status={info.getValue() ? 'Active' : 'Inactive'} variant={info.getValue() ? 'success' : 'neutral'} />
+            cell: (info) => (
+                <div className="flex flex-col gap-1 items-start">
+                    <StatusBadge status={info.getValue() ? 'Active' : 'Inactive'} variant={info.getValue() ? 'success' : 'neutral'} />
+                    {info.row.original.maintenance_mode && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 px-1.5 py-0.5 rounded">
+                            <i className="ri-tools-line text-xs" /> Maint.
+                        </span>
+                    )}
+                </div>
+            )
         },
         {
             id: 'actions',
@@ -100,7 +109,7 @@ const StoreList = () => {
         <Container>
             <div className="flex items-center justify-between">
                 <div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Stores</h3>
+                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Stores</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">Manage your store locations and configurations.</p>
                 </div>
                 <Button

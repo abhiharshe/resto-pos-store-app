@@ -48,6 +48,8 @@ import Pos from './features/pos/pages/Pos';
 import PosLayout from './components/layouts/PosLayout';
 import KdsPage from './features/kds/pages/Kds';
 import AssetLibrary from './features/assets/pages/AssetLibrary';
+import PermissionsManagement from './features/permissions/pages/PermissionsManagement';
+import ApprovalList from './features/approvals/pages/ApprovalList';
 import ProtectedRoute from './features/auth/components/ProtectedRoute';
 import PublicRoute from './features/auth/components/PublicRoute';
 import KdsLayout from './components/layouts/KdsLayout';
@@ -60,7 +62,7 @@ const ErrorUI = ({ message, onRetry }: { message: string, onRetry: () => void })
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Something went wrong</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-2">Something went wrong</h2>
             <p className="text-gray-500 mb-6">We're sorry, but an unexpected error occurred.</p>
             <div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-lg text-sm text-left overflow-auto mb-8 whitespace-pre-wrap font-mono">
                 {message}
@@ -80,12 +82,12 @@ const ErrorUI = ({ message, onRetry }: { message: string, onRetry: () => void })
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
     return (
-        <ErrorUI 
-            message={error.message} 
+        <ErrorUI
+            message={error.message}
             onRetry={() => {
                 resetErrorBoundary();
                 window.location.reload();
-            }} 
+            }}
         />
     );
 }
@@ -94,14 +96,14 @@ function RouteErrorPage() {
     const error = useRouteError() as any;
     const navigate = useNavigate();
     const errorMessage = error?.message || error?.statusText || "Unknown error occurred";
-    
+
     return (
-        <ErrorUI 
-            message={errorMessage} 
+        <ErrorUI
+            message={errorMessage}
             onRetry={() => {
                 navigate('/');
                 window.location.reload();
-            }} 
+            }}
         />
     );
 }
@@ -134,83 +136,312 @@ const router = createBrowserRouter([
         ),
         children: [
             { index: true, element: <Navigate to="/dashboard" replace /> },
-            { path: 'dashboard', element: <Dashboard /> },
-            { path: 'stores', element: <StoreList /> },
+            {
+                path: 'dashboard',
+                element: (
+                    <ProtectedRoute requiredPermission="dashboard:view">
+                        <Dashboard />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'stores',
+                element: <StoreList />,
+            },
             { path: 'stores/new', element: <StoreCreate /> },
             { path: 'stores/edit/:id', element: <StoreEdit /> },
-            { path: 'orders', element: <OrderList /> },
-            { path: 'orders/:id', element: <OrderShow /> },
+            {
+                path: 'orders',
+                element: (
+                    <ProtectedRoute requiredPermission="orders:manage">
+                        <OrderList />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'orders/:id',
+                element: (
+                    <ProtectedRoute requiredPermission="orders:manage">
+                        <OrderShow />
+                    </ProtectedRoute>
+                ),
+            },
             {
                 path: 'menu',
-                children: [
-                    { index: true, element: <MenuList /> },
-                    { path: 'new', element: <MenuCreate /> },
-                    { path: 'edit/:id', element: <MenuEdit /> },
-                    {
-                        path: 'categories',
-                        children: [
-                            { index: true, element: <CategoryList /> },
-                            { path: 'new', element: <CategoryCreate /> },
-                            { path: 'edit/:id', element: <CategoryEdit /> },
-                        ]
-                    },
-                    { path: 'addon-groups', element: <AddonGroupList /> },
-                    {
-                        path: 'items',
-                        children: [
-                            { index: true, element: <ItemList /> },
-                            { path: 'new', element: <ItemCreate /> },
-                            { path: 'edit/:id', element: <ItemEdit /> },
-                            { path: ':id/pricing', element: <ItemPricing /> },
-                        ]
-                    }
-                ]
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <MenuList />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'menu/new',
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <MenuCreate />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'menu/edit/:id',
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <MenuEdit />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'menu/categories',
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <CategoryList />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'menu/categories/new',
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <CategoryCreate />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'menu/categories/edit/:id',
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <CategoryEdit />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'menu/addon-groups',
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <AddonGroupList />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'menu/items',
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <ItemList />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'menu/items/new',
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <ItemCreate />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'menu/items/edit/:id',
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <ItemEdit />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'menu/items/:id/pricing',
+                element: (
+                    <ProtectedRoute requiredPermission="menu:manage">
+                        <ItemPricing />
+                    </ProtectedRoute>
+                ),
             },
             {
                 path: 'users',
                 children: [
-                    { index: true, element: <UserList /> },
-                    { path: 'new', element: <UserCreate /> },
-                    { path: 'edit/:id', element: <UserEdit /> },
+                    {
+                        index: true,
+                        element: (
+                            <ProtectedRoute requiredPermission="users:manage">
+                                <UserList />
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'new',
+                        element: (
+                            <ProtectedRoute requiredPermission="users:manage">
+                                <UserCreate />
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: (
+                            <ProtectedRoute requiredPermission="users:manage">
+                                <UserEdit />
+                            </ProtectedRoute>
+                        ),
+                    },
                 ]
             },
             { path: 'profile', element: <ProfilePage /> },
             { path: 'change-password', element: <ChangePasswordPage /> },
-            { path: 'settings', element: <Settings /> },
-            { path: 'assets', element: <AssetLibrary /> },
+            {
+                path: 'settings',
+                element: (
+                    <ProtectedRoute requiredPermission={['settings:manage', 'stores:manage']}>
+                        <Settings />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'permissions',
+                element: (
+                    <ProtectedRoute requiredPermission="permissions:manage">
+                        <PermissionsManagement />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'approvals',
+                element: (
+                    <ProtectedRoute>
+                        <ApprovalList />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'assets',
+                element: (
+                    <ProtectedRoute requiredPermission="assets:manage">
+                        <AssetLibrary />
+                    </ProtectedRoute>
+                ),
+            },
             {
                 path: 'coupons',
                 children: [
-                    { index: true, element: <CouponList /> },
-                    { path: 'new', element: <CouponCreate /> },
-                    { path: 'edit/:id', element: <CouponEdit /> },
+                    {
+                        index: true,
+                        element: (
+                            <ProtectedRoute requiredPermission="coupons:manage">
+                                <CouponList />
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'new',
+                        element: (
+                            <ProtectedRoute requiredPermission="coupons:manage">
+                                <CouponCreate />
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: (
+                            <ProtectedRoute requiredPermission="coupons:manage">
+                                <CouponEdit />
+                            </ProtectedRoute>
+                        ),
+                    },
                 ]
             },
             {
                 path: 'promotions',
                 children: [
-                    { index: true, element: <PromotionList /> },
-                    { path: 'new', element: <PromotionCreate /> },
-                    { path: 'edit/:id', element: <PromotionEdit /> },
+                    {
+                        index: true,
+                        element: (
+                            <ProtectedRoute requiredPermission="promotions:manage">
+                                <PromotionList />
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'new',
+                        element: (
+                            <ProtectedRoute requiredPermission="promotions:manage">
+                                <PromotionCreate />
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: (
+                            <ProtectedRoute requiredPermission="promotions:manage">
+                                <PromotionEdit />
+                            </ProtectedRoute>
+                        ),
+                    },
                 ]
             },
-            { path: 'deals',
+            {
+                path: 'deals',
                 children: [
-                    { index: true, element: <DealList /> },
-                    { path: 'new', element: <DealCreate /> },
-                    { path: 'edit/:id', element: <DealEdit /> },
-                    { path: 'items/:id', element: <DealItemsEdit /> },
+                    {
+                        index: true,
+                        element: (
+                            <ProtectedRoute requiredPermission="deals:manage">
+                                <DealList />
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'new',
+                        element: (
+                            <ProtectedRoute requiredPermission="deals:manage">
+                                <DealCreate />
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'edit/:id',
+                        element: (
+                            <ProtectedRoute requiredPermission="deals:manage">
+                                <DealEdit />
+                            </ProtectedRoute>
+                        ),
+                    },
+                    {
+                        path: 'items/:id',
+                        element: (
+                            <ProtectedRoute requiredPermission="deals:manage">
+                                <DealItemsEdit />
+                            </ProtectedRoute>
+                        ),
+                    },
                 ]
             },
-            { path: 'recipes', element: <RecipeList /> },
-            { path: 'customers', element: <CustomerList /> },
-            { path: 'customers/:id', element: <CustomerDetail /> },
+            {
+                path: 'recipes',
+                element: (
+                    <ProtectedRoute requiredPermission="recipes:manage">
+                        <RecipeList />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'customers',
+                element: (
+                    <ProtectedRoute requiredPermission="customers:view">
+                        <CustomerList />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'customers/:id',
+                element: (
+                    <ProtectedRoute requiredPermission="customers:view">
+                        <CustomerDetail />
+                    </ProtectedRoute>
+                ),
+            },
         ]
     }, {
         path: '/pos',
         errorElement: <RouteErrorPage />,
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute requiredPermission="pos:access">
                 <PosLayout />
             </ProtectedRoute>
         ),
@@ -221,7 +452,7 @@ const router = createBrowserRouter([
         path: 'kds',
         errorElement: <RouteErrorPage />,
         element: (
-            <ProtectedRoute>
+            <ProtectedRoute requiredPermission="kds:access">
                 <KdsLayout />
             </ProtectedRoute>
         ),

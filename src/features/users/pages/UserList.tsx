@@ -14,9 +14,11 @@ import { Input } from '../../../components/common/Input';
 import { getApiErrorMessage } from '../../../utils/api';
 import AdminResetPasswordModal from '../components/AdminResetPasswordModal';
 import PasswordResetRequestsModal from '../components/PasswordResetRequestsModal';
+import { useAppSelector } from '../../../app/hooks';
 
 const UserList = () => {
     const navigate = useNavigate();
+    const { user: currentUser } = useAppSelector((state) => state.auth);
     const { data: stores } = useStores();
     const [isFilterVisible, setIsFilterVisible] = useState(false);
     const [filters, setFilters] = useState<UserFilters>({
@@ -116,35 +118,56 @@ const UserList = () => {
         {
             id: 'actions',
             header: 'Actions',
-            cell: (info) => (
-                <div className="flex items-center gap-2">
-                    <IconButton
-                        icon="ri-key-line"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                            setActiveRequestId(null);
-                            setSelectedUserForReset(info.row.original);
-                        }}
-                        title="Reset Password"
-                    />
-                    <IconButton
-                        icon="ri-edit-line"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => navigate(`/users/edit/${info.row.original.id}`)}
-                        title="Edit User"
-                    />
-                    <IconButton
-                        icon="ri-delete-bin-line"
-                        variant="danger"
-                        size="sm"
-                        onClick={() => handleDelete(info.row.original.id)}
-                        title="Delete User"
-                        disabled={deleteMutation.isPending}
-                    />
-                </div>
-            )
+            cell: (info) => {
+                const targetUser = info.row.original;
+                const isTargetSuperAdmin = targetUser.role === 'SUPER_ADMIN';
+                const isSelf = currentUser?.id === targetUser.id;
+
+                return (
+                    <div className="flex items-center gap-2">
+                        {/* Reset Password: Only Super Admin himself can reset his own password */}
+                        {(!isTargetSuperAdmin || isSelf) && (
+                            <IconButton
+                                icon="ri-key-line"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                    setActiveRequestId(null);
+                                    setSelectedUserForReset(targetUser);
+                                }}
+                                title="Reset Password"
+                            />
+                        )}
+
+                        {/* Edit User: Only Super Admin himself can edit his own profile */}
+                        {(!isTargetSuperAdmin || isSelf) && (
+                            <IconButton
+                                icon="ri-edit-line"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => navigate(`/users/edit/${targetUser.id}`)}
+                                title="Edit User"
+                            />
+                        )}
+
+                        {/* Delete User: Super Admins can NEVER be removed by anyone */}
+                        {!isTargetSuperAdmin ? (
+                            <IconButton
+                                icon="ri-delete-bin-line"
+                                variant="danger"
+                                size="sm"
+                                onClick={() => handleDelete(targetUser.id)}
+                                title="Delete User"
+                                disabled={deleteMutation.isPending}
+                            />
+                        ) : (
+                            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-400 text-sm cursor-not-allowed" title="Super Admin cannot be deleted">
+                                <i className="ri-lock-line" />
+                            </span>
+                        )}
+                    </div>
+                );
+            }
         }
     ];
 
@@ -196,13 +219,15 @@ const UserList = () => {
                         value={filters.full_name}
                         onChange={(e) => handleFilterChange('full_name', e.target.value)}
                     />
-                    <Select
-                        label="Store"
-                        placeholder="All Stores"
-                        options={[{ label: 'Global / All', value: '' }, ...(stores?.map(s => ({ label: s.name, value: s.id })) || [])]}
-                        value={filters.store_id}
-                        onChange={(val) => handleFilterChange('store_id', val)}
-                    />
+                    {currentUser?.role === 'SUPER_ADMIN' && (
+                        <Select
+                            label="Store"
+                            placeholder="All Stores"
+                            options={[{ label: 'Global / All', value: '' }, ...(stores?.map(s => ({ label: s.name, value: s.id })) || [])]}
+                            value={filters.store_id}
+                            onChange={(val) => handleFilterChange('store_id', val)}
+                        />
+                    )}
                     <Select
                         label="Role"
                         placeholder="All Roles"

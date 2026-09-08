@@ -90,7 +90,7 @@ const ItemPricingForm = ({ item, stores, onSubmit, onCancel, isSaving }: ItemPri
                                                     </div>
                                                     <div className="sm:col-span-2 mt-4 space-y-4 border-t border-zinc-200 dark:border-zinc-800 pt-4">
                                                         <div>
-                                                            <label className="text-sm font-bold text-zinc-700 dark:text-zinc-300">Store Specific Prices & Availability</label>
+                                                            <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Store Specific Prices & Availability</label>
                                                             <p className="text-xs text-zinc-500 mb-2">Leave blank to use the base price for the store. Uncheck to make unavailable.</p>
                                                         </div>
                                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -108,7 +108,7 @@ const ItemPricingForm = ({ item, stores, onSubmit, onCancel, isSaving }: ItemPri
                                                                         </div>
                                                                         <div className="flex items-center justify-between gap-4 border-t border-zinc-100 dark:border-zinc-700 pt-2 mt-1">
                                                                             <div className="flex items-center gap-2 w-40">
-                                                                                <span className="text-xs text-zinc-400 font-bold">Rs.</span>
+                                                                                <span className="text-xs text-zinc-400 font-semibold">₹</span>
                                                                                 <NumberInput
                                                                                     step="0.01"
                                                                                     placeholder="Default"

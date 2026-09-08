@@ -32,7 +32,7 @@ const CustomerList = () => {
             header: 'Customer Name',
             cell: (info) => (
                 <div className="flex flex-col">
-                    <span className="font-bold text-zinc-900 dark:text-white">
+                    <span className="font-semibold text-zinc-900 dark:text-white">
                         {info.getValue() as string || 'Guest Customer'}
                     </span>
                     <span className="text-xs text-zinc-500">{info.row.original.email || 'No email'}</span>
@@ -80,7 +80,7 @@ const CustomerList = () => {
         <Container>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Customer Management</h3>
+                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Customer Management</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">View and analyze your most frequent shoppers and their order history.</p>
                 </div>
             </div>

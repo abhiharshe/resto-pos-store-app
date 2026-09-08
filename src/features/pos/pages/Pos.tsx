@@ -144,7 +144,7 @@ const Pos = () => {
                 >
                     <i className="ri-shopping-cart-2-fill text-2xl"></i>
                     {cartCount > 0 && (
-                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-900 animate-bounce">
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-900 animate-bounce">
                             {cartCount}
                         </span>
                     )}

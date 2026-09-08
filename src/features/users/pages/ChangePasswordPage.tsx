@@ -35,18 +35,18 @@ const ChangePasswordPage: React.FC = () => {
             number: "0123456789",
             special: "@$!%*?&"
         };
-        
+
         let password = "";
         password += charset.upper.charAt(Math.floor(Math.random() * charset.upper.length));
         password += charset.lower.charAt(Math.floor(Math.random() * charset.lower.length));
         password += charset.number.charAt(Math.floor(Math.random() * charset.number.length));
         password += charset.special.charAt(Math.floor(Math.random() * charset.special.length));
-        
+
         const allChars = Object.values(charset).join("");
         for (let i = 0; i < length - 4; i++) {
             password += allChars.charAt(Math.floor(Math.random() * allChars.length));
         }
-        
+
         return password.split('').sort(() => 0.5 - Math.random()).join('');
     };
 
@@ -66,14 +66,14 @@ const ChangePasswordPage: React.FC = () => {
     return (
         <div className="max-w-3xl mx-auto py-12 px-4">
             <div className="flex items-center gap-4 mb-10">
-                <button 
+                <button
                     onClick={() => navigate(-1)}
                     className="w-10 h-10 rounded-full border border-zinc-200 dark:border-zinc-800 flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
                 >
                     <i className="ri-arrow-left-line"></i>
                 </button>
                 <div>
-                    <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Security Settings</h1>
+                    <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white">Security Settings</h1>
                     <p className="text-zinc-500">Manage your password and account security</p>
                 </div>
             </div>
@@ -82,7 +82,7 @@ const ChangePasswordPage: React.FC = () => {
                 <div className="md:col-span-3 space-y-6">
                     <Card className="p-8 border-none shadow-2xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
-                        
+
                         <Formik
                             initialValues={{
                                 current_password: '',
@@ -109,7 +109,7 @@ const ChangePasswordPage: React.FC = () => {
 
                                     <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800">
                                         <div className="flex items-center justify-between mb-4">
-                                            <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider">New Credentials</h3>
+                                            <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">New Credentials</h3>
                                             <button
                                                 type="button"
                                                 onClick={() => {
@@ -119,7 +119,7 @@ const ChangePasswordPage: React.FC = () => {
                                                     setIsPasswordVisible(true);
                                                     toast.success('Secure password generated!');
                                                 }}
-                                                className="text-indigo-600 hover:text-indigo-700 text-xs font-bold flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg transition-colors"
+                                                className="text-indigo-600 hover:text-indigo-700 text-xs font-semibold flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg transition-colors"
                                             >
                                                 <i className="ri-magic-fill"></i> Auto Generate
                                             </button>
@@ -189,29 +189,29 @@ const ChangePasswordPage: React.FC = () => {
                         <div className="absolute top-0 right-0 p-4 opacity-10">
                             <i className="ri-shield-check-line text-8xl"></i>
                         </div>
-                        <h3 className="text-lg font-bold mb-4 relative z-10">Password Guidelines</h3>
+                        <h3 className="text-lg font-semibold mb-4 relative z-10">Password Guidelines</h3>
                         <div className="space-y-4 relative z-10">
                             <div className="flex items-start gap-3">
                                 <div className="mt-1 w-5 h-5 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center shrink-0">
-                                    <i className="ri-check-line text-xs font-bold"></i>
+                                    <i className="ri-check-line text-xs font-semibold"></i>
                                 </div>
                                 <p className="text-sm text-zinc-400">Length: 8 to 20 characters</p>
                             </div>
                             <div className="flex items-start gap-3">
                                 <div className="mt-1 w-5 h-5 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center shrink-0">
-                                    <i className="ri-check-line text-xs font-bold"></i>
+                                    <i className="ri-check-line text-xs font-semibold"></i>
                                 </div>
                                 <p className="text-sm text-zinc-400">Uppercase letters (A-Z)</p>
                             </div>
                             <div className="flex items-start gap-3">
                                 <div className="mt-1 w-5 h-5 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center shrink-0">
-                                    <i className="ri-check-line text-xs font-bold"></i>
+                                    <i className="ri-check-line text-xs font-semibold"></i>
                                 </div>
                                 <p className="text-sm text-zinc-400">Numbers (0-9)</p>
                             </div>
                             <div className="flex items-start gap-3">
                                 <div className="mt-1 w-5 h-5 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center shrink-0">
-                                    <i className="ri-check-line text-xs font-bold"></i>
+                                    <i className="ri-check-line text-xs font-semibold"></i>
                                 </div>
                                 <p className="text-sm text-zinc-400">Special symbols (@$!%*?&)</p>
                             </div>
@@ -229,7 +229,7 @@ const ChangePasswordPage: React.FC = () => {
                                 <i className="ri-error-warning-line text-xl"></i>
                             </div>
                             <div>
-                                <h4 className="font-bold text-amber-800 dark:text-amber-400 text-sm mb-1">Security Warning</h4>
+                                <h4 className="font-semibold text-amber-800 dark:text-amber-400 text-sm mb-1">Security Warning</h4>
                                 <p className="text-xs text-amber-700 dark:text-amber-500 leading-relaxed">
                                     Changing your password will not log you out of your current session, but will require the new password for future logins.
                                 </p>

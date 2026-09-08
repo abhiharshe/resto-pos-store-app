@@ -142,28 +142,28 @@ export const AssetPreview: React.FC<AssetPreviewProps> = ({
                                     <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4">File Details</h4>
                                     <div className="space-y-4">
                                         <div className="space-y-1">
-                                            <p className="text-[11px] text-zinc-400 font-bold uppercase">Name</p>
+                                            <p className="text-[11px] text-zinc-400 font-semibold uppercase">Name</p>
                                             <p className="text-sm font-black text-zinc-900 dark:text-white break-all leading-tight">
                                                 {asset.original_name}
                                             </p>
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="space-y-1">
-                                                <p className="text-[11px] text-zinc-400 font-bold uppercase">Size</p>
-                                                <p className="text-sm font-bold text-zinc-900 dark:text-white">
+                                                <p className="text-[11px] text-zinc-400 font-semibold uppercase">Size</p>
+                                                <p className="text-sm font-semibold text-zinc-900 dark:text-white">
                                                     {formatSize(asset.file_size)}
                                                 </p>
                                             </div>
                                             <div className="space-y-1">
-                                                <p className="text-[11px] text-zinc-400 font-bold uppercase">Type</p>
-                                                <p className="text-sm font-bold text-zinc-900 dark:text-white truncate uppercase">
+                                                <p className="text-[11px] text-zinc-400 font-semibold uppercase">Type</p>
+                                                <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate uppercase">
                                                     {asset.mime_type.split('/')[1]}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[11px] text-zinc-400 font-bold uppercase">Uploaded At</p>
-                                            <p className="text-sm font-bold text-zinc-900 dark:text-white">
+                                            <p className="text-[11px] text-zinc-400 font-semibold uppercase">Uploaded At</p>
+                                            <p className="text-sm font-semibold text-zinc-900 dark:text-white">
                                                 {dayjs(asset.created_at).format('MMMM D, YYYY')}
                                                 <span className="block text-[10px] text-zinc-400 font-medium">
                                                     {dayjs(asset.created_at).format('h:mm A')}
@@ -179,7 +179,7 @@ export const AssetPreview: React.FC<AssetPreviewProps> = ({
                                         <div className="bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-4 space-y-3">
                                             {Object.entries(asset.metadata).map(([key, value]) => (
                                                 <div key={key} className="flex justify-between items-center text-xs">
-                                                    <span className="text-zinc-500 font-bold capitalize">{key.replace(/_/g, ' ')}</span>
+                                                    <span className="text-zinc-500 font-semibold capitalize">{key.replace(/_/g, ' ')}</span>
                                                     <span className="text-zinc-900 dark:text-white font-black truncate max-w-[120px]">{String(value)}</span>
                                                 </div>
                                             ))}

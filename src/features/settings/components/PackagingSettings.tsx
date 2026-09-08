@@ -107,7 +107,7 @@ const PackagingSettings: React.FC = () => {
         <form onSubmit={handleSave} className="space-y-6 max-w-4xl">
             <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-4">
                 <div>
-                    <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Global Packaging Charges (Slabs)</h3>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">Global Packaging Charges (Slabs)</h3>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400">
                         Configure order value slabs and packaging fees applied to Delivery and Takeaway orders.
                     </p>
@@ -117,11 +117,10 @@ const PackagingSettings: React.FC = () => {
                     <button
                         type="button"
                         onClick={() => setIsActive(!isActive)}
-                        className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
-                            isActive
+                        className={`px-3 py-1 text-xs font-semibold rounded-full transition-colors ${isActive
                                 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'
                                 : 'bg-zinc-200 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400'
-                        }`}
+                            }`}
                     >
                         {isActive ? '● Active' : '○ Inactive'}
                     </button>
@@ -132,7 +131,7 @@ const PackagingSettings: React.FC = () => {
             <div className="bg-white dark:bg-zinc-800/60 rounded-2xl border border-zinc-200 dark:border-zinc-700 overflow-hidden shadow-sm">
                 <div className="p-4 border-b border-zinc-200 dark:border-zinc-700 flex justify-between items-center bg-zinc-50/50 dark:bg-zinc-800/80">
                     <div>
-                        <h4 className="font-bold text-sm text-zinc-900 dark:text-white">Order Value Slabs</h4>
+                        <h4 className="font-semibold text-sm text-zinc-900 dark:text-white">Order Value Slabs</h4>
                         <p className="text-xs text-zinc-500">Calculated on Net Food Value (Item Total - Discounts)</p>
                     </div>
                     <Button
@@ -148,7 +147,7 @@ const PackagingSettings: React.FC = () => {
 
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-zinc-100/70 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-xs font-bold uppercase tracking-wider">
+                        <thead className="bg-zinc-100/70 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-xs font-semibold uppercase tracking-wider">
                             <tr>
                                 <th className="p-3.5 pl-5">Min Order Value (₹)</th>
                                 <th className="p-3.5">Max Order Value (₹)</th>
@@ -190,7 +189,7 @@ const PackagingSettings: React.FC = () => {
                                                     placeholder="No Limit (∞)"
                                                 />
                                                 {rule.max_order_value === null && (
-                                                    <span className="text-xs bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 font-bold px-2 py-1 rounded">
+                                                    <span className="text-xs bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 font-semibold px-2 py-1 rounded">
                                                         Above ₹{rule.min_order_value}
                                                     </span>
                                                 )}

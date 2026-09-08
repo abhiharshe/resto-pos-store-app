@@ -61,7 +61,7 @@ export const StoreForm: React.FC<StoreFormProps> = ({ title, initialData, onSubm
         <div>
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-xl font-bold text-zinc-900 dark:text-white">{title}</h3>
+                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">{initialData ? 'Update configuration for ' + initialData.name : 'Fill the form to create a new store'}</p>
                 </div>
                 <Button variant="ghost" onClick={() => navigate('/stores')} icon="ri-arrow-left-line">
@@ -116,7 +116,7 @@ export const StoreForm: React.FC<StoreFormProps> = ({ title, initialData, onSubm
                                                     </button>
                                                 }
                                             />
-                                            <p className="text-[10px] text-zinc-400 mt-1 font-bold">Unique 6-letter identifier used for orders</p>
+                                            <p className="text-[10px] text-zinc-400 mt-1 font-semibold">Unique 6-letter identifier used for orders</p>
                                         </div>
                                         <div className="md:col-span-1">
                                             <Input
@@ -190,7 +190,7 @@ export const StoreForm: React.FC<StoreFormProps> = ({ title, initialData, onSubm
                                                     <div className="w-11 h-6 bg-zinc-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-zinc-600 peer-checked:bg-indigo-600"></div>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Point of Sale (POS)</span>
+                                                    <span className="text-sm font-semibold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Point of Sale (POS)</span>
                                                     <span className="text-[10px] text-zinc-500">Enable order placement functionality</span>
                                                 </div>
                                             </label>
@@ -206,7 +206,7 @@ export const StoreForm: React.FC<StoreFormProps> = ({ title, initialData, onSubm
                                                     <div className="w-11 h-6 bg-zinc-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-zinc-600 peer-checked:bg-indigo-600"></div>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Kitchen Display (KDS)</span>
+                                                    <span className="text-sm font-semibold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Kitchen Display (KDS)</span>
                                                     <span className="text-[10px] text-zinc-500">Enable real-time order tracking for kitchen</span>
                                                 </div>
                                             </label>

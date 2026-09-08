@@ -113,7 +113,7 @@ export const PosHeader: React.FC<PosHeaderProps> = ({ onStoreClick, onNewOrderCl
                 </Button>
                 <div className="flex flex-row items-center leading-tight gap-2">
                     <div className="flex flex-col">
-                        <h1 className="text-xl font-bold text-zinc-900 dark:text-white">POS Order</h1>
+                        <h1 className="text-xl font-semibold text-zinc-900 dark:text-white">POS Order</h1>
                         <button
                             onClick={onStoreClick}
                             disabled={!!user?.store_id}

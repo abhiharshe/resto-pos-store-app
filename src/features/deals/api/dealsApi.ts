@@ -40,6 +40,10 @@ export interface Deal {
     id: string;
     title: string;
     description?: string;
+    store_id?: string;
+    approval_status?: 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED';
+    rejection_reason?: string;
+    is_global?: boolean;
     is_active: boolean;
     assets: any[];
     featured_image?: string;

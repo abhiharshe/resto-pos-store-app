@@ -67,8 +67,8 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 }) => {
     const style = variantStyles[variant];
 
-    const confirmButtonClass = variant === 'danger' 
-        ? 'bg-red-500 hover:bg-red-600 text-white border-transparent' 
+    const confirmButtonClass = variant === 'danger'
+        ? 'bg-red-500 hover:bg-red-600 text-white border-transparent'
         : '';
 
     return (
@@ -99,7 +99,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                                 </div>
 
                                 <div className="flex-1 min-w-0">
-                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+                                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                                         {title}
                                     </h3>
                                     <p className="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">

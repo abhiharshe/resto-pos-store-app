@@ -72,14 +72,14 @@ const ItemCard = ({ item, onSelect }: ItemCardProps) => {
                     />
                 </div>
                 <div className="flex-1 min-w-0 flex flex-col justify-center">
-                    <h2 className="font-bold text-md text-zinc-900 dark:text-zinc-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.name}</h2>
+                    <h2 className="font-semibold text-md text-zinc-900 dark:text-zinc-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.name}</h2>
                     <p className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 line-clamp-2 leading-tight font-medium">
                         {item.description || "Freshly prepared with the finest ingredients for your satisfaction."}
                     </p>
                     <div className="mt-2 text-indigo-600 dark:text-indigo-400 font-black text-lg tracking-tighter">
                         {!item.variants || item.variants.length === 0 ? '-' :
-                            item.variants.length === 1 ? `Rs.${getVariantPrice(item.variants[0])}` :
-                                `Rs.${Math.min(...item.variants.map(v => getVariantPrice(v)))}+`
+                            item.variants.length === 1 ? `₹${getVariantPrice(item.variants[0])}` :
+                                `₹${Math.min(...item.variants.map(v => getVariantPrice(v)))}+`
                         }
                     </div>
                 </div>

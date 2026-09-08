@@ -102,7 +102,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
         <div>
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">{title}</h3>
+                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
                     <p className="text-sm text-zinc-500 font-medium">{initialData ? `Editing promotion: ${initialData.title}` : 'Launch a new automated store offer'}</p>
                 </div>
                 <Button variant="ghost" onClick={() => navigate('/promotions')} icon="ri-arrow-left-line">
@@ -161,7 +161,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                             </div>
 
                             <div className="space-y-3">
-                                <label className="block text-sm font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Offer Banner Image</label>
+                                <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Offer Banner Image</label>
                                 <div className="flex items-center gap-6 p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-700">
                                     {values.image_url ? (
                                         <div className="relative group">
@@ -189,7 +189,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                         />
                                         <label
                                             htmlFor="image-upload"
-                                            className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm font-bold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-zinc-50 transition-colors shadow-sm"
+                                            className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm font-semibold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-zinc-50 transition-colors shadow-sm"
                                         >
                                             <i className="ri-upload-2-line"></i>
                                             {uploadImageMutation.isPending ? 'Uploading...' : 'Upload Image'}
@@ -202,7 +202,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                             <div className="p-6 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 space-y-6">
                                 <div className="flex items-center gap-2 mb-2">
                                     <i className="ri-percent-line text-indigo-500 text-xl"></i>
-                                    <h4 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-wider">Promotion Configuration</h4>
+                                    <h4 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider">Promotion Configuration</h4>
                                 </div>
 
                                 <Select
@@ -301,7 +301,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                         <div className="w-10 h-6 bg-zinc-200 peer-focus:outline-none dark:bg-zinc-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-bold text-zinc-900 dark:text-white">Active Status</p>
+                                        <p className="text-sm font-semibold text-zinc-900 dark:text-white">Active Status</p>
                                         <p className="text-xs text-zinc-500 font-medium">Allow this offer to be applied to orders.</p>
                                     </div>
                                 </label>
@@ -317,7 +317,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                         <div className="w-10 h-6 bg-zinc-200 peer-focus:outline-none dark:bg-zinc-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-bold text-zinc-900 dark:text-white">Stackable</p>
+                                        <p className="text-sm font-semibold text-zinc-900 dark:text-white">Stackable</p>
                                         <p className="text-xs text-zinc-500 font-medium">Can be combined with manual coupons.</p>
                                     </div>
                                 </label>

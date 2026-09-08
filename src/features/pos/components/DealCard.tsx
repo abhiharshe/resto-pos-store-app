@@ -47,7 +47,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, onSelect }) => {
                     />
                 </div>
                 <div className="flex-1 min-w-0 flex flex-col justify-center">
-                    <h2 className="font-bold text-md text-zinc-900 dark:text-zinc-100 truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                    <h2 className="font-semibold text-md text-zinc-900 dark:text-zinc-100 truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                         {deal.title}
                     </h2>
                     <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1 line-clamp-2 leading-tight font-medium">
@@ -56,7 +56,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, onSelect }) => {
                     <div className="mt-2 flex items-baseline gap-1">
                         <span className="text-[10px] text-zinc-400 font-black uppercase tracking-tighter">Only at</span>
                         <span className="text-emerald-600 dark:text-emerald-400 font-black text-2xl tracking-tighter">
-                            Rs.{price}
+                            ₹{price}
                         </span>
                     </div>
                 </div>

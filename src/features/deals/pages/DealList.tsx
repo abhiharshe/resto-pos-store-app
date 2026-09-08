@@ -8,11 +8,17 @@ import { Button } from '../../../components/common/Button';
 import { FloatingActionButton } from '../../../components/common/FloatingActionButton';
 import { Input } from '../../../components/common/Input';
 import { StatusBadge } from '../../../components/common/StatusBadge';
+import { useAppSelector } from '../../../app/hooks';
+import ScopeBadge from '../../approvals/components/ScopeBadge';
+import ApprovalStatusBadge from '../../approvals/components/ApprovalStatusBadge';
 import toast from 'react-hot-toast';
 import Container from '../../../components/shared/Container';
 
 const DealList = () => {
     const navigate = useNavigate();
+    const { user } = useAppSelector((state) => state.auth);
+    const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
 
@@ -57,9 +63,26 @@ const DealList = () => {
             header: 'Deal Name',
             cell: (info) => (
                 <div className="flex flex-col">
-                    <span className="font-bold text-zinc-900 dark:text-white">{info.getValue() as string}</span>
+                    <span className="font-semibold text-zinc-900 dark:text-white">{info.getValue() as string}</span>
                     <span className="text-xs text-zinc-500 line-clamp-1">{info.row.original.description || 'No description'}</span>
                 </div>
+            )
+        },
+        {
+            id: 'scope',
+            header: 'Scope',
+            cell: (info) => (
+                <ScopeBadge isGlobal={!info.row.original.store_id} />
+            )
+        },
+        {
+            accessorKey: 'approval_status',
+            header: 'Approval',
+            cell: (info) => (
+                <ApprovalStatusBadge
+                    status={info.row.original.approval_status}
+                    rejectionReason={info.row.original.rejection_reason}
+                />
             )
         },
         {
@@ -78,21 +101,6 @@ const DealList = () => {
             }
         },
         {
-            id: 'stores',
-            header: 'Stores',
-            cell: (info) => (
-                <div className="flex flex-wrap gap-1">
-                    {info.row.original.store_prices.length > 0 ? (
-                        <span className="px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 rounded text-[10px] font-bold text-zinc-600 dark:text-zinc-400 uppercase">
-                            {info.row.original.store_prices.length} {info.row.original.store_prices.length === 1 ? 'Store' : 'Stores'}
-                        </span>
-                    ) : (
-                        <span className="text-zinc-400 italic text-[10px]">None</span>
-                    )}
-                </div>
-            )
-        },
-        {
             accessorKey: 'is_active',
             header: 'Status',
             cell: (info) => (
@@ -105,35 +113,50 @@ const DealList = () => {
         {
             id: 'actions',
             header: 'Actions',
-            cell: (info) => (
-                <div className="flex items-center gap-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => navigate(`/deals/edit/${info.row.original.id}`)}
-                        className="h-8 py-0 px-3 border-zinc-200 dark:border-zinc-700 hover:border-blue-500 hover:text-blue-500"
-                    >
-                        <i className="ri-edit-line mr-1 text-sm" /> Edit
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => navigate(`/deals/items/${info.row.original.id}`)}
-                        className="h-8 py-0 px-3 border-zinc-200 dark:border-zinc-700 hover:border-indigo-500 hover:text-indigo-500"
-                    >
-                        <i className="ri-list-settings-line mr-1 text-sm" /> Items
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-red-500 hover:text-red-600 border-red-100 dark:border-red-900/30 hover:bg-red-50 dark:hover:bg-red-900/10 h-8 py-0 px-3"
-                        onClick={() => handleDelete(info.row.original.id)}
-                        isLoading={deleteMutation.isPending}
-                    >
-                        <i className="ri-delete-bin-line mr-1 text-sm" /> Delete
-                    </Button>
-                </div>
-            )
+            cell: (info) => {
+                const deal = info.row.original;
+                const isGlobal = !deal.store_id;
+                const canModify = isSuperAdmin || !isGlobal;
+
+                if (!canModify) {
+                    return (
+                        <span className="text-xs text-zinc-400 italic">
+                            Global (Managed by Super Admin)
+                        </span>
+                    );
+                }
+
+                return (
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => navigate(`/deals/edit/${deal.id}`)}
+                            className="h-8 py-0 px-3 border-zinc-200 dark:border-zinc-700 hover:border-blue-500 hover:text-blue-500"
+                        >
+                            <i className="ri-edit-line mr-1 text-sm" />
+                            {deal.approval_status === 'REJECTED' ? 'Edit & Resubmit' : 'Edit'}
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => navigate(`/deals/items/${deal.id}`)}
+                            className="h-8 py-0 px-3 border-zinc-200 dark:border-zinc-700 hover:border-indigo-500 hover:text-indigo-500"
+                        >
+                            <i className="ri-list-settings-line mr-1 text-sm" /> Items
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-red-500 hover:text-red-600 border-red-100 dark:border-red-900/30 hover:bg-red-50 dark:hover:bg-red-900/10 h-8 py-0 px-3"
+                            onClick={() => handleDelete(deal.id)}
+                            isLoading={deleteMutation.isPending}
+                        >
+                            <i className="ri-delete-bin-line mr-1 text-sm" /> Delete
+                        </Button>
+                    </div>
+                );
+            }
         }
     ];
 
@@ -141,7 +164,7 @@ const DealList = () => {
         <Container>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Deals & Combos</h3>
+                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Deals & Combos</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">Manage meal bundles and special choice-based offers.</p>
                 </div>
                 <Button
@@ -180,7 +203,7 @@ const DealList = () => {
                     <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i className="ri-percent-line text-3xl text-zinc-400"></i>
                     </div>
-                    <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-2">No deals found</h3>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-2">No deals found</h3>
                     <p className="text-zinc-500 mb-6 max-w-sm mx-auto">
                         {searchTerm ? `No deals matching "${searchTerm}"` : "Create your first combo deal to offer more value to your customers."}
                     </p>

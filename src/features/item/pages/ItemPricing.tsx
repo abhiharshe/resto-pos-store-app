@@ -60,7 +60,7 @@ const ItemPricing = () => {
             <div className="w-full">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h3 className="text-xl font-bold text-zinc-900 dark:text-white">Manage Pricing for {item.name}</h3>
+                        <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Manage Pricing for {item.name}</h3>
                         <p className="text-zinc-500 dark:text-zinc-400">Set base price and store-wise overrides.</p>
                     </div>
                     <div className="flex gap-2">

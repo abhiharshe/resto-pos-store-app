@@ -1,12 +1,16 @@
 import React, { useCallback, useEffect } from 'react';
+import Tooltip from '../common/Tooltip';
+import MaintenanceOverlay from '../common/MaintenanceOverlay';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useHasPermission, useHasAnyPermission } from '../../hooks/usePermission';
 import { toggleTheme, toggleSidebar } from '../../features/ui/slices/uiSlice';
 import { selectBranding } from '../../features/settings/slices/settingsSlice';
 import moment from 'moment';
 import { AnimatePresence, motion } from 'motion/react';
 import { logOut } from '../../features/auth/slices/authSlice';
 import { getMediaURL } from '../../utils/api';
+import { useApprovalStats } from '../../features/approvals/api/approvalsApi';
 
 const SessionLayout = () => {
     const dispatch = useAppDispatch();
@@ -94,8 +98,37 @@ const SessionLayout = () => {
         };
     }, []);
 
+    // Dynamic Permission Checks
+    const canDashboard = useHasPermission('dashboard:view');
+    const canPos = useHasPermission('pos:access') && (user?.role === 'SUPER_ADMIN' || user?.store?.has_pos);
+    const canOrders = useHasPermission('orders:manage');
+    const canKds = useHasPermission('kds:access') && (user?.role === 'SUPER_ADMIN' || user?.store?.has_kds);
+    const canRecipes = useHasPermission('recipes:manage');
+
+    const canMenu = useHasPermission('menu:manage');
+    const canDeals = useHasPermission('deals:manage');
+    const hasMenuSection = canMenu || canDeals;
+
+    const canCustomers = useHasPermission('customers:view');
+    const canCoupons = useHasPermission('coupons:manage');
+    const canPromotions = useHasPermission('promotions:manage');
+    const hasMarketingSection = canCustomers || canCoupons || canPromotions;
+
+    const canStores = user?.role === 'SUPER_ADMIN';
+    const canApprovals = user?.role === 'SUPER_ADMIN' || user?.role === 'STORE_ADMIN' || useHasPermission('approvals:manage');
+    const canUsers = useHasPermission('users:manage');
+    const canAssets = useHasPermission('assets:manage');
+    const canSettings = useHasPermission('settings:manage') || (user?.role === 'STORE_ADMIN' && useHasPermission('stores:manage'));
+    const canPermissions = useHasPermission('permissions:manage');
+    const hasAdminSection = canStores || canApprovals || canUsers || canAssets || canSettings || canPermissions;
+
+    const { data: approvalStats } = useApprovalStats(user?.role === 'SUPER_ADMIN' ? undefined : user?.store_id);
+
     return (
         <div className={`flex relative w-full h-screen bg-gray-200 dark:bg-zinc-900 transition-colors duration-200 overflow-hidden`}>
+            {/* Maintenance Mode Overlay for restricted roles */}
+            <MaintenanceOverlay />
+
             {/* Backdrop for mobile */}
             <AnimatePresence>
                 {isSidebarOpen && (
@@ -127,7 +160,7 @@ const SessionLayout = () => {
                             />
                         ) : (
                             <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center border border-primary/20">
-                                <span className="text-primary font-bold text-lg leading-none">
+                                <span className="text-primary font-semibold text-lg leading-none">
                                     {branding.siteName?.[0] || 'R'}
                                 </span>
                             </div>
@@ -136,7 +169,7 @@ const SessionLayout = () => {
 
                     <div className={`transition-all duration-300 ease-in-out ${isSidebarOpen ? 'ml-3 opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none w-0 overflow-hidden'
                         }`}>
-                        <h1 className="font-bold text-lg text-zinc-900 dark:text-zinc-100 font-sans tracking-tight truncate max-w-[140px]">
+                        <h1 className="font-semibold text-lg text-zinc-900 dark:text-zinc-100 font-sans tracking-tight truncate max-w-[140px]">
                             {branding.siteName}
                         </h1>
                     </div>
@@ -146,99 +179,155 @@ const SessionLayout = () => {
                     {isSidebarOpen ? (
                         /* Grouped Sidebar - Default & Mobile */
                         <div className="space-y-1">
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
+                            {canDashboard && (
                                 <NavItem to="/dashboard" icon="ri-dashboard-line" label="Dashboard" isOpen={isSidebarOpen} />
                             )}
 
-                            <NavItemGroup icon="ri-shopping-basket-line" label="Operations" isOpen={isSidebarOpen}>
-                                {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && user?.store?.has_pos && (
-                                    <NavItem to="/pos" icon="ri-shopping-cart-line" label="POS Terminal" isOpen={isSidebarOpen} isSubItem />
-                                )}
-                                {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
-                                    <NavItem to="/orders" icon="ri-file-list-3-line" label="Orders List" isOpen={isSidebarOpen} isSubItem />
-                                )}
-                                {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'KITCHEN'].includes(user?.role) && user?.store?.has_kds && (
-                                    <NavItem to="/kds" icon="ri-restaurant-2-line" label="Kitchen Display" isOpen={isSidebarOpen} isSubItem />
-                                )}
-                                {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'KITCHEN'].includes(user?.role) && (
-                                    <NavItem to="/recipes" icon="ri-book-open-line" label="Recipes" isOpen={isSidebarOpen} isSubItem />
-                                )}
-                            </NavItemGroup>
-
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER'].includes(user?.role) && (
-                                <NavItemGroup icon="ri-stack-line" label="Menu Management" isOpen={isSidebarOpen}>
-                                    <NavItem to="/menu" icon="ri-dashboard-2-line" label="Menu Overview" isOpen={isSidebarOpen} isSubItem />
-                                    <NavItem to="/menu/categories" icon="ri-folders-line" label="Categories" isOpen={isSidebarOpen} isSubItem />
-                                    <NavItem to="/menu/items" icon="ri-restaurant-line" label="All Items" isOpen={isSidebarOpen} isSubItem />
-                                    <NavItem to="/deals" icon="ri-percent-line" label="Deals" isOpen={isSidebarOpen} isSubItem />
-                                </NavItemGroup>
+                            {(canPos || canOrders || canKds || canRecipes) && (
+                                <NavSection label="Operations">
+                                    {canPos && (
+                                        <NavItem to="/pos" icon="ri-shopping-cart-line" label="POS Terminal" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canOrders && (
+                                        <NavItem to="/orders" icon="ri-file-list-3-line" label="Orders List" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canKds && (
+                                        <NavItem to="/kds" icon="ri-restaurant-2-line" label="Kitchen Display" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canRecipes && (
+                                        <NavItem to="/recipes" icon="ri-book-open-line" label="Recipes" isOpen={isSidebarOpen} />
+                                    )}
+                                </NavSection>
                             )}
 
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
-                                <NavItemGroup icon="ri-group-line" label="Marketing" isOpen={isSidebarOpen}>
-                                    <NavItem to="/customers" icon="ri-user-heart-line" label="Customers" isOpen={isSidebarOpen} isSubItem />
-                                    <NavItem to="/coupons" icon="ri-price-tag-3-line" label="Coupons" isOpen={isSidebarOpen} isSubItem />
-                                    <NavItem to="/promotions" icon="ri-megaphone-line" label="Promotions" isOpen={isSidebarOpen} isSubItem />
-                                </NavItemGroup>
+                            {hasMenuSection && (
+                                <NavSection label="Menu Management">
+                                    {canMenu && (
+                                        <>
+                                            <NavItem to="/menu" icon="ri-dashboard-2-line" label="Menu Overview" isOpen={isSidebarOpen} />
+                                            <NavItem to="/menu/categories" icon="ri-folders-line" label="Categories" isOpen={isSidebarOpen} />
+                                            <NavItem to="/menu/addon-groups" icon="ri-puzzle-line" label="Add-On Groups" isOpen={isSidebarOpen} />
+                                            <NavItem to="/menu/items" icon="ri-restaurant-line" label="All Items" isOpen={isSidebarOpen} />
+                                        </>
+                                    )}
+                                    {canDeals && (
+                                        <NavItem to="/deals" icon="ri-percent-line" label="Deals" isOpen={isSidebarOpen} />
+                                    )}
+                                </NavSection>
                             )}
 
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER'].includes(user?.role) && (
-                                <NavItemGroup icon="ri-settings-4-line" label="Administration" isOpen={isSidebarOpen}>
-                                    <NavItem to="/stores" icon="ri-store-2-line" label="Stores List" isOpen={isSidebarOpen} isSubItem />
-                                    <NavItem to="/users" icon="ri-user-settings-line" label="Staff Account" isOpen={isSidebarOpen} isSubItem />
-                                    <NavItem to="/assets" icon="ri-image-line" label="Media Library" isOpen={isSidebarOpen} isSubItem />
-                                    <NavItem to="/settings" icon="ri-equalizer-line" label="Store Settings" isOpen={isSidebarOpen} isSubItem />
-                                </NavItemGroup>
+                            {hasMarketingSection && (
+                                <NavSection label="Marketing">
+                                    {canCustomers && (
+                                        <NavItem to="/customers" icon="ri-user-heart-line" label="Customers" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canCoupons && (
+                                        <NavItem to="/coupons" icon="ri-price-tag-3-line" label="Coupons" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canPromotions && (
+                                        <NavItem to="/promotions" icon="ri-megaphone-line" label="Promotions" isOpen={isSidebarOpen} />
+                                    )}
+                                </NavSection>
+                            )}
+
+                            {hasAdminSection && (
+                                <NavSection label="Administration">
+                                    {canStores && (
+                                        <NavItem to="/stores" icon="ri-store-2-line" label="Stores List" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canApprovals && (
+                                        <NavItem
+                                            to="/approvals"
+                                            icon="ri-shield-check-line"
+                                            label="Approvals"
+                                            isOpen={isSidebarOpen}
+                                            badge={approvalStats?.total_pending ? approvalStats.total_pending : undefined}
+                                        />
+                                    )}
+                                    {canUsers && (
+                                        <NavItem to="/users" icon="ri-user-settings-line" label="Staff Accounts" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canAssets && (
+                                        <NavItem to="/assets" icon="ri-image-line" label="Media Library" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canPermissions && (
+                                        <NavItem to="/permissions" icon="ri-shield-keyhole-line" label="Access Control" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canSettings && (
+                                        <NavItem to="/settings" icon="ri-equalizer-line" label="Settings" isOpen={isSidebarOpen} />
+                                    )}
+                                </NavSection>
                             )}
                         </div>
                     ) : (
                         /* Flat Sidebar - Collapsed Desktop */
                         <div className="hidden md:flex flex-col space-y-1 items-center">
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
+                            {canDashboard && (
                                 <NavItem to="/dashboard" icon="ri-dashboard-line" label="Dashboard" isOpen={false} />
                             )}
 
                             {/* Operations */}
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && user?.store?.has_pos && (
+                            {canPos && (
                                 <NavItem to="/pos" icon="ri-shopping-cart-line" label="POS" isOpen={false} />
                             )}
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
+                            {canOrders && (
                                 <NavItem to="/orders" icon="ri-file-list-3-line" label="Orders" isOpen={false} />
                             )}
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'KITCHEN'].includes(user?.role) && user?.store?.has_kds && (
+                            {canKds && (
                                 <NavItem to="/kds" icon="ri-restaurant-2-line" label="KDS" isOpen={false} />
                             )}
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'KITCHEN'].includes(user?.role) && (
+                            {canRecipes && (
                                 <NavItem to="/recipes" icon="ri-book-open-line" label="Recipes" isOpen={false} />
                             )}
 
                             {/* Menu */}
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER'].includes(user?.role) && (
+                            {canMenu && (
                                 <>
                                     <NavItem to="/menu" icon="ri-dashboard-2-line" label="Menu" isOpen={false} />
                                     <NavItem to="/menu/categories" icon="ri-folders-line" label="Categories" isOpen={false} />
+                                    <NavItem to="/menu/addon-groups" icon="ri-puzzle-line" label="Add-Ons" isOpen={false} />
                                     <NavItem to="/menu/items" icon="ri-restaurant-line" label="Items" isOpen={false} />
-                                    <NavItem to="/deals" icon="ri-percent-line" label="Deals" isOpen={false} />
                                 </>
+                            )}
+                            {canDeals && (
+                                <NavItem to="/deals" icon="ri-percent-line" label="Deals" isOpen={false} />
                             )}
 
                             {/* Marketing */}
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER', 'CASHIER'].includes(user?.role) && (
-                                <>
-                                    <NavItem to="/customers" icon="ri-user-heart-line" label="Customers" isOpen={false} />
-                                    <NavItem to="/coupons" icon="ri-price-tag-3-line" label="Coupons" isOpen={false} />
-                                    <NavItem to="/promotions" icon="ri-megaphone-line" label="Promotions" isOpen={false} />
-                                </>
+                            {canCustomers && (
+                                <NavItem to="/customers" icon="ri-user-heart-line" label="Customers" isOpen={false} />
+                            )}
+                            {canCoupons && (
+                                <NavItem to="/coupons" icon="ri-price-tag-3-line" label="Coupons" isOpen={false} />
+                            )}
+                            {canPromotions && (
+                                <NavItem to="/promotions" icon="ri-megaphone-line" label="Promotions" isOpen={false} />
                             )}
 
                             {/* Admin */}
-                            {['SUPER_ADMIN', 'STORE_ADMIN', 'MANAGER'].includes(user?.role) && (
-                                <>
-                                    <NavItem to="/stores" icon="ri-store-2-line" label="Stores" isOpen={false} />
-                                    <NavItem to="/users" icon="ri-user-settings-line" label="Staff" isOpen={false} />
-                                    <NavItem to="/assets" icon="ri-image-line" label="Media" isOpen={false} />
-                                    <NavItem to="/settings" icon="ri-equalizer-line" label="Settings" isOpen={false} />
-                                </>
+                            {canStores && (
+                                <NavItem to="/stores" icon="ri-store-2-line" label="Stores" isOpen={false} />
+                            )}
+                            {canApprovals && (
+                                <NavItem
+                                    to="/approvals"
+                                    icon="ri-shield-check-line"
+                                    label="Approvals"
+                                    isOpen={false}
+                                    badge={approvalStats?.total_pending ? approvalStats.total_pending : undefined}
+                                />
+                            )}
+                            {canUsers && (
+                                <NavItem to="/users" icon="ri-user-settings-line" label="Staff" isOpen={false} />
+                            )}
+                            {canAssets && (
+                                <NavItem to="/assets" icon="ri-image-line" label="Media" isOpen={false} />
+                            )}
+                            {canPermissions && (
+                                <NavItem to="/permissions" icon="ri-shield-keyhole-line" label="Access" isOpen={false} />
+                            )}
+                            {canSettings && (
+                                <NavItem to="/settings" icon="ri-equalizer-line" label="Settings" isOpen={false} />
                             )}
                         </div>
                     )}
@@ -287,14 +376,14 @@ const SessionLayout = () => {
                                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                                 className={`flex items-center gap-2 p-1.5 pr-3 border border-zinc-200 dark:border-zinc-700 rounded-full transition-all duration-200 focus:outline-none ${isProfileOpen ? 'bg-zinc-100 dark:bg-zinc-700' : 'hover:bg-zinc-50 dark:hover:bg-zinc-800'}`}
                             >
-                                <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold uppercase border border-indigo-200 dark:border-indigo-800">
+                                <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-semibold uppercase border border-indigo-200 dark:border-indigo-800">
                                     {user?.name?.[0] || user?.username?.[0] || 'A'}
                                 </div>
                                 <div className="hidden sm:flex flex-col items-start leading-tight">
                                     <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">
                                         {user?.name || user?.username || 'Admin'}
                                     </span>
-                                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-bold">
+                                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-semibold">
                                         {user?.role || 'Staff'}
                                     </span>
                                 </div>
@@ -312,7 +401,7 @@ const SessionLayout = () => {
                                     >
                                         <div className="px-4 py-3 border-b border-zinc-100 dark:border-zinc-700 mb-1">
                                             <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Signed in as</p>
-                                            <p className="text-sm font-bold text-zinc-900 dark:text-white truncate">{user?.email}</p>
+                                            <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate">{user?.email}</p>
                                         </div>
 
                                         <DropdownItem icon="ri-user-settings-line" label="View Profile" onClick={() => { setIsProfileOpen(false); navigate('/profile'); }} />
@@ -360,25 +449,59 @@ interface NavItemProps {
     label: string;
     isOpen: boolean;
     isSubItem?: boolean;
+    badge?: number | string;
     onClick?: () => void;
 }
 
-const NavItem = ({ to, icon, label, isOpen, isSubItem, onClick }: NavItemProps) => (
-    <div className="relative flex items-center">
-        <NavLink
-            to={to}
-            onClick={onClick}
-            className={({ isActive }) =>
-                `flex-1 flex items-center text-sm font-medium rounded-lg transition-all duration-200 group py-1 ${isSubItem ? 'pl-4 pr-4' : 'pl-2 pr-2'
-                } ${isActive
-                    ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400'
-                    : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100'
-                }`
-            }
-        >
-            <i className={`${icon} ${isSubItem ? 'text-base' : 'text-lg'} ${isOpen ? 'mr-3' : 'mx-auto'}`} />
-            <span className={`whitespace-nowrap transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>{label}</span>
-        </NavLink>
+const NavItem = ({ to, icon, label, isOpen, isSubItem, badge, onClick }: NavItemProps) => (
+    <Tooltip content={badge ? `${label} (${badge})` : label} position="right" disabled={isOpen}>
+        <div className="relative flex items-center w-full">
+            <NavLink
+                to={to}
+                onClick={onClick}
+                className={({ isActive }) =>
+                    `flex-1 flex items-center justify-between text-sm font-medium rounded-lg transition-all duration-200 group py-1 ${isSubItem ? 'pl-4 pr-4' : 'pl-2 pr-2'
+                    } ${isActive
+                        ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400'
+                        : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100'
+                    }`
+                }
+            >
+                <div className="flex items-center">
+                    <div className="relative">
+                        <i className={`${icon} ${isSubItem ? 'text-base' : 'text-lg'} ${isOpen ? 'mr-3' : 'mx-auto'}`} />
+                        {!isOpen && badge !== undefined && (
+                            <span className="absolute -top-1.5 -right-2 bg-amber-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center shadow-sm">
+                                {Number(badge) > 99 ? '99+' : badge}
+                            </span>
+                        )}
+                    </div>
+                    <span className={`whitespace-nowrap transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>{label}</span>
+                </div>
+                {isOpen && badge !== undefined && (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                        {badge}
+                    </span>
+                )}
+            </NavLink>
+        </div>
+    </Tooltip>
+);
+
+interface NavSectionProps {
+    label: string;
+    children: React.ReactNode;
+}
+
+const NavSection = ({ label, children }: NavSectionProps) => (
+    <div className="mt-4 first:mt-0">
+        <div className="flex items-center gap-2 px-3 mb-1">
+            <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">{label}</span>
+            <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-700/50" />
+        </div>
+        <div className="space-y-0.5 flex flex-col">
+            {children}
+        </div>
     </div>
 );
 
@@ -429,7 +552,7 @@ const NavItemGroup = ({ icon, label, isOpen, children }: NavItemGroupProps) => {
                             className="absolute left-full top-0 ml-3 w-52 bg-white dark:bg-zinc-800 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-zinc-100 dark:border-zinc-700 p-2 z-[100]"
                         >
                             <div className="px-3 py-1 border-b border-zinc-50 dark:border-zinc-700/50 mb-1">
-                                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{label}</span>
+                                <span className="text-[10px] font-semibold text-zinc-400 uppercase tracking-widest">{label}</span>
                             </div>
                             <div className="space-y-1">
                                 {React.Children.map(children, (child) => {

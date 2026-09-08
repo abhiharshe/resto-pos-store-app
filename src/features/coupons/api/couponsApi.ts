@@ -17,7 +17,10 @@ export interface Coupon {
     start_date?: string;
     end_date?: string;
     is_active: boolean;
-    store_id?: number;
+    store_id?: string;
+    approval_status?: 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED';
+    rejection_reason?: string;
+    is_global?: boolean;
     created_at: string;
 }
 
@@ -34,7 +37,7 @@ export interface CouponCreate {
     start_date?: string;
     end_date?: string;
     is_active?: boolean;
-    store_id?: number;
+    store_id?: string;
 }
 
 export interface CouponValidateRequest {

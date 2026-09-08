@@ -7,6 +7,7 @@ import { useGetSettingsQuery } from '../../settings/api/settingsApi';
 import moment from 'moment';
 import React from 'react';
 import { getMediaURL } from '../../../utils/api';
+import { formatCurrencySymbol } from '../../../utils/currency';
 
 const OrderShow = () => {
     const { id } = useParams<{ id: string }>();
@@ -15,7 +16,7 @@ const OrderShow = () => {
 
     const { data: globalSettings } = useGetSettingsQuery();
 
-    const currency = globalSettings?.currency || 'Rs.';
+    const currency = formatCurrencySymbol(globalSettings?.currency);
 
     const { data: order, isLoading } = useOrder(id || '');
     const standaloneItems = order?.items.filter(item => !item.order_deal_id) || [];
@@ -32,7 +33,7 @@ const OrderShow = () => {
     if (!order) {
         return (
             <div className="p-8 text-center space-y-4">
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Order Not Found</h2>
+                <h2 className="text-2xl font-semibold text-zinc-900 dark:text-white">Order Not Found</h2>
                 <p className="text-zinc-500">The order you are looking for does not exist or has been deleted.</p>
                 <Button onClick={() => navigate('/orders')}>Back to Orders</Button>
             </div>
@@ -51,7 +52,7 @@ const OrderShow = () => {
                         title="Back to Orders"
                     />
                     <div>
-                        <h1 className="text-2xl font-bold text-zinc-900 dark:text-white flex items-center gap-3">
+                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white flex items-center gap-3">
                             <span>Order #{order.id}</span>
                             <span className="px-2 py-1 border border-green-700 text-green-700 bg-gray-200 text-sm rounded-full">{order.order_type}</span>
                         </h1>
@@ -72,7 +73,7 @@ const OrderShow = () => {
                 <div className="lg:col-span-2 space-y-6">
                     <div>
                         <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/50">
-                            <h3 className="font-bold text-zinc-900 dark:text-white uppercase tracking-wider text-xs">Order Items</h3>
+                            <h3 className="font-semibold text-zinc-900 dark:text-white uppercase tracking-wider text-xs">Order Items</h3>
                         </div>
                         <div className="p-4 divide-y divide-zinc-100 dark:divide-zinc-800">
                             {/* Deals Sections */}
@@ -85,14 +86,14 @@ const OrderShow = () => {
                                             </div>
                                             <div>
                                                 <h4 className="font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-tighter">{deal.deal_name}</h4>
-                                                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Bundle Offer</p>
+                                                <p className="text-[10px] text-zinc-400 font-semibold uppercase tracking-widest">Bundle Offer</p>
                                             </div>
                                         </div>
                                         <div className="text-right">
                                             <p className="font-black text-zinc-900 dark:text-white leading-none">
                                                 <span className='text-xs me-1'>{currency}</span>{deal.total_price.toFixed(2)}
                                             </p>
-                                            <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-tight line-through mt-1">
+                                            <p className="text-[10px] text-zinc-400 font-semibold uppercase tracking-tight line-through mt-1">
                                                 Regular {currency}{deal.items.reduce((acc, i) => acc + i.unit_price * i.quantity, 0).toFixed(2)}
                                             </p>
                                         </div>
@@ -103,9 +104,9 @@ const OrderShow = () => {
                                                 <div className="space-y-1">
                                                     <div className="flex items-center gap-2">
                                                         <span className="text-[10px] font-black text-zinc-400">×{item.quantity}</span>
-                                                        <span className="font-bold text-sm text-zinc-800 dark:text-zinc-200">{item.name}</span>
+                                                        <span className="font-semibold text-sm text-zinc-800 dark:text-zinc-200">{item.name}</span>
                                                         {item.variant_name && item.variant_name !== 'Default' && (
-                                                            <span className="text-[10px] bg-zinc-200 dark:bg-zinc-800 px-2 py-0.5 rounded-full text-zinc-600 dark:text-zinc-400 font-bold">{item.variant_name}</span>
+                                                            <span className="text-[10px] bg-zinc-200 dark:bg-zinc-800 px-2 py-0.5 rounded-full text-zinc-600 dark:text-zinc-400 font-semibold">{item.variant_name}</span>
                                                         )}
                                                     </div>
                                                     {item.addons && item.addons.length > 0 && (
@@ -130,7 +131,7 @@ const OrderShow = () => {
                                 <div key={item.id} className="py-4 first:pt-0 last:pb-0 flex justify-between items-start">
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-3">
-                                            <span className="w-8 h-8 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm font-bold text-zinc-900 dark:text-white">
+                                            <span className="w-8 h-8 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm font-semibold text-zinc-900 dark:text-white">
                                                 {item.quantity}
                                             </span>
                                             <div className="flex flex-col">
@@ -160,7 +161,7 @@ const OrderShow = () => {
                                         <p className="font-black text-zinc-900 dark:text-white leading-none">
                                             <span className='text-xs me-1'>{currency}</span>{item.subtotal.toFixed(2)}
                                         </p>
-                                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-tight mt-1">@<span className='text-xs me-0.5'>{currency}</span>{item.unit_price.toFixed(2)}</p>
+                                        <p className="text-[10px] text-zinc-400 font-semibold uppercase tracking-tight mt-1">@<span className='text-xs me-0.5'>{currency}</span>{item.unit_price.toFixed(2)}</p>
                                         <div className="mt-2 text-right">
                                             <StatusBadge status={item.status} className="scale-75 origin-right" />
                                         </div>
@@ -171,7 +172,7 @@ const OrderShow = () => {
                             {(!order.deals || order.deals.length === 0) && standaloneItems.length === 0 && (
                                 <div className="py-20 text-center">
                                     <i className="ri-shopping-basket-line text-4xl text-zinc-200 mb-2"></i>
-                                    <p className="text-zinc-400 text-xs font-bold uppercase">No items found in this order</p>
+                                    <p className="text-zinc-400 text-xs font-semibold uppercase">No items found in this order</p>
                                 </div>
                             )}
                         </div>
@@ -181,7 +182,7 @@ const OrderShow = () => {
                     <div className="bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800">
                         <div className="flex items-center gap-2 text-zinc-400 mb-4">
                             <i className="ri-information-line"></i>
-                            <span className="text-xs font-bold uppercase tracking-widest">Order Notes / Internal Info</span>
+                            <span className="text-xs font-semibold uppercase tracking-widest">Order Notes / Internal Info</span>
                         </div>
                         <p className="text-sm text-zinc-500 italic">No additional notes provided for this order.</p>
                     </div>
@@ -192,7 +193,7 @@ const OrderShow = () => {
                     {/* Status & Customer info */}
                     <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm space-y-6">
                         <div className="space-y-4">
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Order Status</h4>
+                            <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Order Status</h4>
                             <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
                                 <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Current</span>
                                 <StatusBadge status={order.status} />
@@ -200,9 +201,9 @@ const OrderShow = () => {
                         </div>
 
                         <div className="space-y-4">
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Customer Details</h4>
+                            <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Customer Details</h4>
                             <div className="space-y-2">
-                                <p className="font-bold text-zinc-900 dark:text-white">
+                                <p className="font-semibold text-zinc-900 dark:text-white">
                                     {order.guest_name || order.customer?.full_name || 'Guest Customer'}
                                 </p>
                                 {order.guest_phone && (
@@ -219,15 +220,15 @@ const OrderShow = () => {
                         </div>
 
                         <div className="space-y-4">
-                            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Payment & Type</h4>
+                            <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Payment & Type</h4>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                                    <p className="text-[10px] font-bold text-zinc-400 uppercase">Method</p>
-                                    <p className="text-sm font-bold text-zinc-900 dark:text-white">{order.payment_method}</p>
+                                    <p className="text-[10px] font-semibold text-zinc-400 uppercase">Method</p>
+                                    <p className="text-sm font-semibold text-zinc-900 dark:text-white">{order.payment_method}</p>
                                 </div>
                                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                                    <p className="text-[10px] font-bold text-zinc-400 uppercase">Status</p>
-                                    <p className={`text-sm font-bold ${order.payment_status === 'PAID' ? 'text-green-600' : 'text-amber-500'}`}>
+                                    <p className="text-[10px] font-semibold text-zinc-400 uppercase">Status</p>
+                                    <p className={`text-sm font-semibold ${order.payment_status === 'PAID' ? 'text-green-600' : 'text-amber-500'}`}>
                                         {order.payment_status}
                                     </p>
                                 </div>
@@ -235,12 +236,12 @@ const OrderShow = () => {
                             {order.payment_method === 'CASH' && (order.cash_received != null || order.change_amount != null || order.change != null) && (
                                 <div className="grid grid-cols-2 gap-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
                                     <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                                        <p className="text-[10px] font-bold text-zinc-400 uppercase">Cash Received</p>
-                                        <p className="text-sm font-bold text-zinc-900 dark:text-white">{currency}{(order.cash_received ?? 0).toFixed(2)}</p>
+                                        <p className="text-[10px] font-semibold text-zinc-400 uppercase">Cash Received</p>
+                                        <p className="text-sm font-semibold text-zinc-900 dark:text-white">{currency}{(order.cash_received ?? 0).toFixed(2)}</p>
                                     </div>
                                     <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                                        <p className="text-[10px] font-bold text-zinc-400 uppercase">Change</p>
-                                        <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{currency}{(order.change_amount ?? order.change ?? 0).toFixed(2)}</p>
+                                        <p className="text-[10px] font-semibold text-zinc-400 uppercase">Change</p>
+                                        <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{currency}{(order.change_amount ?? order.change ?? 0).toFixed(2)}</p>
                                     </div>
                                 </div>
                             )}
@@ -249,7 +250,7 @@ const OrderShow = () => {
 
                     {/* Financial Summary */}
                     <div className="bg-zinc-800 dark:bg-black rounded-2xl p-6 shadow-xl text-white space-y-4">
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500">Financial Summary</h4>
+                        <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Financial Summary</h4>
                         <div className="space-y-3">
                             <div className="flex justify-between text-sm">
                                 <span className="text-zinc-400">Subtotal</span>
@@ -274,18 +275,18 @@ const OrderShow = () => {
                                 </div>
                             )}
                             <div className="pt-4 border-t border-zinc-800 flex justify-between items-end">
-                                <span className="text-sm font-bold text-zinc-400 uppercase">Total Amount</span>
+                                <span className="text-sm font-semibold text-zinc-400 uppercase">Total Amount</span>
                                 <span className="text-3xl font-black text-red-500 leading-none"><span className='text-xs me-1'>{currency}</span>{order.total_amount.toFixed(2)}</span>
                             </div>
                             {order.payment_method === 'CASH' && order.cash_received != null && (
                                 <div className="pt-3 border-t border-zinc-800 space-y-2 text-xs text-zinc-400">
                                     <div className="flex justify-between">
                                         <span>Cash Received:</span>
-                                        <span className="font-bold text-white"><span className='text-[10px] me-0.5'>{currency}</span>{order.cash_received.toFixed(2)}</span>
+                                        <span className="font-semibold text-white"><span className='text-[10px] me-0.5'>{currency}</span>{order.cash_received.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Change Returned:</span>
-                                        <span className="font-bold text-emerald-400"><span className='text-[10px] me-0.5'>{currency}</span>{(order.change_amount ?? order.change ?? 0).toFixed(2)}</span>
+                                        <span className="font-semibold text-emerald-400"><span className='text-[10px] me-0.5'>{currency}</span>{(order.change_amount ?? order.change ?? 0).toFixed(2)}</span>
                                     </div>
                                 </div>
                             )}
@@ -295,7 +296,7 @@ const OrderShow = () => {
             </div>
 
             <div className="text-center pt-8 print:hidden">
-                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest italic opacity-50">
+                <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-widest italic opacity-50">
                     Order ID: AUTH-{order.id}-{moment(order.created_at).valueOf()} • Powered by restopos POS
                 </p>
             </div>
@@ -305,7 +306,7 @@ const OrderShow = () => {
                 <div className="fixed inset-0 z-100 bg-zinc-900/90 backdrop-blur-sm flex items-center justify-center p-4 print:hidden">
                     <div className="bg-white dark:bg-zinc-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col h-[90vh]">
                         <div className="p-4 border-b dark:border-zinc-700 flex justify-between items-center">
-                            <h3 className="font-bold flex items-center gap-2">
+                            <h3 className="font-semibold flex items-center gap-2">
                                 <i className="ri-printer-line text-indigo-500"></i>
                                 Print Preview
                             </h3>
@@ -369,7 +370,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
             {settings?.receipt_logo_url && (
                 <img src={getMediaURL(settings.receipt_logo_url)} alt="Logo" className="w-12 h-12 mx-auto object-contain mb-2" />
             )}
-            <h2 className="text-lg font-bold uppercase tracking-tight">{settings?.receipt_header || 'RESTAURANT'}</h2>
+            <h2 className="text-lg font-semibold uppercase tracking-tight">{settings?.receipt_header || 'RESTAURANT'}</h2>
             <div className="text-[10px]">
                 <p>{order.store?.name}</p>
                 <p>{order.store?.address}</p>
@@ -380,7 +381,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
         <div className="border-t border-b border-black border-dashed py-2  space-y-1 text-[10px]">
             <div className="flex justify-between">
                 <span>Order #:</span>
-                <span className="font-bold">{order.order_number || `#${order.id}`}</span>
+                <span className="font-semibold">{order.order_number || `#${order.id}`}</span>
             </div>
             <div className="flex justify-between">
                 <span>Date:</span>
@@ -388,7 +389,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
             </div>
             <div className="flex justify-between">
                 <span>Type:</span>
-                <span className="font-bold">{order.order_type}</span>
+                <span className="font-semibold">{order.order_type}</span>
             </div>
             <div className="flex justify-between">
                 <span>Payment:</span>
@@ -399,7 +400,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
         {/* Customer Details */}
         {(order.guest_name || order.guest_phone) && (
             <div className=" text-[10px] space-y-0.5 border-b border-black border-dotted pb-2">
-                <p className="font-bold uppercase mb-1 underline">Customer Info</p>
+                <p className="font-semibold uppercase mb-1 underline">Customer Info</p>
                 {order.guest_name && <p>{order.guest_name}</p>}
                 {order.guest_phone && <p>{order.guest_phone}</p>}
                 {order.guest_address && <p className="italic text-[9px]">{order.guest_address}</p>}
@@ -408,7 +409,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
 
         {/* Items */}
         <div className="">
-            <div className="flex justify-between font-bold border-b border-black border-dashed pb-1 mb-2 text-[10px]">
+            <div className="flex justify-between font-semibold border-b border-black border-dashed pb-1 mb-2 text-[10px]">
                 <span className="w-8">QTY</span>
                 <span className="flex-1 text-left px-2">ITEM</span>
                 <span className="w-16 text-right">TOTAL</span>
@@ -417,7 +418,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
                 {/* Deals */}
                 {order.deals?.map(deal => (
                     <div key={deal.id} className="space-y-1">
-                        <div className="flex justify-between font-bold text-[10px]">
+                        <div className="flex justify-between font-semibold text-[10px]">
                             <span className="w-8">1</span>
                             <span className="flex-1 px-2 uppercase">{deal.deal_name}</span>
                             <span className="w-16 text-right">{currency}{deal.total_price.toFixed(2)}</span>
@@ -477,7 +478,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
                     <span>-{currency}{order.discount_amount.toFixed(2)}</span>
                 </div>
             )}
-            <div className="flex justify-between font-bold text-[14px] border-t border-black border-double pt-2 mt-2">
+            <div className="flex justify-between font-semibold text-[14px] border-t border-black border-double pt-2 mt-2">
                 <span>TOTAL</span>
                 <span>{currency}{order.total_amount.toFixed(2)}</span>
             </div>
@@ -487,7 +488,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
                         <span>Cash Received</span>
                         <span>{currency}{order.cash_received.toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between font-bold">
+                    <div className="flex justify-between font-semibold">
                         <span>Change</span>
                         <span>{currency}{(order.change_amount ?? order.change ?? 0).toFixed(2)}</span>
                     </div>
@@ -503,7 +504,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
             <div className="border-t border-black border-dashed pt-4 opacity-50 text-[8px] uppercase tracking-widest italic">
                 Scan to Rate & Review (Coming Soon)
             </div>
-            <p className="text-[9px] font-bold">Thank You! Visit Again</p>
+            <p className="text-[9px] font-semibold">Thank You! Visit Again</p>
         </div>
     </div>
 );

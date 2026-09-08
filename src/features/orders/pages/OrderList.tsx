@@ -13,6 +13,7 @@ import { Select } from '../../../components/common/Select';
 import { ConfirmDialog } from '../../../components/common/ConfirmDialog';
 import { toast } from 'react-hot-toast';
 import Datepicker from "react-tailwindcss-datepicker";
+import { formatCurrencySymbol } from '../../../utils/currency';
 
 const OrderList = () => {
     const { user } = useAppSelector((state) => state.auth);
@@ -90,7 +91,7 @@ const OrderList = () => {
             header: 'Order #',
             cell: (info) => (
                 <div className='flex flex-col items-start'>
-                    <span className="font-bold text-zinc-900 dark:text-white">{info.getValue() as string || `#${info.row.original.id}`}</span>
+                    <span className="font-semibold text-zinc-900 dark:text-white">{info.getValue() as string || `#${info.row.original.id}`}</span>
                     <span className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-24">{info.row.original.store?.name}</span>
                 </div>
             )
@@ -104,18 +105,18 @@ const OrderList = () => {
             header: 'Subtotal',
             cell: (info) => {
                 const val = info.row.original.subtotal ?? info.row.original.sub_total ?? (info.row.original.total_amount - info.row.original.tax_amount - info.row.original.service_charge + info.row.original.discount_amount);
-                return <span className="font-medium text-zinc-600 dark:text-zinc-400">{selectedStore?.currency || 'Rs.'}{val.toFixed(2)}</span>;
+                return <span className="font-medium text-zinc-600 dark:text-zinc-400">{formatCurrencySymbol(selectedStore?.currency)}{val.toFixed(2)}</span>;
             }
         },
         {
             accessorKey: 'tax_amount',
             header: 'Tax',
-            cell: (info) => <span className="text-zinc-500 dark:text-zinc-400">{selectedStore?.currency || 'Rs.'}{(info.getValue() as number || 0).toFixed(2)}</span>
+            cell: (info) => <span className="text-zinc-500 dark:text-zinc-400">{formatCurrencySymbol(selectedStore?.currency)}{(info.getValue() as number || 0).toFixed(2)}</span>
         },
         {
             accessorKey: 'total_amount',
             header: 'Total',
-            cell: (info) => <span className="font-bold text-zinc-900 dark:text-white">{selectedStore?.currency || 'Rs.'}{(info.getValue() as number).toFixed(2)}</span>
+            cell: (info) => <span className="font-semibold text-zinc-900 dark:text-white">{formatCurrencySymbol(selectedStore?.currency)}{(info.getValue() as number).toFixed(2)}</span>
         },
         {
             accessorKey: 'payment_method',
@@ -124,10 +125,10 @@ const OrderList = () => {
                 const order = info.row.original;
                 return (
                     <div className="flex flex-col">
-                        <span className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">{order.payment_method}</span>
+                        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">{order.payment_method}</span>
                         {order.payment_method === 'CASH' && order.cash_received != null && (
                             <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
-                                Rec: {selectedStore?.currency || 'Rs.'}{order.cash_received.toFixed(2)} | Change: {selectedStore?.currency || 'Rs.'}{(order.change_amount ?? order.change ?? 0).toFixed(2)}
+                                Rec: {formatCurrencySymbol(selectedStore?.currency)}{order.cash_received.toFixed(2)} | Change: {formatCurrencySymbol(selectedStore?.currency)}{(order.change_amount ?? order.change ?? 0).toFixed(2)}
                             </span>
                         )}
                     </div>
@@ -142,7 +143,7 @@ const OrderList = () => {
         {
             accessorKey: 'order_type',
             header: 'Type',
-            cell: (info) => <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">{info.getValue() as string}</span>
+            cell: (info) => <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">{info.getValue() as string}</span>
         },
         {
             accessorKey: 'created_at',
@@ -185,7 +186,7 @@ const OrderList = () => {
         <div className="space-y-6 transition-all duration-300 ease-in-out">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Order History</h3>
+                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Order History</h3>
                     <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">Manage and track all orders across stores.</p>
                 </div>
                 <div className="flex items-center gap-2">

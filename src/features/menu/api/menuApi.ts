@@ -17,6 +17,10 @@ export interface Category {
     id: string;
     menu_id: string;
     name: string;
+    store_id?: string;
+    approval_status?: 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED';
+    rejection_reason?: string;
+    is_global?: boolean;
     image?: Asset;
     items?: MenuItem[];
     menu?: Menu;
@@ -37,6 +41,10 @@ export interface MenuItem {
     category_id: string;
     name: string;
     description?: string;
+    store_id?: string;
+    approval_status?: 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED';
+    rejection_reason?: string;
+    is_global?: boolean;
     variants?: MenuItemVariant[];
     is_active: boolean;
     is_pickup: boolean;

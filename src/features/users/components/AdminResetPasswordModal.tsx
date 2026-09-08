@@ -109,11 +109,11 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
             <div className="p-6 space-y-6">
                 {/* Target User Info Header */}
                 <div className="flex items-center gap-3.5 p-3.5 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
-                    <div className="w-11 h-11 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-lg shrink-0">
+                    <div className="w-11 h-11 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-semibold text-lg shrink-0">
                         {user?.full_name ? user.full_name[0].toUpperCase() : <i className="ri-user-line" />}
                     </div>
                     <div className="flex flex-col min-w-0">
-                        <span className="font-bold text-zinc-900 dark:text-white truncate">
+                        <span className="font-semibold text-zinc-900 dark:text-white truncate">
                             {user?.full_name || 'Staff User'}
                         </span>
                         <span className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
@@ -131,7 +131,7 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
                     /* Success Result View with Credential Summary */
                     <div className="space-y-5 animate-in fade-in zoom-in-95 duration-200">
                         <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/60 rounded-2xl">
-                            <div className="flex items-center gap-2 text-green-700 dark:text-green-400 font-bold text-sm mb-1">
+                            <div className="flex items-center gap-2 text-green-700 dark:text-green-400 font-semibold text-sm mb-1">
                                 <i className="ri-checkbox-circle-fill text-lg" />
                                 <span>Credentials Updated</span>
                             </div>
@@ -146,7 +146,7 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
                                 <button
                                     type="button"
                                     onClick={() => handleCopy(`Email: ${user?.email}\nPassword: ${resetResult.temporary_password || password}`)}
-                                    className="text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 font-bold"
+                                    className="text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 font-semibold"
                                 >
                                     <i className="ri-file-copy-line" /> Copy Both
                                 </button>
@@ -159,7 +159,7 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
                                 <div className="flex justify-between items-center p-2 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-100 dark:border-zinc-800">
                                     <span className="text-zinc-500 dark:text-zinc-400 text-xs">Password:</span>
                                     <div className="flex items-center gap-2">
-                                        <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 select-all">
+                                        <span className="font-mono font-semibold text-indigo-600 dark:text-indigo-400 select-all">
                                             {resetResult.temporary_password || password}
                                         </span>
                                         <button
@@ -195,7 +195,7 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
                                 <button
                                     type="button"
                                     onClick={generatePassword}
-                                    className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1.5 transition-colors"
+                                    className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center gap-1.5 transition-colors"
                                 >
                                     <i className="ri-magic-line text-sm" /> Auto-Generate
                                 </button>

@@ -68,7 +68,7 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
         if (!isDealItem) {
             return {
                 effectivePrice: regularPrice,
-                displayLabel: `Rs.${regularPrice}`,
+                displayLabel: `₹${regularPrice}`,
                 isDealOption: false
             };
         }
@@ -82,14 +82,14 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
             const upcharge = Number(matchingDealOpt.additional_price || 0);
             return {
                 effectivePrice: upcharge,
-                displayLabel: upcharge > 0 ? `+ Rs.${upcharge}` : "INCLUDED",
+                displayLabel: upcharge > 0 ? `+ ₹${upcharge}` : "INCLUDED",
                 isDealOption: true
             };
         } else {
             // Unlisted variant in deal -> actual variant price applies as upcharge
             return {
                 effectivePrice: regularPrice,
-                displayLabel: `+ Rs.${regularPrice}`,
+                displayLabel: `+ ₹${regularPrice}`,
                 isDealOption: false
             };
         }
@@ -154,7 +154,7 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                     />
                     <div>
                         <h2 className="text-xl font-black text-zinc-900 dark:text-white leading-tight">{item.name}</h2>
-                        <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">{title}</p>
+                        <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">{title}</p>
                     </div>
                 </div>
             </div>
@@ -188,9 +188,9 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                                                 className="w-4 h-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500"
                                             />
                                             <div className="flex flex-col">
-                                                <span className="font-bold text-sm block truncate w-32">{variant.name}</span>
+                                                <span className="font-semibold text-sm block truncate w-32">{variant.name}</span>
                                                 {isDealItem && !priceInfo.isDealOption && (
-                                                    <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold">Standard Variant</span>
+                                                    <span className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold">Standard Variant</span>
                                                 )}
                                             </div>
                                         </div>
@@ -232,23 +232,23 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                                                     onChange={() => handleAddonToggle(addon, group)}
                                                     className="w-4 h-4 text-emerald-600 border-zinc-300 focus:ring-emerald-500"
                                                 />
-                                                <span className="font-bold text-sm block truncate w-32">{addon.name}</span>
+                                                <span className="font-semibold text-sm block truncate w-32">{addon.name}</span>
                                             </div>
                                             <span className="text-emerald-600 dark:text-emerald-400 font-black text-xs">
-                                                {addon.price > 0 ? `+ Rs.${addon.price}` : 'FREE'}
+                                                {addon.price > 0 ? `+ ₹${addon.price}` : 'FREE'}
                                             </span>
                                         </label>
 
                                         {isSelected && group.max_quantity_per_addon > 1 && (
                                             <div className="flex justify-between items-center mt-3 pt-3 border-t border-emerald-200 dark:border-emerald-800/50">
-                                                <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">Quantity</span>
+                                                <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400">Quantity</span>
                                                 <div className="flex items-center gap-3 bg-white dark:bg-emerald-900/30 rounded-lg px-2 py-1 shadow-sm">
                                                     <button
                                                         type="button"
                                                         onClick={(e) => { e.preventDefault(); handleAddonQuantityChange(addon.id, -1, group.max_quantity_per_addon); }}
                                                         className="w-6 h-6 flex items-center justify-center text-emerald-600 hover:bg-emerald-100 dark:hover:bg-emerald-800 rounded-md transition-colors"
                                                     >
-                                                        <i className="ri-subtract-line text-sm font-bold"></i>
+                                                        <i className="ri-subtract-line text-sm font-semibold"></i>
                                                     </button>
                                                     <span className="font-black text-sm min-w-4 text-center">{isSelected.quantity || 1}</span>
                                                     <button
@@ -256,7 +256,7 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                                                         onClick={(e) => { e.preventDefault(); handleAddonQuantityChange(addon.id, 1, group.max_quantity_per_addon); }}
                                                         className="w-6 h-6 flex items-center justify-center text-emerald-600 hover:bg-emerald-100 dark:hover:bg-emerald-800 rounded-md transition-colors"
                                                     >
-                                                        <i className="ri-add-line text-sm font-bold"></i>
+                                                        <i className="ri-add-line text-sm font-semibold"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -277,22 +277,22 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                             onClick={() => setQuantity(q => Math.max(1, q - 1))}
                             className="w-10 h-10 flex items-center justify-center text-indigo-600 hover:bg-indigo-50 dark:hover:bg-zinc-700 rounded-xl transition-colors"
                         >
-                            <i className="ri-subtract-line text-xl font-bold"></i>
+                            <i className="ri-subtract-line text-xl font-semibold"></i>
                         </button>
                         <span className="font-black text-xl min-w-8 text-center">{quantity}</span>
                         <button
                             onClick={() => setQuantity(q => q + 1)}
                             className="w-10 h-10 flex items-center justify-center text-indigo-600 hover:bg-indigo-50 dark:hover:bg-zinc-700 rounded-xl transition-colors"
                         >
-                            <i className="ri-add-line text-xl font-bold"></i>
+                            <i className="ri-add-line text-xl font-semibold"></i>
                         </button>
                     </div>
                     <div className="text-right">
-                        <p className="text-xs text-zinc-400 font-bold uppercase tracking-widest leading-none">
+                        <p className="text-xs text-zinc-400 font-semibold uppercase tracking-widest leading-none">
                             {isDealItem ? "Customization Upcharge" : "Total Item Price"}
                         </p>
                         <p className="text-3xl font-black text-indigo-600 dark:text-indigo-400 tracking-tighter">
-                            {isDealItem && totalPrice === 0 ? "INCLUDED" : `Rs.${totalPrice}`}
+                            {isDealItem && totalPrice === 0 ? "INCLUDED" : `₹${totalPrice}`}
                         </p>
                     </div>
                 </div>

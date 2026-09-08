@@ -58,7 +58,7 @@ const DeliverySettings: React.FC = () => {
         <form onSubmit={handleSave} className="space-y-6 max-w-4xl">
             <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-4">
                 <div>
-                    <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Global Delivery Charges</h3>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">Global Delivery Charges</h3>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400">
                         Configure the default delivery fee structure applied to all stores without custom overrides.
                     </p>
@@ -68,11 +68,10 @@ const DeliverySettings: React.FC = () => {
                     <button
                         type="button"
                         onClick={() => setIsActive(!isActive)}
-                        className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
-                            isActive
+                        className={`px-3 py-1 text-xs font-semibold rounded-full transition-colors ${isActive
                                 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'
                                 : 'bg-zinc-200 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400'
-                        }`}
+                            }`}
                     >
                         {isActive ? '● Active' : '○ Inactive'}
                     </button>
@@ -87,11 +86,10 @@ const DeliverySettings: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div
                         onClick={() => setChargeType('FIXED')}
-                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 ${
-                            chargeType === 'FIXED'
+                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 ${chargeType === 'FIXED'
                                 ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/20 dark:border-indigo-500'
                                 : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
-                        }`}
+                            }`}
                     >
                         <div className="mt-0.5">
                             <input
@@ -103,7 +101,7 @@ const DeliverySettings: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <span className="font-bold text-sm text-zinc-900 dark:text-white block">Fixed Delivery Fee</span>
+                            <span className="font-semibold text-sm text-zinc-900 dark:text-white block">Fixed Delivery Fee</span>
                             <span className="text-xs text-zinc-500 dark:text-zinc-400">
                                 Flat fee charged on all delivery orders regardless of distance (e.g. ₹50).
                             </span>
@@ -112,11 +110,10 @@ const DeliverySettings: React.FC = () => {
 
                     <div
                         onClick={() => setChargeType('PER_KM')}
-                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 ${
-                            chargeType === 'PER_KM'
+                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 ${chargeType === 'PER_KM'
                                 ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/20 dark:border-indigo-500'
                                 : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
-                        }`}
+                            }`}
                     >
                         <div className="mt-0.5">
                             <input
@@ -128,7 +125,7 @@ const DeliverySettings: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <span className="font-bold text-sm text-zinc-900 dark:text-white block">Distance Based (Per KM)</span>
+                            <span className="font-semibold text-sm text-zinc-900 dark:text-white block">Distance Based (Per KM)</span>
                             <span className="text-xs text-zinc-500 dark:text-zinc-400">
                                 Delivery fee calculated dynamically based on delivery distance (e.g. ₹12 / km with min charge).
                             </span>

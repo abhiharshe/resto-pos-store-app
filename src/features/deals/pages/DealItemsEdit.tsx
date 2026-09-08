@@ -14,9 +14,9 @@ const DealItemsEdit = () => {
     const handleSubmit = async (values: any) => {
         if (!id) return;
         try {
-            await updateMutation.mutateAsync({ 
-                id, 
-                items: values 
+            await updateMutation.mutateAsync({
+                id,
+                items: values
             });
             toast.success('Deal items updated successfully!');
             navigate('/deals');
@@ -38,8 +38,8 @@ const DealItemsEdit = () => {
         return (
             <Container>
                 <div className="p-8 text-center bg-red-50 dark:bg-red-900/10 rounded-2xl border border-red-200">
-                    <p className="text-red-600 font-bold uppercase tracking-widest text-xs">Deal not found</p>
-                    <button onClick={() => navigate('/deals')} className="mt-4 text-indigo-600 font-bold hover:underline">Back to Deals</button>
+                    <p className="text-red-600 font-semibold uppercase tracking-widest text-xs">Deal not found</p>
+                    <button onClick={() => navigate('/deals')} className="mt-4 text-indigo-600 font-semibold hover:underline">Back to Deals</button>
                 </div>
             </Container>
         );
@@ -57,8 +57,8 @@ const DealItemsEdit = () => {
                 <p className="text-zinc-500 mt-1 uppercase tracking-widest text-[10px] font-black underline decoration-indigo-500 decoration-2 underline-offset-4">Standalone Group Management</p>
             </div>
 
-            <DealItemsForm 
-                initialData={deal} 
+            <DealItemsForm
+                initialData={deal}
                 onSubmit={handleSubmit}
                 isLoading={updateMutation.isPending}
                 onCancel={() => navigate('/deals')}

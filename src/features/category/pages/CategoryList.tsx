@@ -8,11 +8,17 @@ import { Input } from '../../../components/common/Input';
 import { Select } from '../../../components/common/Select';
 import { ColumnDef } from '@tanstack/react-table';
 import { FloatingActionButton } from '../../../components/common/FloatingActionButton';
+import { useAppSelector } from '../../../app/hooks';
+import ScopeBadge from '../../approvals/components/ScopeBadge';
+import ApprovalStatusBadge from '../../approvals/components/ApprovalStatusBadge';
 import toast from 'react-hot-toast';
 import Container from '../../../components/shared/Container';
 
 const CategoryList = () => {
     const navigate = useNavigate();
+    const { user } = useAppSelector((state) => state.auth);
+    const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+
     const { data: categories, isLoading } = useCategories();
     const { data: menus } = useMenus();
     const deleteMutation = useDeleteCategory();
@@ -77,6 +83,23 @@ const CategoryList = () => {
             cell: (info) => <span className="text-zinc-500 dark:text-zinc-400 text-sm uppercase tracking-wider">{info.getValue() as string || 'N/A'}</span>
         },
         {
+            id: 'scope',
+            header: 'Scope',
+            cell: (info) => (
+                <ScopeBadge isGlobal={!info.row.original.store_id} />
+            )
+        },
+        {
+            accessorKey: 'approval_status',
+            header: 'Approval',
+            cell: (info) => (
+                <ApprovalStatusBadge
+                    status={info.row.original.approval_status}
+                    rejectionReason={info.row.original.rejection_reason}
+                />
+            )
+        },
+        {
             accessorKey: 'is_active',
             header: 'Status',
             cell: (info) => <StatusBadge status={info.getValue() ? 'Active' : 'Inactive'} variant={info.getValue() ? 'success' : 'neutral'} />
@@ -84,26 +107,41 @@ const CategoryList = () => {
         {
             id: 'actions',
             header: 'Actions',
-            cell: (info) => (
-                <div className="flex items-center gap-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => navigate(`/menu/categories/edit/${info.row.original.id}`)}
-                    >
-                        <i className="ri-edit-line mr-1 text-sm" /> Edit
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-red-500 hover:text-red-600 border-red-100 dark:border-red-900/30 hover:bg-red-50 dark:hover:bg-red-900/10"
-                        onClick={() => handleDelete(info.row.original.id)}
-                        isLoading={deleteMutation.isPending}
-                    >
-                        <i className="ri-delete-bin-line mr-1 text-sm" /> Delete
-                    </Button>
-                </div>
-            )
+            cell: (info) => {
+                const category = info.row.original;
+                const isGlobal = !category.store_id;
+                const canModify = isSuperAdmin || !isGlobal;
+
+                if (!canModify) {
+                    return (
+                        <span className="text-xs text-zinc-400 italic">
+                            Global (Managed by Super Admin)
+                        </span>
+                    );
+                }
+
+                return (
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => navigate(`/menu/categories/edit/${category.id}`)}
+                        >
+                            <i className="ri-edit-line mr-1 text-sm" />
+                            {category.approval_status === 'REJECTED' ? 'Edit & Resubmit' : 'Edit'}
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-red-500 hover:text-red-600 border-red-100 dark:border-red-900/30 hover:bg-red-50 dark:hover:bg-red-900/10"
+                            onClick={() => handleDelete(category.id)}
+                            isLoading={deleteMutation.isPending}
+                        >
+                            <i className="ri-delete-bin-line mr-1 text-sm" /> Delete
+                        </Button>
+                    </div>
+                );
+            }
         }
     ];
 
@@ -111,7 +149,7 @@ const CategoryList = () => {
         <Container>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Categories</h3>
+                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Categories</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">Organize your menu items into logical groups.</p>
                 </div>
                 <div className="flex items-center gap-2">

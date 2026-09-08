@@ -122,8 +122,8 @@ export const RecipeList: React.FC = () => {
                 isAdmin && payload.publish_now
                     ? 'Recipe published successfully!'
                     : isAdmin
-                    ? 'Recipe draft saved!'
-                    : 'Recipe submitted for Admin approval!'
+                        ? 'Recipe draft saved!'
+                        : 'Recipe submitted for Admin approval!'
             );
             setIsFormModalOpen(false);
             setSelectedItemForForm(null);
@@ -139,8 +139,8 @@ export const RecipeList: React.FC = () => {
                 isAdmin && payload.publish_now
                     ? 'Recipe updated & published!'
                     : isAdmin
-                    ? 'Recipe updated!'
-                    : 'Changes submitted for Admin approval!'
+                        ? 'Recipe updated!'
+                        : 'Changes submitted for Admin approval!'
             );
             setIsFormModalOpen(false);
             setRecipeToEdit(null);
@@ -202,7 +202,7 @@ export const RecipeList: React.FC = () => {
                         <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl">
                             <i className="ri-book-open-line" />
                         </div>
-                        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
                             Recipe Management
                         </h1>
                         <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-zinc-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300">
@@ -220,7 +220,7 @@ export const RecipeList: React.FC = () => {
                     <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200">
                         <i className="ri-alarm-warning-line text-xl text-amber-600 dark:text-amber-400 animate-pulse" />
                         <div className="text-xs">
-                            <span className="font-bold">{counts.PENDING_APPROVAL} Pending Approvals</span>
+                            <span className="font-semibold">{counts.PENDING_APPROVAL} Pending Approvals</span>
                             <p className="text-amber-700 dark:text-amber-300">Kitchen staff submitted recipe changes</p>
                         </div>
                     </div>
@@ -241,22 +241,20 @@ export const RecipeList: React.FC = () => {
                         <button
                             key={tab.key}
                             onClick={() => setActiveTab(tab.key as FilterTab)}
-                            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap border ${
-                                isActive
+                            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap border ${isActive
                                     ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
                                     : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-750'
-                            }`}
+                                }`}
                         >
                             <i className={tab.icon} />
                             <span>{tab.label}</span>
                             <span
-                                className={`text-xs px-2 py-0.5 rounded-full ${
-                                    isActive
+                                className={`text-xs px-2 py-0.5 rounded-full ${isActive
                                         ? 'bg-white/20 text-white'
                                         : tab.key === 'PENDING_APPROVAL' && tab.count > 0
-                                        ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 font-bold'
-                                        : 'bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400'
-                                }`}
+                                            ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 font-semibold'
+                                            : 'bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400'
+                                    }`}
                             >
                                 {tab.count}
                             </span>
@@ -313,7 +311,7 @@ export const RecipeList: React.FC = () => {
                     <div className="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-700 text-zinc-400 flex items-center justify-center text-2xl mx-auto mb-3">
                         <i className="ri-book-open-line" />
                     </div>
-                    <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">No items match your criteria</h3>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">No items match your criteria</h3>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 max-w-sm mx-auto">
                         Try clearing your search filters or add a new recipe to get started.
                     </p>
@@ -338,7 +336,7 @@ export const RecipeList: React.FC = () => {
                                         <tr key={item.id} className="hover:bg-zinc-50/60 dark:hover:bg-zinc-750/30 transition-colors">
                                             {/* Item name & category */}
                                             <td className="px-6 py-4">
-                                                <div className="font-bold text-zinc-900 dark:text-zinc-100 text-base">
+                                                <div className="font-semibold text-zinc-900 dark:text-zinc-100 text-base">
                                                     {item.name}
                                                 </div>
                                                 <div className="flex items-center gap-2 mt-1">
@@ -348,7 +346,7 @@ export const RecipeList: React.FC = () => {
                                                         </span>
                                                     )}
                                                     {!item.is_active && (
-                                                        <span className="text-[10px] uppercase font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded">
+                                                        <span className="text-[10px] uppercase font-semibold text-amber-600 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded">
                                                             Inactive Item
                                                         </span>
                                                     )}

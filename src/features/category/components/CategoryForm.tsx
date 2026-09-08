@@ -46,7 +46,7 @@ export const CategoryForm = ({ initialValues, onSubmit, isLoading, onCancel, tit
         <div>
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-xl font-bold text-zinc-900 dark:text-white">{title}</h3>
+                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">{initialValues ? 'Update configuration for ' + initialValues.name : 'Fill the form to create a new category'}</p>
                 </div>
                 <Button variant="ghost" onClick={() => navigate('/menu/categories')} icon="ri-arrow-left-line">

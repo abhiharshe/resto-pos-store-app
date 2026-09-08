@@ -184,7 +184,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                             <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                                 {recipeToEdit ? 'Modify Recipe' : 'New Recipe'}
                             </span>
-                            <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                            <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
                                 {recipeToEdit ? `Edit: ${recipeToEdit.recipe_name}` : `Create Recipe for: ${menuItem?.name}`}
                             </h2>
                         </div>
@@ -203,7 +203,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                             <div className="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900 flex items-start gap-3 text-indigo-900 dark:text-indigo-200">
                                 <i className="ri-information-line text-xl text-indigo-600 dark:text-indigo-400 mt-0.5" />
                                 <div className="text-xs space-y-0.5">
-                                    <h4 className="font-bold">Kitchen Role Submission</h4>
+                                    <h4 className="font-semibold">Kitchen Role Submission</h4>
                                     <p className="text-indigo-700 dark:text-indigo-300">
                                         Submitting or updating this recipe will send it directly to store management for review & approval before being published.
                                     </p>
@@ -318,7 +318,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                                 className="ml-0.5 hover:bg-rose-200 dark:hover:bg-rose-900/50 p-0.5 rounded-full text-rose-500 dark:text-rose-400 hover:text-rose-700 transition-colors"
                                                 title={`Remove ${allergen}`}
                                             >
-                                                <i className="ri-close-line text-xs font-bold" />
+                                                <i className="ri-close-line text-xs font-semibold" />
                                             </button>
                                         </span>
                                     ))}
@@ -340,11 +340,10 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                                 key={preset}
                                                 type="button"
                                                 onClick={() => handleToggleAllergen(preset)}
-                                                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1 border ${
-                                                    isSelected
+                                                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1 border ${isSelected
                                                         ? 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-900/40 dark:text-rose-200 dark:border-rose-700'
                                                         : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-700'
-                                                }`}
+                                                    }`}
                                             >
                                                 {isSelected ? <i className="ri-check-line text-rose-600 dark:text-rose-400" /> : <i className="ri-add-line text-zinc-400" />}
                                                 {preset}

@@ -55,7 +55,7 @@ const Forgot = () => {
                 <div className="mx-auto flex items-center justify-center h-14 w-14 rounded-2xl bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 text-2xl shadow-sm">
                     <i className="ri-checkbox-circle-fill" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                     {mode === 'admin_request' ? 'Request Submitted' : 'Check your email'}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-zinc-400 max-w-sm mx-auto leading-relaxed">
@@ -97,11 +97,10 @@ const Forgot = () => {
                         setMode('admin_request');
                         setError(null);
                     }}
-                    className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
-                        mode === 'admin_request'
+                    className={`flex-1 py-2 text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-1.5 ${mode === 'admin_request'
                             ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
                             : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                    }`}
+                        }`}
                 >
                     <i className="ri-shield-user-line" />
                     <span>Request Admin Reset</span>
@@ -112,11 +111,10 @@ const Forgot = () => {
                         setMode('email_link');
                         setError(null);
                     }}
-                    className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
-                        mode === 'email_link'
+                    className={`flex-1 py-2 text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-1.5 ${mode === 'email_link'
                             ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
                             : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                    }`}
+                        }`}
                 >
                     <i className="ri-mail-send-line" />
                     <span>Direct Email Link</span>
@@ -174,8 +172,8 @@ const Forgot = () => {
                         {isPending
                             ? 'Processing...'
                             : mode === 'admin_request'
-                            ? 'Submit Request to Admin'
-                            : 'Send Reset Link'}
+                                ? 'Submit Request to Admin'
+                                : 'Send Reset Link'}
                     </button>
                 </div>
             </form>

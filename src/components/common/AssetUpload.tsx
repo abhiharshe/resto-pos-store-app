@@ -164,9 +164,9 @@ const AssetUpload: React.FC<AssetUploadProps> = ({
                 }
             });
         } else {
-            setFiles((prev) => prev.map(f => 
-                validFiles.find(v => v.id === f.id) && !f.error 
-                    ? { ...f, status: 'completed', progress: 100 } 
+            setFiles((prev) => prev.map(f =>
+                validFiles.find(v => v.id === f.id) && !f.error
+                    ? { ...f, status: 'completed', progress: 100 }
                     : f
             ));
             if (onFilesChange) {
@@ -237,7 +237,7 @@ const AssetUpload: React.FC<AssetUploadProps> = ({
                     <i className="ri-upload-cloud-2-line text-3xl"></i>
                 </div>
                 <div className="text-center">
-                    <p className="text-zinc-700 dark:text-zinc-300 font-bold">
+                    <p className="text-zinc-700 dark:text-zinc-300 font-semibold">
                         {isUploading ? 'Upload in progress...' : 'Click or drag files to upload'}
                     </p>
                     <p className="text-zinc-500 text-xs mt-1">
@@ -263,7 +263,7 @@ const AssetUpload: React.FC<AssetUploadProps> = ({
                             {/* Details */}
                             <div className="flex-1 min-w-0">
                                 <div className="flex justify-between items-start mb-2">
-                                    <p className="text-sm font-bold text-zinc-900 dark:text-white truncate" title={f.file.name}>
+                                    <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate" title={f.file.name}>
                                         {f.file.name}
                                     </p>
                                     <button

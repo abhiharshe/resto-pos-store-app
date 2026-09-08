@@ -112,7 +112,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                         `}
                     >
                         <span className="text-xl">{selectedCountry.flag}</span>
-                        <span className="text-sm font-bold text-gray-600 dark:text-zinc-400">{selectedCountry.dialCode}</span>
+                        <span className="text-sm font-semibold text-gray-600 dark:text-zinc-400">{selectedCountry.dialCode}</span>
                         <i className={`ri-arrow-down-s-line text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                     </button>
 
@@ -151,7 +151,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                                         >
                                             <span className="text-xl">{country.flag}</span>
                                             <div className="flex flex-col items-start overflow-hidden">
-                                                <span className="text-xs font-bold truncate w-full text-left">{country.name}</span>
+                                                <span className="text-xs font-semibold truncate w-full text-left">{country.name}</span>
                                                 <span className="text-[10px] opacity-60">{country.dialCode}</span>
                                             </div>
                                         </button>
@@ -187,7 +187,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
             </div>
 
             {(error || (isTouched && !isValid)) && (
-                <p className="mt-1.5 text-[10px] text-red-500 font-bold ml-1 uppercase letter-spacing-tight">
+                <p className="mt-1.5 text-[10px] text-red-500 font-semibold ml-1 uppercase letter-spacing-tight">
                     {error || 'Invalid phone number'}
                 </p>
             )}

@@ -205,7 +205,7 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
                         </div>
                         <div>
                             <h3 className="text-xl font-black text-zinc-900 dark:text-white leading-tight">{deal.title}</h3>
-                            <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">{deal.selection_groups.length} Selection Groups</p>
+                            <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">{deal.selection_groups.length} Selection Groups</p>
                         </div>
                     </div>
                 </div>
@@ -221,7 +221,7 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
                                     {group.name}
                                     {group.is_required && <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-black">REQUIRED</span>}
                                 </h4>
-                                <p className="text-xs text-zinc-400 font-bold">
+                                <p className="text-xs text-zinc-400 font-semibold">
                                     Choose between {group.min_selection} and {group.max_selection} items
                                 </p>
                             </div>
@@ -254,12 +254,12 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
                                                     )}
                                                 </p>
                                                 {option.additional_price > 0 && (
-                                                    <p className="text-xs font-black text-emerald-600 mt-1 uppercase tracking-tighter self-start">+ Rs.{option.additional_price}</p>
+                                                    <p className="text-xs font-black text-emerald-600 mt-1 uppercase tracking-tighter self-start">+ ₹{option.additional_price}</p>
                                                 )}
                                             </div>
                                             {isSelected ? (
                                                 <div className="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center shrink-0 shadow-sm transition-transform active:scale-90">
-                                                    <i className="ri-check-line text-sm font-bold"></i>
+                                                    <i className="ri-check-line text-sm font-semibold"></i>
                                                 </div>
                                             ) : (
                                                 <div className="w-6 h-6 border-2 border-zinc-200 dark:border-zinc-700 rounded-full shrink-0" />
@@ -268,7 +268,7 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
 
                                         {isSelected && hasCustomization && (
                                             <div className="flex items-center justify-between mt-auto pt-3 border-t border-emerald-100 dark:border-emerald-900/20">
-                                                <div className="text-[10px] text-zinc-400 font-bold uppercase tracking-tight overflow-hidden">
+                                                <div className="text-[10px] text-zinc-400 font-semibold uppercase tracking-tight overflow-hidden">
                                                     {optState?.selectedAddons.length ? `${optState.selectedAddons.length} addons` : 'Base Item'}
                                                 </div>
                                                 <button
@@ -294,16 +294,16 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
             {/* Footer */}
             <div className="p-4 flex flex-row items-center justify-between border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/20">
                 <div className="flex flex-col items-start gap-1">
-                    <p className="text-xs text-zinc-400 font-bold uppercase tracking-widest">Deal Price Breakdown</p>
+                    <p className="text-xs text-zinc-400 font-semibold uppercase tracking-widest">Deal Price Breakdown</p>
                     <div className="flex items-baseline gap-2">
-                        <span className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">Rs.{totalPrice.toFixed(2)}</span>
+                        <span className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">₹{totalPrice.toFixed(2)}</span>
                         <div className="flex items-center gap-1.5 text-xs text-zinc-500 font-medium">
-                            <span>(Base Rs.{storePrice.toFixed(2)}</span>
+                            <span>(Base ₹{storePrice.toFixed(2)}</span>
                             {selectionUpchargesTotal > 0 && (
-                                <span className="text-emerald-600 font-bold">+ Upcharges Rs.{selectionUpchargesTotal.toFixed(2)}</span>
+                                <span className="text-emerald-600 font-semibold">+ Upcharges ₹{selectionUpchargesTotal.toFixed(2)}</span>
                             )}
                             {addonsTotal > 0 && (
-                                <span className="text-indigo-600 font-bold">+ Addons Rs.{addonsTotal.toFixed(2)}</span>
+                                <span className="text-indigo-600 font-semibold">+ Addons ₹{addonsTotal.toFixed(2)}</span>
                             )}
                             <span>)</span>
                         </div>

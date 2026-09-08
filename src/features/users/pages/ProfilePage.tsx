@@ -52,7 +52,7 @@ const ProfilePage: React.FC = () => {
                 <div className="h-48 w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-800 rounded-2xl shadow-lg overflow-hidden">
                     <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
                 </div>
-                
+
                 {/* Avatar Overlay */}
                 <div className="absolute -bottom-16 left-8 flex items-end gap-6">
                     <div className="relative group">
@@ -63,7 +63,7 @@ const ProfilePage: React.FC = () => {
                                 <i className="ri-user-line text-6xl text-zinc-300 dark:text-zinc-600"></i>
                             )}
                         </div>
-                        <button 
+                        <button
                             onClick={() => setShowUploader(!showUploader)}
                             className="absolute -bottom-2 -right-2 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95"
                             title="Update Profile Picture"
@@ -88,11 +88,11 @@ const ProfilePage: React.FC = () => {
                 {/* Left Sidebar Info */}
                 <div className="space-y-6">
                     <Card className="p-6 border-none shadow-xl bg-white/50 dark:bg-zinc-800/50 backdrop-blur-sm">
-                        <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-widest mb-4">Account Status</h3>
+                        <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-widest mb-4">Account Status</h3>
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-zinc-600 dark:text-zinc-400">Status</span>
-                                <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold rounded-lg uppercase">Active</span>
+                                <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold rounded-lg uppercase">Active</span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-zinc-600 dark:text-zinc-400">Store ID</span>
@@ -105,7 +105,7 @@ const ProfilePage: React.FC = () => {
                         </div>
                     </Card>
 
-                    <AssetUpload 
+                    <AssetUpload
                         isOpen={showUploader}
                         onClose={() => setShowUploader(false)}
                         entityType="User"
@@ -128,7 +128,7 @@ const ProfilePage: React.FC = () => {
                                 <i className="ri-user-settings-line text-xl"></i>
                             </div>
                             <div>
-                                <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Profile Information</h2>
+                                <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">Profile Information</h2>
                                 <p className="text-sm text-zinc-500">Update your account details and contact information.</p>
                             </div>
                         </div>
@@ -202,12 +202,12 @@ const ProfilePage: React.FC = () => {
                                     <i className="ri-shield-keyhole-line text-xl"></i>
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Security & Privacy</h2>
+                                    <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">Security & Privacy</h2>
                                     <p className="text-sm text-zinc-500">Keep your account secure with a strong password.</p>
                                 </div>
                             </div>
-                            <Button 
-                                variant="outline" 
+                            <Button
+                                variant="outline"
                                 onClick={() => window.location.href = '/change-password'}
                                 icon="ri-lock-password-line"
                             >

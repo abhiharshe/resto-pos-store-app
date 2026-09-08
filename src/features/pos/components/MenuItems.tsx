@@ -248,7 +248,7 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
                                                 onClick={() => handleMenuClick(menu.id)}
                                                 className={`flex flex-col items-start border-b-2 px-4 py-2 transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 ${selectedMenuId === menu.id
                                                     ? "bg-zinc-100 dark:bg-zinc-800 border-indigo-600 dark:border-indigo-500 font-black"
-                                                    : "bg-transparent border-transparent text-zinc-400 font-bold"
+                                                    : "bg-transparent border-transparent text-zinc-400 font-semibold"
                                                     }`}
                                             >
                                                 <span className="text-sm">{menu.title}</span>

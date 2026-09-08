@@ -63,7 +63,7 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
 
     const getOrderAction = () => {
         const allItemsReady = order.items.every(item => item.status === 'READY' || item.status === 'SERVED');
-        
+
         if (!allItemsReady) return null;
 
         switch (order.order_type) {
@@ -116,7 +116,7 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
             <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/30 flex justify-between items-start">
                 <div>
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="text-lg font-bold text-zinc-900 dark:text-white">
+                        <span className="text-lg font-semibold text-zinc-900 dark:text-white">
                             {order.order_number || `#${order.id}`}
                         </span>
                         <StatusBadge status={order.order_type} />
@@ -150,12 +150,12 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
                                 <div key={item.id} className="flex justify-between items-center gap-2">
                                     <div className="flex-grow min-w-0">
                                         <div className="flex items-center gap-2">
-                                            <span className="font-bold text-sm text-zinc-900 dark:text-white truncate">
+                                            <span className="font-semibold text-sm text-zinc-900 dark:text-white truncate">
                                                 {item.quantity}x {item.name}
                                             </span>
                                         </div>
                                         {item.variant_name && item.variant_name !== 'Default' && (
-                                            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block truncate font-bold">
+                                            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block truncate font-semibold">
                                                 {item.variant_name}
                                             </span>
                                         )}
@@ -181,12 +181,12 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
                     <div key={item.id} className="flex justify-between items-center gap-2 group">
                         <div className="flex-grow min-w-0">
                             <div className="flex items-center gap-2">
-                                <span className="font-bold text-sm text-zinc-900 dark:text-white truncate">
+                                <span className="font-semibold text-sm text-zinc-900 dark:text-white truncate">
                                     {item.quantity}x {item.name}
                                 </span>
                             </div>
                             {item.variant_name && item.variant_name !== 'Default' && (
-                                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-bold truncate">
+                                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-semibold truncate">
                                     {item.variant_name}
                                 </span>
                             )}
@@ -211,10 +211,10 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
             {/* Footer Actions */}
             {action && (
                 <div className="p-3 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-900/30">
-                    <Button 
+                    <Button
                         variant={action.variant as any}
-                        size="sm" 
-                        className="w-full text-xs font-bold uppercase tracking-wider h-9 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                        size="sm"
+                        className="w-full text-xs font-semibold uppercase tracking-wider h-9 transition-all hover:scale-[1.02] active:scale-[0.98]"
                         onClick={handleOrderAction}
                         isLoading={updateOrderStatus.isPending}
                     >

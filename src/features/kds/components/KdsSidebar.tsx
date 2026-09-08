@@ -34,7 +34,7 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                         {/* Header */}
                         <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center bg-zinc-50/50 dark:bg-zinc-800/50">
                             <div>
-                                <h2 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                                <h2 className="text-xl font-semibold text-zinc-900 dark:text-white flex items-center gap-2">
                                     Order {order.order_number || `#${order.id}`}
                                 </h2>
                                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -49,11 +49,11 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                             {/* Order Info */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-100 dark:border-zinc-800">
-                                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Type</p>
+                                    <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-widest mb-1">Type</p>
                                     <StatusBadge status={order.order_type} />
                                 </div>
                                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-100 dark:border-zinc-800">
-                                    <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Status</p>
+                                    <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-widest mb-1">Status</p>
                                     <StatusBadge status={order.status} />
                                 </div>
                             </div>
@@ -61,12 +61,12 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                             {/* Customer Info */}
                             {(order.customer || order.guest_name) && (
                                 <div>
-                                    <h3 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-2">
+                                    <h3 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-2">
                                         <i className="ri-user-heart-line text-indigo-500"></i>
                                         Customer Details
                                     </h3>
                                     <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800">
-                                        <p className="font-bold text-zinc-900 dark:text-white">
+                                        <p className="font-semibold text-zinc-900 dark:text-white">
                                             {order.customer?.full_name || order.guest_name}
                                         </p>
                                         {order.guest_phone && (
@@ -85,7 +85,7 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
 
                             {/* Items */}
                             <div>
-                                <h3 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <h3 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
                                     <i className="ri-list-check text-emerald-500"></i>
                                     Items Breakdown
                                 </h3>
@@ -103,7 +103,7 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                                                 {deal.items.map((item) => (
                                                     <div key={item.id} className="last:border-0 pb-0">
                                                         <div className="flex justify-between items-start">
-                                                            <span className="font-bold text-sm text-zinc-900 dark:text-white">
+                                                            <span className="font-semibold text-sm text-zinc-900 dark:text-white">
                                                                 {item.quantity}x {item.name}
                                                             </span>
                                                             <span className={`text-[9px] px-2 py-0.5 rounded-full font-black uppercase tracking-tighter
@@ -114,7 +114,7 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                                                         </div>
                                                         <div className="flex flex-col gap-1 mt-1">
                                                             {item.variant_name && item.variant_name !== 'Default' && (
-                                                                <span className="text-[10px] text-zinc-400 font-bold uppercase">{item.variant_name}</span>
+                                                                <span className="text-[10px] text-zinc-400 font-semibold uppercase">{item.variant_name}</span>
                                                             )}
                                                             {item.addons && item.addons.length > 0 && (
                                                                 <div className="pl-3 border-l-2 border-emerald-100 dark:border-emerald-900/20">
@@ -136,7 +136,7 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                                     {order.items.filter(item => !item.order_deal_id).map((item) => (
                                         <div key={item.id} className="border-b border-zinc-100 dark:border-zinc-800 pb-4 last:border-0 last:pb-0">
                                             <div className="flex justify-between">
-                                                <span className="font-bold text-zinc-900 dark:text-white">
+                                                <span className="font-semibold text-zinc-900 dark:text-white">
                                                     {item.quantity}x {item.name}
                                                 </span>
                                                 <span className={`text-[9px] px-2 py-0.5 rounded-full font-black uppercase tracking-tighter
@@ -146,7 +146,7 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                                                 </span>
                                             </div>
                                             <div className="flex justify-between items-center mt-1">
-                                                <span className="text-[10px] text-zinc-400 font-bold uppercase">{item.variant_name !== 'Default' ? item.variant_name : ''}</span>
+                                                <span className="text-[10px] text-zinc-400 font-semibold uppercase">{item.variant_name !== 'Default' ? item.variant_name : ''}</span>
                                                 <span className="text-xs font-mono text-zinc-400">
                                                     ₹{item.subtotal.toFixed(2)}
                                                 </span>

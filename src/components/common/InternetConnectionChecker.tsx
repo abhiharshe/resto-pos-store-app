@@ -70,12 +70,12 @@ const InternetConnectionChecker: React.FC<Props> = ({ children }) => {
                 {/* Action Button */}
                 <button
                     onClick={() => window.location.reload()}
-                    className="w-full py-4 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 group"
+                    className="w-full py-4 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-semibold shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 group"
                 >
                     <i className="ri-refresh-line group-hover:rotate-180 transition-transform duration-500"></i>
                     Refresh Page
                 </button>
-                
+
                 <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-black">
                     Auto-reconnect enabled
                 </p>

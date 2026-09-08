@@ -42,7 +42,7 @@ export const RecipeRejectModal: React.FC<RecipeRejectModalProps> = ({
                             </div>
 
                             <div>
-                                <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+                                <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
                                     Reject Recipe Submission
                                 </h3>
                                 <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">

@@ -68,7 +68,7 @@ const PromotionManagement = () => {
                     {info.row.original.image_url && (
                         <img src={info.row.original.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" />
                     )}
-                    <span className="font-bold text-zinc-900 dark:text-white uppercase tracking-tight">{info.getValue() as string}</span>
+                    <span className="font-semibold text-zinc-900 dark:text-white uppercase tracking-tight">{info.getValue() as string}</span>
                 </div>
             )
         },
@@ -89,12 +89,12 @@ const PromotionManagement = () => {
                     <div className="text-sm">
                         {promo.type === 'BXGY' ? (
                             <p className="text-zinc-600 dark:text-zinc-400">
-                                Buy {promo.buy_quantity} <span className="font-bold">{promo.buy_item?.name}</span>, <br />
-                                Get {promo.get_quantity} <span className="font-bold text-indigo-600 dark:text-indigo-400">{promo.get_item?.name}</span> Free
+                                Buy {promo.buy_quantity} <span className="font-semibold">{promo.buy_item?.name}</span>, <br />
+                                Get {promo.get_quantity} <span className="font-semibold text-indigo-600 dark:text-indigo-400">{promo.get_item?.name}</span> Free
                             </p>
                         ) : (
                             <p className="text-zinc-600 dark:text-zinc-400">
-                                <span className="font-bold text-green-600">{promo.discount_percentage}% OFF</span> on {promo.buy_item?.name}
+                                <span className="font-semibold text-green-600">{promo.discount_percentage}% OFF</span> on {promo.buy_item?.name}
                             </p>
                         )}
                     </div>

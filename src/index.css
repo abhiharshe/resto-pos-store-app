@@ -1,9 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #C2410C;
-  --color-primary-hover: #9A3412;
-  --color-primary-dark: #C2410C;
+  /* Replace default indigo color palette with Mauve from Tailwind CSS */
+  --color-indigo-50: oklch(98.5% 0 0);
+  --color-indigo-100: oklch(96% 0.003 325.6);
+  --color-indigo-200: oklch(92.2% 0.005 325.62);
+  --color-indigo-300: oklch(86.5% 0.012 325.68);
+  --color-indigo-400: oklch(71.1% 0.019 323.02);
+  --color-indigo-500: oklch(54.2% 0.034 322.5);
+  --color-indigo-600: oklch(43.5% 0.029 321.78);
+  --color-indigo-700: oklch(36.4% 0.029 323.89);
+  --color-indigo-800: oklch(26.3% 0.024 320.12);
+  --color-indigo-900: oklch(21.2% 0.019 322.12);
+  --color-indigo-950: oklch(14.5% 0.008 326);
+
+  /* Theme Primary Colors using Mauve scale */
+  --color-primary-50: var(--color-mauve-50);
+  --color-primary-100: var(--color-mauve-100);
+  --color-primary-200: var(--color-mauve-200);
+  --color-primary-300: var(--color-mauve-300);
+  --color-primary-400: var(--color-mauve-400);
+  --color-primary-500: var(--color-mauve-500);
+  --color-primary-600: var(--color-mauve-600);
+  --color-primary-700: var(--color-mauve-700);
+  --color-primary-800: var(--color-mauve-800);
+  --color-primary-900: var(--color-mauve-900);
+  --color-primary-950: var(--color-mauve-950);
+
+  /* Primary defaults */
+  --color-primary: var(--color-mauve-600);
+  --color-primary-hover: var(--color-mauve-700);
+  --color-primary-dark: var(--color-mauve-500);
   
   --color-danger: #DC2626;
   --color-success: #16A34A;

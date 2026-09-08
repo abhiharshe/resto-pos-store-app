@@ -69,7 +69,7 @@ export const AddonGroupForm = ({ initialValues, onCancel }: AddonGroupFormProps)
 
     return (
         <div className="w-full">
-            <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-6">
+            <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-6">
                 {initialValues?.id ? 'Edit Add-On Group' : 'Create Add-On Group'}
             </h3>
             <Card className="w-full">
@@ -137,7 +137,7 @@ export const AddonGroupForm = ({ initialValues, onCancel }: AddonGroupFormProps)
 
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between border-b pb-2 dark:border-zinc-800">
-                                    <h4 className="text-sm font-bold text-zinc-400 uppercase tracking-wider">Add-Ons & Pricing</h4>
+                                    <h4 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">Add-Ons & Pricing</h4>
                                     <span className="text-xs text-zinc-500">{values.addons.length} Items</span>
                                 </div>
 

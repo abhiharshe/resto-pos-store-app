@@ -86,7 +86,7 @@ const AssetCard: React.FC<{
                 ) : (
                     <div className="flex flex-col items-center space-y-2">
                         <i className={`ri-${asset.mime_type.includes('pdf') ? 'file-pdf' : 'file-3'}-fill text-5xl text-zinc-400`}></i>
-                        <span className="text-[10px] font-bold text-zinc-500 uppercase">{asset.mime_type.split('/')[1]}</span>
+                        <span className="text-[10px] font-semibold text-zinc-500 uppercase">{asset.mime_type.split('/')[1]}</span>
                     </div>
                 )}
 
@@ -124,7 +124,7 @@ const AssetCard: React.FC<{
 
             {/* Content */}
             <div className="p-4">
-                <p className="text-sm font-bold text-zinc-900 dark:text-white truncate mb-1" title={asset.original_name}>
+                <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate mb-1" title={asset.original_name}>
                     {asset.original_name}
                 </p>
                 <div className="flex justify-between items-center text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
@@ -271,7 +271,7 @@ const AssetGallery: React.FC<AssetGalleryProps> = ({
                                 key={i}
                                 onClick={() => setPage(i + 1)}
                                 className={`
-                                    w-10 h-10 rounded-xl text-sm font-bold transition-all
+                                    w-10 h-10 rounded-xl text-sm font-semibold transition-all
                                     ${page === i + 1
                                         ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200'
                                         : 'text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800'}

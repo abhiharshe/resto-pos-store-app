@@ -16,6 +16,10 @@ export interface Store {
     has_pos: boolean;
     has_kds: boolean;
     is_active: boolean;
+    maintenance_mode?: boolean;
+    maintenance_message?: string;
+    maintenance_start_time?: string;
+    maintenance_end_time?: string;
 }
 
 export interface StoreFormValues {
@@ -126,3 +130,25 @@ export const useDeleteStore = () => {
         },
     });
 }
+
+export interface MaintenanceModePayload {
+    maintenance_mode: boolean;
+    maintenance_message?: string;
+    maintenance_start_time?: string;
+    maintenance_end_time?: string;
+}
+
+export const useUpdateStoreMaintenanceMode = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ id, data }: { id: string; data: MaintenanceModePayload }) => {
+            const { data: responseData } = await api.put<Store>(`/stores/${id}/maintenance`, data);
+            return responseData;
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ['stores'] });
+            queryClient.invalidateQueries({ queryKey: ['stores', data.id] });
+            queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+        },
+    });
+};

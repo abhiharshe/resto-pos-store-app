@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useGetSettingsQuery } from '../api/settingsApi';
 import GeneralSettings from '../components/GeneralSettings';
 import OrderSettings from '../components/OrderSettings';
@@ -10,7 +11,20 @@ import PackagingSettings from '../components/PackagingSettings';
 import Container from '../../../components/shared/Container';
 
 const Settings = () => {
-    const [activeTab, setActiveTab] = useState('general');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabParam = searchParams.get('tab');
+    const [activeTab, setActiveTab] = useState(tabParam || 'general');
+
+    useEffect(() => {
+        if (tabParam && ['general', 'order', 'delivery', 'packaging', 'email', 'assets', 'system'].includes(tabParam)) {
+            setActiveTab(tabParam);
+        }
+    }, [tabParam]);
+
+    const handleTabChange = (tabId: string) => {
+        setActiveTab(tabId);
+        setSearchParams({ tab: tabId });
+    };
 
     // Global queries to warm up the cache and handle loading state
     const { isLoading: isSettingsLoading } = useGetSettingsQuery();
@@ -37,7 +51,7 @@ const Settings = () => {
         <Container>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Settings</h3>
+                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Settings</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">Manage your global application configurations.</p>
                 </div>
             </div>
@@ -48,7 +62,7 @@ const Settings = () => {
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
+                                onClick={() => handleTabChange(tab.id)}
                                 className={`
                                     whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm flex items-center transition-colors
                                     ${activeTab === tab.id

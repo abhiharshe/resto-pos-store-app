@@ -80,7 +80,7 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                                     v{recipe.version}
                                 </span>
                             </div>
-                            <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                            <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
                                 {recipe.recipe_name}
                             </h2>
                             {recipe.menu_item_name && (
@@ -141,7 +141,7 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                                     <i className="ri-time-line text-indigo-500" />
                                     Prep Time
                                 </div>
-                                <span className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                                <span className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
                                     {recipe.prep_time_minutes ? `${recipe.prep_time_minutes} mins` : '—'}
                                 </span>
                             </div>
@@ -150,7 +150,7 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                                     <i className="ri-fire-line text-amber-500" />
                                     Cook Time
                                 </div>
-                                <span className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                                <span className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
                                     {recipe.cook_time_minutes ? `${recipe.cook_time_minutes} mins` : '—'}
                                 </span>
                             </div>
@@ -159,7 +159,7 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                                     <i className="ri-user-smile-line text-emerald-500" />
                                     Servings
                                 </div>
-                                <span className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                                <span className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
                                     {recipe.servings || 1}
                                 </span>
                             </div>

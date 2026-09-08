@@ -23,7 +23,7 @@ const DealEdit = () => {
         }
     };
 
-    if (isFetching) return <div className="p-8 text-center text-zinc-500 font-bold animate-pulse uppercase tracking-[0.2em]">Retrieving deal data...</div>;
+    if (isFetching) return <div className="p-8 text-center text-zinc-500 font-semibold animate-pulse uppercase tracking-[0.2em]">Retrieving deal data...</div>;
     if (!deal) return <div className="p-8 text-center text-red-500">Deal not found.</div>;
 
     return (

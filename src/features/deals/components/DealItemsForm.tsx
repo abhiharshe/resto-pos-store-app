@@ -92,7 +92,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                         <i className="ri-list-settings-line text-xl"></i>
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-bold text-zinc-900 dark:text-white leading-none">Deal Selection Slots</h3>
+                                        <h3 className="text-lg font-semibold text-zinc-900 dark:text-white leading-none">Deal Selection Slots</h3>
                                         <p className="text-xs text-zinc-500 mt-1 uppercase tracking-widest font-black">Configure Choice Groups & Items</p>
                                     </div>
                                 </div>
@@ -152,7 +152,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                                         <div className="md:col-span-4 flex items-center justify-between p-3 bg-white dark:bg-zinc-900/40 rounded-xl border border-zinc-100 dark:border-zinc-800/50">
                                                             <div className="flex items-center gap-3">
                                                                 <i className="ri-checkbox-circle-line text-emerald-500 text-lg"></i>
-                                                                <span className="text-sm font-bold text-zinc-700 dark:text-white">Is selection mandatory?</span>
+                                                                <span className="text-sm font-semibold text-zinc-700 dark:text-white">Is selection mandatory?</span>
                                                             </div>
                                                             <div
                                                                 onClick={() => setFieldValue(`selection_groups.${gIndex}.is_required`, !group.is_required)}
@@ -227,7 +227,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                                                         type="button"
                                                                         variant="outline"
                                                                         size="sm"
-                                                                        className="w-full py-4 border-dashed rounded-2xl flex items-center justify-center gap-2 text-zinc-500 hover:text-indigo-600 hover:border-indigo-600 transition-all font-bold text-xs uppercase tracking-widest bg-zinc-50/50 dark:bg-zinc-800/30"
+                                                                        className="w-full py-4 border-dashed rounded-2xl flex items-center justify-center gap-2 text-zinc-500 hover:text-indigo-600 hover:border-indigo-600 transition-all font-semibold text-xs uppercase tracking-widest bg-zinc-50/50 dark:bg-zinc-800/30"
                                                                         onClick={() => pushOpt({ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false })}
                                                                     >
                                                                         <i className="ri-add-circle-line text-lg"></i>
@@ -267,7 +267,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                             type="button"
                             variant="ghost"
                             onClick={onCancel}
-                            className="font-bold uppercase tracking-widest text-xs"
+                            className="font-semibold uppercase tracking-widest text-xs"
                         >
                             Cancel Changes
                         </Button>

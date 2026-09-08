@@ -68,7 +68,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onEdit }) => {
                     className="flex flex-col items-center justify-center text-white p-2 h-full min-w-[60px] hover:bg-white/10 transition-colors"
                 >
                     <i className="ri-edit-line text-lg"></i>
-                    <span className="text-[10px] font-bold">Edit</span>
+                    <span className="text-[10px] font-semibold">Edit</span>
                 </button>
             </div>
 
@@ -93,7 +93,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onEdit }) => {
                 <div className="flex justify-between items-start gap-2 text-gray-800 dark:text-gray-100">
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                            <h3 className="font-bold text-sm truncate">{item.name} <span className="text-gray-500 dark:text-gray-400 font-normal ml-1">({item.variantName})</span></h3>
+                            <h3 className="font-semibold text-sm truncate">{item.name} <span className="text-gray-500 dark:text-gray-400 font-normal ml-1">({item.variantName})</span></h3>
                             {item.isPromoItem && (
                                 <span className="text-[9px] font-black bg-indigo-600 text-white px-1.5 py-0.5 rounded-full uppercase tracking-tighter">Promo</span>
                             )}
@@ -109,9 +109,9 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onEdit }) => {
                         )}
                     </div>
                     <div className="text-right shrink-0">
-                        <p className="text-sm font-bold">Rs.{item.totalItemPrice}</p>
+                        <p className="text-sm font-semibold">₹{item.totalItemPrice}</p>
                         {item.discountedPrice !== undefined && (
-                            <p className="text-[10px] text-gray-400 line-through">Rs.{item.price * item.quantity}</p>
+                            <p className="text-[10px] text-gray-400 line-through">₹{item.price * item.quantity}</p>
                         )}
                     </div>
                 </div>
@@ -126,7 +126,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onEdit }) => {
                             >
                                 <i className="ri-subtract-line text-xs"></i>
                             </button>
-                            <span className="text-xs font-bold min-w-6 text-center text-indigo-600 dark:text-indigo-400">{item.quantity}</span>
+                            <span className="text-xs font-semibold min-w-6 text-center text-indigo-600 dark:text-indigo-400">{item.quantity}</span>
                             <button
                                 onClick={() => !item.isPromoItem && dispatch(incrementQuantity(item.cartId))}
                                 disabled={item.isPromoItem}
@@ -146,7 +146,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onEdit }) => {
                         )}
                     </div>
                     <span className="text-[10px] text-gray-400 italic">
-                        {item.isPromoItem ? 'Complimentary' : `Rs.${item.discountedPrice ?? item.price + item.selectedAddons.reduce((a, b) => a + b.price, 0)} each`}
+                        {item.isPromoItem ? 'Complimentary' : `₹${item.discountedPrice ?? item.price + item.selectedAddons.reduce((a, b) => a + b.price, 0)} each`}
                     </span>
                 </div>
             </motion.div>
@@ -171,14 +171,14 @@ const CartDealCard: React.FC<{ deal: any }> = ({ deal }) => {
                                     <span className="font-black opacity-40">•</span>
                                     <span className="font-semibold">{item.quantity}x {item.name} {item.variantName && item.variantName !== 'Default' ? `(${item.variantName})` : ''}</span>
                                     {Number(item.selectionUpcharge) > 0 && (
-                                        <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">+Rs.{item.selectionUpcharge}</span>
+                                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold text-[10px]">+₹{item.selectionUpcharge}</span>
                                     )}
                                 </div>
                                 {item.selectedAddons?.length > 0 && (
                                     <div className="ml-3.5 flex flex-wrap gap-1 text-[10px] text-zinc-500">
                                         {item.selectedAddons.map((addon: any, aIdx: number) => (
                                             <span key={aIdx} className="bg-white/80 dark:bg-zinc-800/80 px-1.5 py-0.5 rounded border border-emerald-100 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
-                                                +{addon.name} (+Rs.{addon.price})
+                                                +{addon.name} (+₹{addon.price})
                                             </span>
                                         ))}
                                     </div>
@@ -188,8 +188,8 @@ const CartDealCard: React.FC<{ deal: any }> = ({ deal }) => {
                     </div>
                 </div>
                 <div className="text-right shrink-0 pl-2">
-                    <p className="text-sm font-black text-emerald-700 dark:text-emerald-400">Rs.{Number(deal.totalDealPrice || 0).toFixed(2)}</p>
-                    <p className="text-[10px] text-zinc-400">Rs.{Number(deal.price || 0).toFixed(2)} base</p>
+                    <p className="text-sm font-black text-emerald-700 dark:text-emerald-400">₹{Number(deal.totalDealPrice || 0).toFixed(2)}</p>
+                    <p className="text-[10px] text-zinc-400">₹{Number(deal.price || 0).toFixed(2)} base</p>
                 </div>
             </div>
 
@@ -238,8 +238,8 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
         selectedStoreId
     } = useAppSelector((state) => state.cart);
 
-    const cartCount = items.reduce((acc: number, item: CartItem) => acc + item.quantity, 0) + 
-                      deals.reduce((acc: number, deal: any) => acc + deal.quantity, 0);
+    const cartCount = items.reduce((acc: number, item: CartItem) => acc + item.quantity, 0) +
+        deals.reduce((acc: number, deal: any) => acc + deal.quantity, 0);
 
 
     const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
@@ -312,7 +312,7 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                     >
                         <i className="ri-close-line text-2xl"></i>
                     </button>
-                    <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-300">Your Order ({cartCount})</h3>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-300">Your Order ({cartCount})</h3>
                 </div>
                 <div className="flex items-center gap-1">
                     <IconButton
@@ -396,7 +396,7 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                         <div className="flex items-center gap-2 min-w-0">
                             <i className="ri-user-star-line text-indigo-600 dark:text-indigo-400"></i>
                             <div className="min-w-0">
-                                <p className="text-xs font-bold text-zinc-900 dark:text-white truncate">
+                                <p className="text-xs font-semibold text-zinc-900 dark:text-white truncate">
                                     {customerName || 'Guest Customer'}
                                 </p>
                                 {customerPhone && (
@@ -450,17 +450,17 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                 <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl space-y-1.5 border border-zinc-100 dark:border-zinc-800">
                     <div className="flex justify-between text-md text-gray-500 font-medium">
                         <span>Subtotal</span>
-                        <span className="text-zinc-900 dark:text-zinc-300">Rs.{subtotal}</span>
+                        <span className="text-zinc-900 dark:text-zinc-300">₹{subtotal}</span>
                     </div>
                     <div className="flex justify-between text-md text-gray-500 font-medium">
                         <span>Tax (5%)</span>
-                        <span className="text-zinc-900 dark:text-zinc-300">Rs.{tax.toFixed(2)}</span>
+                        <span className="text-zinc-900 dark:text-zinc-300">₹{tax.toFixed(2)}</span>
                     </div>
                     {discountAmount > 0 && (
-                        <div className="flex justify-between text-md text-emerald-600 font-bold italic group relative">
+                        <div className="flex justify-between text-md text-emerald-600 font-semibold italic group relative">
                             <span className="flex items-center gap-1">
                                 Discount ({couponCode})
-                                <button 
+                                <button
                                     onClick={() => dispatch(removeCoupon())}
                                     className="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity ml-1"
                                     title="Remove Coupon"
@@ -468,18 +468,18 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                                     <i className="ri-close-circle-fill"></i>
                                 </button>
                             </span>
-                            <span>- Rs.{discountAmount.toFixed(2)}</span>
+                            <span>- ₹{discountAmount.toFixed(2)}</span>
                         </div>
                     )}
                     <div className="flex justify-between font-black text-lg text-zinc-900 dark:text-white pt-1.5 mt-1 border-t border-zinc-200 dark:border-zinc-700">
                         <span>Total</span>
-                        <span className="text-indigo-600 dark:text-indigo-400">Rs.{total.toFixed(2)}</span>
+                        <span className="text-indigo-600 dark:text-indigo-400">₹{total.toFixed(2)}</span>
                     </div>
                 </div>
 
                 <Button
                     variant="primary"
-                    className="w-full py-2 text-sm font-bold shadow-lg shadow-indigo-100 dark:shadow-none rounded-2xl"
+                    className="w-full py-2 text-sm font-semibold shadow-lg shadow-indigo-100 dark:shadow-none rounded-2xl"
                     disabled={items.length === 0 && deals.length === 0}
                     onClick={handleCheckout}
                 >

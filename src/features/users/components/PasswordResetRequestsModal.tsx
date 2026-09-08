@@ -70,11 +70,10 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                         <button
                             type="button"
                             onClick={() => setStatusFilter('PENDING')}
-                            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${
-                                statusFilter === 'PENDING'
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 ${statusFilter === 'PENDING'
                                     ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
                                     : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                            }`}
+                                }`}
                         >
                             <span>Pending</span>
                             {statusFilter === 'PENDING' && pendingCount > 0 && (
@@ -86,33 +85,30 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                         <button
                             type="button"
                             onClick={() => setStatusFilter('COMPLETED')}
-                            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                                statusFilter === 'COMPLETED'
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${statusFilter === 'COMPLETED'
                                     ? 'bg-white dark:bg-zinc-900 text-green-600 dark:text-green-400 shadow-sm'
                                     : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                            }`}
+                                }`}
                         >
                             Completed
                         </button>
                         <button
                             type="button"
                             onClick={() => setStatusFilter('REJECTED')}
-                            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                                statusFilter === 'REJECTED'
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${statusFilter === 'REJECTED'
                                     ? 'bg-white dark:bg-zinc-900 text-red-600 dark:text-red-400 shadow-sm'
                                     : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                            }`}
+                                }`}
                         >
                             Rejected
                         </button>
                         <button
                             type="button"
                             onClick={() => setStatusFilter('ALL')}
-                            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                                statusFilter === 'ALL'
+                            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${statusFilter === 'ALL'
                                     ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-sm'
                                     : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                            }`}
+                                }`}
                         >
                             All
                         </button>
@@ -146,7 +142,7 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                             >
                                 <div className="space-y-1.5 min-w-0">
                                     <div className="flex items-center gap-2 flex-wrap">
-                                        <span className="font-bold text-sm text-zinc-900 dark:text-white">
+                                        <span className="font-semibold text-sm text-zinc-900 dark:text-white">
                                             {req.user?.full_name || 'Staff User'}
                                         </span>
                                         <span className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -158,8 +154,8 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                                                 req.status === 'PENDING'
                                                     ? 'warning'
                                                     : req.status === 'COMPLETED'
-                                                    ? 'success'
-                                                    : 'danger'
+                                                        ? 'success'
+                                                        : 'danger'
                                             }
                                         />
                                     </div>

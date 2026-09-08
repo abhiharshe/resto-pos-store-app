@@ -5,11 +5,17 @@ import { DataTable } from '../../../components/common/DataTable';
 import { Button } from '../../../components/common/Button';
 import { StatusBadge } from '../../../components/common/StatusBadge';
 import { FloatingActionButton } from '../../../components/common/FloatingActionButton';
+import { useAppSelector } from '../../../app/hooks';
+import ScopeBadge from '../../approvals/components/ScopeBadge';
+import ApprovalStatusBadge from '../../approvals/components/ApprovalStatusBadge';
 import toast from 'react-hot-toast';
 import Container from '../../../components/shared/Container';
 
 const ItemList = () => {
     const navigate = useNavigate();
+    const { user } = useAppSelector((state) => state.auth);
+    const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+
     const { data: items, isLoading } = useMenuItems();
     const deleteMutation = useDeleteMenuItem();
 
@@ -41,11 +47,28 @@ const ItemList = () => {
                         </div>
                         <div className="flex flex-col">
                             <span className="font-semibold text-zinc-900 dark:text-white line-clamp-1">{info.row.original.name}</span>
-                            <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">{info.row.original.category?.name}</span>
+                            <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">{info.row.original.category?.name}</span>
                         </div>
                     </div>
                 );
             }
+        },
+        {
+            id: 'scope',
+            header: 'Scope',
+            cell: (info) => (
+                <ScopeBadge isGlobal={!info.row.original.store_id} />
+            )
+        },
+        {
+            accessorKey: 'approval_status',
+            header: 'Approval',
+            cell: (info) => (
+                <ApprovalStatusBadge
+                    status={info.row.original.approval_status}
+                    rejectionReason={info.row.original.rejection_reason}
+                />
+            )
         },
         {
             accessorKey: 'variants',
@@ -73,41 +96,55 @@ const ItemList = () => {
         {
             id: 'actions',
             header: 'Actions',
-            cell: (info) => (
-                <div className="flex items-center gap-2">
-                    <Button
-                        styleType='outline'
-                        variant='success'
-                        size='sm'
-                        onClick={() => navigate(`/menu/items/${info.row.original.id}/pricing`)}
-                        className="h-8 py-0 px-2"
-                        title="Edit Pricing"
-                    >
-                        <i className="ri-currency-line text-sm" />
-                    </Button>
-                    <Button
-                        styleType='outline'
-                        variant="info"
-                        size="sm"
-                        onClick={() => navigate(`/menu/items/edit/${info.row.original.id}`)}
-                        className="h-8 py-0 px-2"
-                        title='Edit the menu'
-                    >               
-                        <i className="ri-edit-line text-sm" />
-                    </Button>
-                    <Button
-                        styleType='outline'
-                        variant="danger"
-                        size="sm"
-                        onClick={() => handleDelete(info.row.original.id)}
-                        isLoading={deleteMutation.isPending}
-                        className="h-8 py-0 px-2"
-                        title="Delete the item?"
-                    >
-                        <i className="ri-delete-bin-line text-sm" />
-                    </Button>
-                </div>
-            )
+            cell: (info) => {
+                const item = info.row.original;
+                const isGlobal = !item.store_id;
+                const canModify = isSuperAdmin || !isGlobal;
+
+                if (!canModify) {
+                    return (
+                        <span className="text-xs text-zinc-400 italic">
+                            Global (Managed by Super Admin)
+                        </span>
+                    );
+                }
+
+                return (
+                    <div className="flex items-center gap-2">
+                        <Button
+                            styleType='outline'
+                            variant='success'
+                            size='sm'
+                            onClick={() => navigate(`/menu/items/${item.id}/pricing`)}
+                            className="h-8 py-0 px-2"
+                            title="Edit Pricing"
+                        >
+                            <i className="ri-currency-line text-sm" />
+                        </Button>
+                        <Button
+                            styleType='outline'
+                            variant="info"
+                            size="sm"
+                            onClick={() => navigate(`/menu/items/edit/${item.id}`)}
+                            className="h-8 py-0 px-2"
+                            title={item.approval_status === 'REJECTED' ? 'Edit & Resubmit' : 'Edit Item'}
+                        >
+                            <i className="ri-edit-line text-sm" />
+                        </Button>
+                        <Button
+                            styleType='outline'
+                            variant="danger"
+                            size="sm"
+                            onClick={() => handleDelete(item.id)}
+                            isLoading={deleteMutation.isPending}
+                            className="h-8 py-0 px-2"
+                            title="Delete the item?"
+                        >
+                            <i className="ri-delete-bin-line text-sm" />
+                        </Button>
+                    </div>
+                );
+            }
         }
     ];
 
@@ -115,7 +152,7 @@ const ItemList = () => {
         <Container>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Menu Items</h3>
+                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Menu Items</h3>
                     <p className="text-zinc-500 dark:text-zinc-400">Manage your menu offerings, prices and availability.</p>
                 </div>
                 <Button onClick={() => navigate('/menu/items/new')} className="hidden sm:flex">

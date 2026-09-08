@@ -18,23 +18,22 @@ const KdsPage: React.FC = () => {
     const { user } = useAppSelector((state) => state.auth);
     const queryClient = useQueryClient();
     const { data: stores, isLoading: storesLoading } = useStores();
-    const [selectedStoreId, setSelectedStoreId] = useState<number>(0);
+    const [selectedStoreId, setSelectedStoreId] = useState<string>('');
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [isFullScreen, setIsFullScreen] = useState<boolean>(!!document.fullscreenElement);
 
     // Initial store selection
     useEffect(() => {
-        if (stores && stores.length > 0 && !selectedStoreId) {
-            // Prioritize user's own store, fallback to first store in list
-            const initialStoreId = user?.store_id || stores[0].id;
-            setSelectedStoreId(initialStoreId);
+        if (user?.store_id) {
+            setSelectedStoreId(user.store_id);
+        } else if (stores && stores.length > 0 && !selectedStoreId) {
+            setSelectedStoreId(stores[0].id);
         }
     }, [stores, selectedStoreId, user]);
 
     // Fetch active orders (those not completed or cancelled)
-    // We'll use useOrders but filter locally or ideally the API should support a KDS mode
     const { data: orders, isLoading: ordersLoading } = useOrders({
-        store_id: selectedStoreId,
+        store_id: selectedStoreId || undefined,
     });
 
     // Real-time updates via WebSocket
@@ -131,15 +130,22 @@ const KdsPage: React.FC = () => {
                             <i className="ri-restaurant-2-line text-xl"></i>
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold text-zinc-900 dark:text-white leading-tight">KDS</h1>
+                            <h1 className="text-xl font-semibold text-zinc-900 dark:text-white leading-tight">KDS</h1>
                             <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">{kdsOrders.length} active orders</p>
                         </div>
-                        <div className="flex items-center gap-2 min-w-[240px]">
-                            <Select
-                                options={stores?.map(s => ({ label: s.name, value: s.id })) || []}
-                                value={selectedStoreId}
-                                onChange={(val) => setSelectedStoreId(Number(val))}
-                            />
+                        <div className="flex items-center gap-2 min-w-[200px]">
+                            {user?.role === 'SUPER_ADMIN' ? (
+                                <Select
+                                    options={stores?.map(s => ({ label: s.name, value: s.id })) || []}
+                                    value={selectedStoreId}
+                                    onChange={(val) => setSelectedStoreId(String(val))}
+                                />
+                            ) : (
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                                    <i className="ri-store-2-line text-emerald-500" />
+                                    <span>{user?.store?.name || stores?.find(s => s.id === selectedStoreId)?.name || 'Allocated Store'}</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className='flex gap-2'>

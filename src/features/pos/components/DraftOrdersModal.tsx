@@ -96,7 +96,7 @@ const DraftOrdersModal: React.FC<DraftOrdersModalProps> = ({ isOpen, onClose }) 
                 <div className="p-6 border-b border-zinc-50 dark:border-zinc-800 flex justify-between items-center bg-zinc-50 dark:bg-zinc-900/50">
                     <div>
                         <h2 className="text-xl font-black dark:text-white">Draft Orders</h2>
-                        <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Saved pending orders</p>
+                        <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider">Saved pending orders</p>
                     </div>
                     <IconButton icon="ri-close-line" variant="ghost" onClick={onClose} />
                 </div>
@@ -105,12 +105,12 @@ const DraftOrdersModal: React.FC<DraftOrdersModalProps> = ({ isOpen, onClose }) 
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-12 space-y-4">
                             <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-                            <p className="text-sm font-bold text-gray-400 uppercase">Fetching drafts...</p>
+                            <p className="text-sm font-semibold text-gray-400 uppercase">Fetching drafts...</p>
                         </div>
                     ) : drafts?.length === 0 ? (
                         <div className="text-center py-12 space-y-4">
                             <i className="ri-draft-line text-6xl text-gray-200 dark:text-gray-700"></i>
-                            <p className="text-gray-400 font-bold uppercase text-sm">No draft orders found</p>
+                            <p className="text-gray-400 font-semibold uppercase text-sm">No draft orders found</p>
                         </div>
                     ) : (
                         drafts?.map((draft) => (
@@ -125,10 +125,10 @@ const DraftOrdersModal: React.FC<DraftOrdersModalProps> = ({ isOpen, onClose }) 
                                         <span className="text-sm font-black dark:text-white">#{draft.id}</span>
                                         <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 text-[10px] font-black rounded-lg uppercase">{draft.order_type}</span>
                                     </div>
-                                    <p className="text-xs font-bold text-gray-500">
+                                    <p className="text-xs font-semibold text-gray-500">
                                         {draft.guest_name || 'Walk-in Customer'} • {new Date().toLocaleTimeString()}
                                     </p>
-                                    <p className="text-sm font-black text-indigo-600 dark:text-indigo-400">Rs. {draft.total_amount.toFixed(2)}</p>
+                                    <p className="text-sm font-black text-indigo-600 dark:text-indigo-400">₹{draft.total_amount.toFixed(2)}</p>
                                 </div>
                                 <Button
                                     size="sm"
@@ -142,7 +142,7 @@ const DraftOrdersModal: React.FC<DraftOrdersModalProps> = ({ isOpen, onClose }) 
                     )}
                 </div>
                 <div className="absolute bottom-4">
-                    <p className="text-xs text-center font-bold text-zinc-400 uppercase tracking-widest">Powered by restopos POS</p>
+                    <p className="text-xs text-center font-semibold text-zinc-400 uppercase tracking-widest">Powered by restopos POS</p>
                 </div>
             </motion.div>
         </div>

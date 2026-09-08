@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { 
-    clearCart, 
-    setOrderType, 
-    setPaymentMode, 
-    updateCustomerDetails, 
-    applyCoupon, 
+import {
+    clearCart,
+    setOrderType,
+    setPaymentMode,
+    updateCustomerDetails,
+    applyCoupon,
     removeCoupon,
     toggleWalkIn
 } from "../slices/cartSlice";
@@ -239,21 +239,20 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                         {/* Order Type */}
                         <section className="space-y-4">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-widest flex items-center gap-2">
                                     <i className="ri-EBike-2-line"></i> Order Type
                                 </h3>
-                                
+
                                 {/* Walk-in Toggle in Modal */}
                                 <button
                                     onClick={() => dispatch(toggleWalkIn())}
-                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${
-                                        isWalkIn 
-                                        ? 'bg-indigo-600 border-indigo-600 text-white' 
-                                        : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-gray-500'
-                                    }`}
+                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${isWalkIn
+                                            ? 'bg-indigo-600 border-indigo-600 text-white'
+                                            : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-gray-500'
+                                        }`}
                                 >
                                     <i className={`ri-walk-line ${isWalkIn ? 'text-white' : 'text-gray-400'}`}></i>
-                                    <span className="text-xs font-bold">Walk-In</span>
+                                    <span className="text-xs font-semibold">Walk-In</span>
                                 </button>
                             </div>
                             <div className="flex gap-2 p-1 bg-zinc-50 dark:bg-zinc-900 rounded-2xl border border-zinc-100 dark:border-zinc-800">
@@ -261,7 +260,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                     <button
                                         key={type}
                                         onClick={() => dispatch(setOrderType(type))}
-                                        className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all duration-200 ${orderType === type
+                                        className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${orderType === type
                                             ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-lg border border-zinc-100 dark:border-zinc-800'
                                             : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                                             }`}
@@ -274,12 +273,12 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
 
                         {/* Customer Information */}
                         <section className="space-y-4">
-                            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                            <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-widest flex items-center gap-2">
                                 <i className="ri-user-heart-line"></i> Customer Details
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
                                 <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-gray-500 ml-1">Name</label>
+                                    <label className="text-xs font-semibold text-gray-500 ml-1">Name</label>
                                     <input
                                         type="text"
                                         value={customerName}
@@ -289,7 +288,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                         placeholder="Enter customer name"
                                         className={`w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border ${isWalkIn ? 'opacity-50' : ''} ${(showErrors || touched.name) && errors.name ? 'border-red-500' : 'border-zinc-100 dark:border-zinc-800'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none text-sm font-medium`}
                                     />
-                                    {(showErrors || touched.name) && errors.name && <p className="text-[10px] text-red-500 ml-1 font-bold italic">{errors.name}</p>}
+                                    {(showErrors || touched.name) && errors.name && <p className="text-[10px] text-red-500 ml-1 font-semibold italic">{errors.name}</p>}
                                 </div>
                                 <div className="space-y-1.5 overflow-visible">
                                     <PhoneInput
@@ -303,7 +302,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                 {orderType === 'DELIVERY' && (
                                     <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-3">
                                         <div className="md:col-span-2 space-y-1.5">
-                                            <label className="text-xs font-bold text-gray-500 ml-1">Delivery Address</label>
+                                            <label className="text-xs font-semibold text-gray-500 ml-1">Delivery Address</label>
                                             <textarea
                                                 value={customerAddress}
                                                 onBlur={() => setTouched(prev => ({ ...prev, address: true }))}
@@ -312,10 +311,10 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                                 rows={2}
                                                 className={`w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border ${(showErrors || touched.address) && errors.address ? 'border-red-500' : 'border-zinc-100 dark:border-zinc-800'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none text-sm font-medium`}
                                             />
-                                            {(showErrors || touched.address) && errors.address && <p className="text-[10px] text-red-500 ml-1 font-bold italic">{errors.address}</p>}
+                                            {(showErrors || touched.address) && errors.address && <p className="text-[10px] text-red-500 ml-1 font-semibold italic">{errors.address}</p>}
                                         </div>
                                         <div className="space-y-1.5">
-                                            <label className="text-xs font-bold text-gray-500 ml-1">Distance (KM)</label>
+                                            <label className="text-xs font-semibold text-gray-500 ml-1">Distance (KM)</label>
                                             <input
                                                 type="number"
                                                 min={0}
@@ -326,7 +325,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                                 placeholder="e.g. 5.0"
                                                 className={`w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border ${(showErrors || touched.distance) && errors.distance ? 'border-red-500' : 'border-zinc-100 dark:border-zinc-800'} rounded-xl focus:border-indigo-500 focus:bg-white dark:focus:bg-zinc-800 transition-all outline-none text-sm font-medium`}
                                             />
-                                            {(showErrors || touched.distance) && errors.distance && <p className="text-[10px] text-red-500 ml-1 font-bold italic">{errors.distance}</p>}
+                                            {(showErrors || touched.distance) && errors.distance && <p className="text-[10px] text-red-500 ml-1 font-semibold italic">{errors.distance}</p>}
                                         </div>
                                     </div>
                                 )}
@@ -335,7 +334,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
 
                         {/* Payment Mode */}
                         <section className="space-y-4">
-                            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                            <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-widest flex items-center gap-2">
                                 <i className="ri-bank-card-line"></i> Payment Mode
                             </h3>
                             <div className="flex gap-4">
@@ -349,7 +348,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                             }`}
                                     >
                                         <i className={mode === 'CASH' ? 'ri-money-dollar-circle-line text-xl' : 'ri-bank-card-2-line text-xl'}></i>
-                                        <span className="font-bold capitalize">{mode.toLowerCase()}</span>
+                                        <span className="font-semibold capitalize">{mode.toLowerCase()}</span>
                                     </button>
                                 ))}
                             </div>
@@ -358,68 +357,68 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
 
                     {/* Right Side: Summary & Payment */}
                     <div className="w-full md:w-[380px] p-6 bg-zinc-50/50 dark:bg-zinc-900/30 flex flex-col border-l border-zinc-100 dark:border-zinc-800">
-                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Payment Summary</h3>
+                        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-6">Payment Summary</h3>
 
                         <div className="flex-1 space-y-6">
                             {/* Summary Rows */}
                             <div className="space-y-2.5">
                                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                                     <span>Items Subtotal</span>
-                                    <span className="font-bold">Rs. {subtotal.toFixed(2)}</span>
+                                    <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
                                 </div>
                                 {discountAmount > 0 && (
-                                    <div className="flex justify-between text-sm text-green-600 font-bold italic">
+                                    <div className="flex justify-between text-sm text-green-600 font-semibold italic">
                                         <span>Discount ({appliedCouponCode || 'Coupon'})</span>
-                                        <span>- Rs. {discountAmount.toFixed(2)}</span>
+                                        <span>- ₹{discountAmount.toFixed(2)}</span>
                                     </div>
                                 )}
                                 {discountAmount > 0 && (
                                     <div className="flex justify-between text-xs text-zinc-400 font-medium">
                                         <span>Net Food Value</span>
-                                        <span>Rs. {Math.max(0, subtotal - discountAmount).toFixed(2)}</span>
+                                        <span>₹{Math.max(0, subtotal - discountAmount).toFixed(2)}</span>
                                     </div>
                                 )}
                                 {calculatedFees && (orderType === 'DELIVERY' || orderType === 'PICKUP') && (
                                     <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 items-center">
                                         <div className="flex items-center gap-1.5">
                                             <span>Packaging Charge</span>
-                                            <span className="text-[10px] bg-zinc-200 dark:bg-zinc-700 px-1.5 py-0.5 rounded font-bold text-zinc-600 dark:text-zinc-300">
+                                            <span className="text-[10px] bg-zinc-200 dark:bg-zinc-700 px-1.5 py-0.5 rounded font-semibold text-zinc-600 dark:text-zinc-300">
                                                 {calculatedFees.packaging_charge_source}
                                             </span>
                                         </div>
-                                        <span className="font-bold">Rs. {calculatedFees.packaging_charge.toFixed(2)}</span>
+                                        <span className="font-semibold">₹{calculatedFees.packaging_charge.toFixed(2)}</span>
                                     </div>
                                 )}
                                 {calculatedFees && orderType === 'DELIVERY' && (
                                     <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 items-center">
                                         <div className="flex items-center gap-1.5">
                                             <span>Delivery Charge</span>
-                                            <span className="text-[10px] bg-zinc-200 dark:bg-zinc-700 px-1.5 py-0.5 rounded font-bold text-zinc-600 dark:text-zinc-300">
+                                            <span className="text-[10px] bg-zinc-200 dark:bg-zinc-700 px-1.5 py-0.5 rounded font-semibold text-zinc-600 dark:text-zinc-300">
                                                 {calculatedFees.delivery_charge_source}
                                             </span>
                                         </div>
-                                        <span className="font-bold">Rs. {calculatedFees.delivery_charge.toFixed(2)}</span>
+                                        <span className="font-semibold">₹{calculatedFees.delivery_charge.toFixed(2)}</span>
                                     </div>
                                 )}
                                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                                     <span>Tax</span>
-                                    <span className="font-bold">Rs. {(calculatedFees ? calculatedFees.tax_amount : tax).toFixed(2)}</span>
+                                    <span className="font-semibold">₹{(calculatedFees ? calculatedFees.tax_amount : tax).toFixed(2)}</span>
                                 </div>
                                 {calculatedFees && calculatedFees.service_charge > 0 && (
                                     <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                                         <span>Service Charge</span>
-                                        <span className="font-bold">Rs. {calculatedFees.service_charge.toFixed(2)}</span>
+                                        <span className="font-semibold">₹{calculatedFees.service_charge.toFixed(2)}</span>
                                     </div>
                                 )}
                                 <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
                                     <span className="text-lg font-black dark:text-white uppercase">Grand Total</span>
-                                    <span className="text-2xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight">Rs. {effectiveTotal.toFixed(2)}</span>
+                                    <span className="text-2xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight">₹{effectiveTotal.toFixed(2)}</span>
                                 </div>
                             </div>
 
                             {/* Coupon Section */}
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 ml-1 uppercase">Promo Code</label>
+                                <label className="text-xs font-semibold text-gray-500 ml-1 uppercase">Promo Code</label>
                                 <div className="flex gap-2">
                                     <input
                                         type="text"
@@ -432,7 +431,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                     {appliedCouponCode ? (
                                         <Button
                                             variant="outline"
-                                            className="py-2 px-4 text-xs font-bold text-red-500 border-red-200"
+                                            className="py-2 px-4 text-xs font-semibold text-red-500 border-red-200"
                                             onClick={() => dispatch(removeCoupon())}
                                         >
                                             Remove
@@ -440,7 +439,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                     ) : (
                                         <Button
                                             variant="outline"
-                                            className="py-2 px-4 text-xs font-bold"
+                                            className="py-2 px-4 text-xs font-semibold"
                                             onClick={handleApplyCoupon}
                                             isLoading={validateCouponMutation.isPending}
                                         >
@@ -460,7 +459,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                     <div className="space-y-1.5">
                                         <label className="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter">Cash Received</label>
                                         <div className="relative">
-                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">Rs.</span>
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">₹</span>
                                             <input
                                                 type="number"
                                                 placeholder="0.00"
@@ -474,8 +473,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
 
                                     <div className="flex justify-between items-center p-4 bg-white dark:bg-zinc-800 rounded-2xl border-2 border-dashed border-zinc-100 dark:border-zinc-800">
                                         <div>
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase">Change Back</p>
-                                            <p className={`text-2xl font-black ${change > 0 ? 'text-green-600' : 'text-gray-300 dark:text-gray-600'}`}>Rs. {change.toFixed(2)}</p>
+                                            <p className="text-[10px] font-semibold text-gray-400 uppercase">Change Back</p>
+                                            <p className={`text-2xl font-black ${change > 0 ? 'text-green-600' : 'text-gray-300 dark:text-gray-600'}`}>₹{change.toFixed(2)}</p>
                                         </div>
                                         <i className={`ri-hand-coin-line text-3xl ${change > 0 ? 'text-green-500' : 'text-gray-200 dark:text-gray-700'}`}></i>
                                     </div>
@@ -503,7 +502,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                                 )}
                             </Button>
                             {isInsufficientCash && (
-                                <p className="text-center text-[10px] text-red-500 font-bold mt-2 uppercase tracking-tighter">Insufficient cash received</p>
+                                <p className="text-center text-[10px] text-red-500 font-semibold mt-2 uppercase tracking-tighter">Insufficient cash received</p>
                             )}
                         </div>
                     </div>

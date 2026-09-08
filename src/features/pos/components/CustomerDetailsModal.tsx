@@ -47,7 +47,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                                 <i className="ri-user-smile-line text-xl"></i>
                             </div>
                             <div>
-                                <h2 className="text-lg font-bold dark:text-white">Customer Details</h2>
+                                <h2 className="text-lg font-semibold dark:text-white">Customer Details</h2>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">Information for the order</p>
                             </div>
                         </div>
@@ -103,7 +103,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                     <div className="p-4 bg-zinc-50 dark:bg-zinc-800/30 border-t border-zinc-100 dark:border-zinc-800">
                         <Button
                             variant="primary"
-                            className="w-full py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200 dark:shadow-none"
+                            className="w-full py-4 rounded-2xl font-semibold shadow-lg shadow-indigo-200 dark:shadow-none"
                             onClick={onClose}
                         >
                             Save & Close
@@ -111,7 +111,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                     </div>
                 </motion.div>
                 <div className="absolute bottom-4">
-                    <p className="text-[10px] text-center font-bold text-zinc-400 uppercase tracking-widest">Powered by restopos POS</p>
+                    <p className="text-[10px] text-center font-semibold text-zinc-400 uppercase tracking-widest">Powered by restopos POS</p>
                 </div>
             </div>
         </AnimatePresence>
