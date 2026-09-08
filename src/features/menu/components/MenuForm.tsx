@@ -45,7 +45,7 @@ const MenuForm = ({ title: title, initialValues: propInitialValues, onSubmit: pr
     const handleSubmit = async (values: typeof initialValues, { resetForm, setFieldError }: any) => {
         const promise = propOnSubmit ? propOnSubmit(values) : createMutation.mutateAsync(values);
 
-        toast.promise(promise, {
+        toast.promise(promise as Promise<any>, {
             loading: propOnSubmit ? 'Updating menu...' : 'Creating menu...',
             success: propOnSubmit ? 'Menu updated successfully!' : 'Menu created successfully!',
             error: (err: any) => err.response?.data?.detail || 'Something went wrong',

@@ -35,18 +35,20 @@ const PromotionSchema = Yup.object().shape({
     }),
 });
 
-interface PromotionFormProps {
+export interface PromotionFormProps {
     initialData?: Promotion;
-    onSubmit: (values: PromotionCreate) => void;
+    onSubmit: (values: any) => Promise<void> | void;
     isLoading?: boolean;
     title: string;
+    onCancel?: () => void;
 }
 
 export const PromotionForm: React.FC<PromotionFormProps> = ({
     initialData,
     onSubmit,
     isLoading,
-    title
+    title,
+    onCancel
 }) => {
     const navigate = useNavigate();
     const { data: menuItems } = useMenuItems();
@@ -324,7 +326,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                             </div>
 
                             <div className="flex justify-end gap-3 pt-6 border-t dark:border-zinc-800">
-                                <Button type="button" variant="ghost" onClick={() => navigate('/promotions')}>
+                                <Button type="button" variant="ghost" onClick={onCancel || (() => navigate('/promotions'))}>
                                     Cancel
                                 </Button>
                                 <Button type="submit" isLoading={isLoading || isSubmitting} icon="ri-save-line">

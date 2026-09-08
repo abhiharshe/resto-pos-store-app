@@ -3,7 +3,7 @@ import Tooltip from '../common/Tooltip';
 import MaintenanceOverlay from '../common/MaintenanceOverlay';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { useHasPermission, useHasAnyPermission } from '../../hooks/usePermission';
+import { useHasPermission } from '../../hooks/usePermission';
 import { toggleTheme, toggleSidebar } from '../../features/ui/slices/uiSlice';
 import { selectBranding } from '../../features/settings/slices/settingsSlice';
 import moment from 'moment';
@@ -512,14 +512,14 @@ interface NavItemGroupProps {
     children: React.ReactNode;
 }
 
-const NavItemGroup = ({ icon, label, isOpen, children }: NavItemGroupProps) => {
+export const NavItemGroup = ({ icon, label, isOpen, children }: NavItemGroupProps) => {
     const location = useLocation();
     const [isHovered, setIsHovered] = React.useState(false);
-    const childrenArray = React.Children.toArray(children) as React.ReactElement[];
+    const childrenArray = React.Children.toArray(children) as React.ReactElement<any>[];
 
     // Check if any child is active to auto-expand
-    const isAnyChildActive = childrenArray.some(child =>
-        location.pathname === child.props.to || location.pathname.startsWith(child.props.to + '/')
+    const isAnyChildActive = childrenArray.some((child: any) =>
+        location.pathname === child.props?.to || location.pathname.startsWith((child.props?.to || '') + '/')
     );
 
     const [isExpanded, setIsExpanded] = React.useState(isAnyChildActive);

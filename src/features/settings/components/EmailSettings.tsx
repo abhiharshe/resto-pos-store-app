@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
 import { useGetEmailSettingsQuery, useUpdateEmailSettingsMutation, useTestEmailMutation } from '../api/settingsApi';

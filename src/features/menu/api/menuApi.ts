@@ -52,6 +52,7 @@ export interface MenuItem {
     is_delivery: boolean;
     category?: Category;
     images?: { id: string; image_url: string }[]; // Legacy
+    image_urls?: string[];
     gallery?: Asset[];
     featured_image?: Asset;
 }
@@ -176,7 +177,7 @@ export const useCreateMenuItem = () => {
 export const useUpdateMenuItem = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ id, ...item }: Partial<MenuItem> & { id: string; image_urls?: string[] }) => {
+        mutationFn: async ({ id, ...item }: Partial<MenuItem> & { id: string; image_urls?: string[]; addon_group_ids?: string[] }) => {
             const { data } = await api.patch<MenuItem>(`/menu/items/${id}`, item);
             return data;
         },
@@ -186,10 +187,11 @@ export const useUpdateMenuItem = () => {
     });
 };
 export interface Addon {
-    id: string;
-    group_id: string;
+    id?: string;
+    group_id?: string;
     name: string;
     price: number;
+    is_default?: boolean;
 }
 
 export interface AddonGroup {
@@ -197,6 +199,7 @@ export interface AddonGroup {
     name: string;
     min_selection: number;
     max_selection: number;
+    max_quantity_per_addon?: number;
     addons: Addon[];
 }
 

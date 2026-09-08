@@ -9,13 +9,13 @@ import { formatCurrencySymbol } from '../../../utils/currency';
 interface OrderDetailsModalProps {
     isOpen: boolean;
     onClose: () => void;
-    orderId: number | null;
+    orderId: string | null;
     currency?: string;
 }
 
 const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ isOpen, onClose, orderId, currency: rawCurrency }) => {
     const currency = formatCurrencySymbol(rawCurrency);
-    const { data: order, isLoading } = useOrder(orderId as number);
+    const { data: order, isLoading } = useOrder(orderId || '');
 
     if (!isOpen) return null;
 

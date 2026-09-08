@@ -78,7 +78,7 @@ export const CouponForm: React.FC<CouponFormProps> = ({ title, initialData, onSu
                         // Convert empty strings back to undefined for the API
                         const formattedValues = {
                             ...values,
-                            store_id: values.store_id ? Number(values.store_id) : undefined,
+                            store_id: values.store_id ? String(values.store_id) : undefined,
                             max_discount_amount: values.max_discount_amount || undefined,
                             total_usage_limit: values.total_usage_limit || undefined,
                             start_date: values.start_date || undefined,

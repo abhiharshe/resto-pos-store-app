@@ -16,6 +16,7 @@ export interface Store {
     has_pos: boolean;
     has_kds: boolean;
     is_active: boolean;
+    currency?: string;
     maintenance_mode?: boolean;
     maintenance_message?: string;
     maintenance_start_time?: string;

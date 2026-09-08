@@ -20,7 +20,7 @@ const CouponList = () => {
     const { data: coupons, isLoading } = useCoupons();
     const deleteMutation = useDeleteCoupon();
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         if (window.confirm('Are you sure you want to delete this coupon?')) {
             const promise = deleteMutation.mutateAsync(id);
             toast.promise(promise, {

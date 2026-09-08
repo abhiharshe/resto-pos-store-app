@@ -12,7 +12,6 @@ import {
     Recipe,
     RecipeCreatePayload,
     RecipeUpdatePayload,
-    RecipeStatus,
 } from '../api/recipesApi';
 import { RecipeDetailsModal } from '../components/RecipeDetailsModal';
 import { RecipeFormModal } from '../components/RecipeFormModal';

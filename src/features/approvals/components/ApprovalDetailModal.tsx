@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Modal from '../../../components/common/Modal';
 import Button from '../../../components/common/Button';
 import { ApprovalRequest, useApproveRequest, useRejectRequest } from '../api/approvalsApi';
-import ScopeBadge from './ScopeBadge';
 import ApprovalStatusBadge from './ApprovalStatusBadge';
 import toast from 'react-hot-toast';
 import moment from 'moment';

@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useCreateStore, StoreFormValues } from '../api/storesApi';
 import { StoreForm } from '../components/StoreForm';
-import Card from '../../../components/common/Card';
-import { Button } from '../../../components/common/Button';
 import toast from 'react-hot-toast';
 import Container from '../../../components/shared/Container';
 

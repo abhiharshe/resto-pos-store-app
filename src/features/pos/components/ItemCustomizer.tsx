@@ -3,7 +3,6 @@ import { MenuItemProps, SelectedAddon } from "../api/posApi";
 import { Button } from "../../../components/common/Button";
 import IconButton from "../../../components/common/IconButton";
 import { useAppSelector } from "../../../app/hooks";
-import { motion } from "motion/react";
 
 interface ItemCustomizerProps {
     item: MenuItemProps;
@@ -239,13 +238,13 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                                             </span>
                                         </label>
 
-                                        {isSelected && group.max_quantity_per_addon > 1 && (
+                                        {isSelected && group.max_quantity_per_addon && group.max_quantity_per_addon > 1 && (
                                             <div className="flex justify-between items-center mt-3 pt-3 border-t border-emerald-200 dark:border-emerald-800/50">
                                                 <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400">Quantity</span>
                                                 <div className="flex items-center gap-3 bg-white dark:bg-emerald-900/30 rounded-lg px-2 py-1 shadow-sm">
                                                     <button
                                                         type="button"
-                                                        onClick={(e) => { e.preventDefault(); handleAddonQuantityChange(addon.id, -1, group.max_quantity_per_addon); }}
+                                                        onClick={(e) => { e.preventDefault(); handleAddonQuantityChange(addon.id, -1, group.max_quantity_per_addon || 1); }}
                                                         className="w-6 h-6 flex items-center justify-center text-emerald-600 hover:bg-emerald-100 dark:hover:bg-emerald-800 rounded-md transition-colors"
                                                     >
                                                         <i className="ri-subtract-line text-sm font-semibold"></i>
@@ -253,7 +252,7 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                                                     <span className="font-black text-sm min-w-4 text-center">{isSelected.quantity || 1}</span>
                                                     <button
                                                         type="button"
-                                                        onClick={(e) => { e.preventDefault(); handleAddonQuantityChange(addon.id, 1, group.max_quantity_per_addon); }}
+                                                        onClick={(e) => { e.preventDefault(); handleAddonQuantityChange(addon.id, 1, group.max_quantity_per_addon || 1); }}
                                                         className="w-6 h-6 flex items-center justify-center text-emerald-600 hover:bg-emerald-100 dark:hover:bg-emerald-800 rounded-md transition-colors"
                                                     >
                                                         <i className="ri-add-line text-sm font-semibold"></i>

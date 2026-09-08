@@ -65,7 +65,7 @@ const AssetSettings = () => {
                             value={formik.values.local_storage_path}
                             onChange={formik.handleChange}
                             placeholder="e.g. uploads"
-                            helperText="Directory where files will be stored on the server."
+                            helper="Directory where files will be stored on the server."
                         />
                     )}
                 </div>

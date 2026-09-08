@@ -256,7 +256,7 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
 
         try {
             const orderData = {
-                store_id: selectedStoreId || 1,
+                store_id: selectedStoreId || '',
                 order_type: orderType,
                 payment_method: paymentMode,
                 status: 'DRAFT' as const,

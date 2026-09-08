@@ -185,7 +185,7 @@ const AssetGallery: React.FC<AssetGalleryProps> = ({
 
             return { previousData };
         },
-        onError: (err, assetId, context) => {
+        onError: (_err, _assetId, context) => {
             queryClient.setQueryData(['assets', entityType, entityId, page, pageSize], context?.previousData);
             toast.error('Failed to delete asset');
         },

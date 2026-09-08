@@ -13,7 +13,7 @@ const AddonGroupList = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingGroup, setEditingGroup] = useState<AddonGroup | null>(null);
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         if (window.confirm('Are you sure you want to delete this add-on group? This will remove it from all associated items.')) {
             const promise = deleteMutation.mutateAsync(id);
             toast.promise(promise, {

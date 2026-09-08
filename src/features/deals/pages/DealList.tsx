@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ColumnDef } from '@tanstack/react-table';
 import { useDeals, useDeleteDeal, Deal } from '../api/dealsApi';
-import { useStores } from '../../stores/api/storesApi';
 import { DataTable } from '../../../components/common/DataTable';
 import { Button } from '../../../components/common/Button';
 import { FloatingActionButton } from '../../../components/common/FloatingActionButton';
@@ -31,7 +30,6 @@ const DealList = () => {
     }, [searchTerm]);
 
     const { data: deals, isLoading } = useDeals({ q: debouncedSearch });
-    const { data: stores } = useStores();
     const deleteMutation = useDeleteDeal();
 
     const handleDelete = async (id: string) => {

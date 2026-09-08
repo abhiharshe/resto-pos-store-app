@@ -68,7 +68,7 @@ export const useAssets = (entityType: string, entityId: string) => {
 
             return { previousAssets };
         },
-        onError: (err, assetId, context) => {
+        onError: (_err, _assetId, context) => {
             queryClient.setQueryData(queryKey, context?.previousAssets);
             toast.error('Failed to delete asset');
         },

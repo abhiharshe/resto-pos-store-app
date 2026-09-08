@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCreateDeal, DealCreate as DealCreateType } from '../api/dealsApi';
 import { DealCreateForm } from '../components/DealCreateForm';

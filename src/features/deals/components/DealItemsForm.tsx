@@ -56,17 +56,17 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
         const item = menuItems?.find(i => String(i.id) === String(itemId));
         return [
             { label: 'Select Variant', value: '' },
-            ...(item?.variants.map(v => ({ label: `${v.name} (+₹${v.price})`, value: v.id! })) || [])
+            ...(item?.variants?.map(v => ({ label: `${v.name} (+₹${v.price})`, value: v.id! })) || [])
         ];
     };
 
     const initialValues: DealItemsUpdate = useMemo(() => ({
-        selection_groups: initialData.selection_groups.map(g => ({
+        selection_groups: initialData.selection_groups.map((g: any) => ({
             name: g.name,
             min_selection: g.min_selection,
             max_selection: g.max_selection,
             is_required: g.is_required,
-            options: g.options.map(o => ({
+            options: g.options.map((o: any) => ({
                 menu_item_id: o.menu_item_id,
                 variant_id: o.variant_id,
                 additional_price: o.additional_price,

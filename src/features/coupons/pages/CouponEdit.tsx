@@ -8,12 +8,12 @@ import Container from '../../../components/shared/Container';
 const CouponEdit = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { data: coupon, isLoading } = useCoupon(Number(id));
+    const { data: coupon, isLoading } = useCoupon(id);
     const updateMutation = useUpdateCoupon();
 
     const handleSubmit = async (data: CouponCreate) => {
         if (!id) return;
-        const promise = updateMutation.mutateAsync({ id: Number(id), ...data });
+        const promise = updateMutation.mutateAsync({ id, ...data });
 
         toast.promise(promise, {
             loading: 'Updating coupon...',

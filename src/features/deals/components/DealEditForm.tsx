@@ -1,17 +1,17 @@
-import { useMenuItems, Asset } from '../../menu/api/menuApi';
+import { useMenuItems } from '../../menu/api/menuApi';
 import { useStores } from '../../stores/api/storesApi';
 import Card from '../../../components/common/Card';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
 import AssetUpload from '../../../components/common/AssetUpload';
 import { useAssets } from '../../../hooks/useAssets';
 import React, { useMemo, useState } from 'react';
 import * as Yup from 'yup';
-import { DealCreate } from '../api/dealsApi';
+import { Deal, DealCreate } from '../api/dealsApi';
 import { FieldArray, Form, Formik } from 'formik';
 import { Input } from '../../../components/common/Input';
 import { Button } from '../../../components/common/Button';
 import { Select } from '../../../components/common/Select';
+import { toast } from 'react-hot-toast';
 
 const DealSchema = Yup.object().shape({
     title: Yup.string().required('Title is required').max(255),
@@ -28,7 +28,7 @@ const DealSchema = Yup.object().shape({
     ).test(
         'at-least-one-active',
         'At least one store must be active for this deal',
-        (prices) => !!prices && prices.some(sp => sp.is_active === true)
+        (prices) => !!prices && prices.some((sp: any) => sp.is_active === true)
     ),
     selection_groups: Yup.array().of(
         Yup.object().shape({
@@ -80,7 +80,7 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
         const item = menuItems?.find(i => String(i.id) === String(itemId));
         return [
             { label: 'Select variant...', value: '' },
-            ...(item?.variants.map(v => ({ label: `${v.name} (₹${v.price})`, value: v.id! })) || [])
+            ...(item?.variants?.map(v => ({ label: `${v.name} (₹${v.price})`, value: v.id! })) || [])
         ];
     };
 
@@ -89,8 +89,8 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
     // - stores not on the deal are added with is_active: false and price: 0
     const buildStorePrices = () => {
         const allStores = stores || [];
-        return allStores.map(s => {
-            const existing = initialData.store_prices.find(sp => sp.store_id === s.id);
+        return allStores.map((s: any) => {
+            const existing = initialData.store_prices.find((sp: any) => sp.store_id === s.id);
             return existing
                 ? { store_id: existing.store_id, price: existing.price, is_active: existing.is_active }
                 : { store_id: s.id, price: 0, is_active: false };
@@ -102,12 +102,12 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
         description: initialData.description || '',
         is_active: initialData.is_active ?? true,
         store_prices: buildStorePrices(),
-        selection_groups: initialData.selection_groups.map(g => ({
+        selection_groups: initialData.selection_groups.map((g: any) => ({
             name: g.name,
             min_selection: g.min_selection,
             max_selection: g.max_selection,
             is_required: g.is_required,
-            options: g.options.map(o => ({
+            options: g.options.map((o: any) => ({
                 menu_item_id: o.menu_item_id,
                 variant_id: o.variant_id,
                 additional_price: o.additional_price,
@@ -165,14 +165,7 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
                     }}
                     enableReinitialize
                 >
-                    {({ values, errors, touched, setFieldValue, isSubmitting, handleChange, validateForm, submitCount }) => {
-                        // Show a toast when the user tries to submit but there are validation errors
-                        // React.useEffect(() => {
-                        //    if (submitCount > 0 && Object.keys(errors).length > 0) {
-                        //        toast.error("Please fix the validation errors before proceeding.");
-                        //    }
-                        // }, [submitCount]);
-
+                    {({ values, errors, touched, setFieldValue, isSubmitting, handleChange, validateForm }) => {
                         return (
                             <Form className="space-y-8">
                                 {/* STEP 1: BASIC INFO & IMAGES */}
@@ -314,7 +307,7 @@ export const DealEditForm: React.FC<DealEditFormProps> = ({
                                                                 </div>
                                                                 <div>
                                                                     <h4 className="font-semibold text-zinc-900 dark:text-white leading-tight">{store.name}</h4>
-                                                                    <span className="text-[10px] uppercase font-black tracking-widest text-zinc-500 leading-none">{store.location || 'Default Location'}</span>
+                                                                    <span className="text-[10px] uppercase font-black tracking-widest text-zinc-500 leading-none">{store.address || 'Default Location'}</span>
                                                                 </div>
                                                             </div>
                                                             <button

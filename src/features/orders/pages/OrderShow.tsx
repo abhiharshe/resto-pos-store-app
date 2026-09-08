@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useOrder } from '../api/ordersApi';
+import { useOrder, OrderDeal, OrderItem } from '../api/ordersApi';
 import IconButton from '../../../components/common/IconButton';
 import { Button } from '../../../components/common/Button';
 import { StatusBadge } from '../../../components/common/StatusBadge';
@@ -416,7 +416,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
             </div>
             <div className="space-y-3">
                 {/* Deals */}
-                {order.deals?.map(deal => (
+                {order.deals?.map((deal: OrderDeal) => (
                     <div key={deal.id} className="space-y-1">
                         <div className="flex justify-between font-semibold text-[10px]">
                             <span className="w-8">1</span>
@@ -424,7 +424,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
                             <span className="w-16 text-right">{currency}{deal.total_price.toFixed(2)}</span>
                         </div>
                         <div className="pl-6 space-y-0.5 opacity-80 italic text-[9px]">
-                            {deal.items.map((item, idx) => (
+                            {deal.items.map((item: OrderItem, idx: number) => (
                                 <div key={idx} className="flex justify-between">
                                     <span>- {item.quantity}x {item.name} {item.variant_name !== 'Default' ? `(${item.variant_name})` : ''}</span>
                                 </div>
@@ -443,7 +443,7 @@ const PosReceiptContent = ({ order, settings, currency, standaloneItems }: { ord
                             </span>
                             <span className="w-16 text-right">{currency}{item.subtotal.toFixed(2)}</span>
                         </div>
-                        {item.addons?.map(a => (
+                        {item.addons?.map((a: any) => (
                             <div key={a.id} className="pl-8 text-[9px] flex justify-between opacity-70">
                                 <span>+ {a.name}</span>
                                 <span>{currency}{a.price.toFixed(2)}</span>

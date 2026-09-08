@@ -37,7 +37,7 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
         return () => clearInterval(timer);
     }, [order.created_at]);
 
-    const handleItemStatusChange = async (itemId: number, currentStatus: OrderItemStatus) => {
+    const handleItemStatusChange = async (itemId: string, currentStatus: OrderItemStatus) => {
         let nextStatus: OrderItemStatus;
         if (currentStatus === 'PENDING') nextStatus = 'PREPARING';
         else if (currentStatus === 'PREPARING') nextStatus = 'READY';
@@ -45,7 +45,7 @@ export const KdsCard: React.FC<KdsCardProps> = ({ order, onViewDetails }) => {
         else return;
 
         try {
-            await updateItemStatus.mutateAsync({ orderItemId: itemId, status: nextStatus });
+            await updateItemStatus.mutateAsync({ orderItemId: String(itemId), status: nextStatus });
         } catch (error) {
             toast.error('Failed to update item status');
         }

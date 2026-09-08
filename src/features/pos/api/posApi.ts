@@ -5,7 +5,7 @@ export interface SelectedAddon {
     id: string;
     name: string;
     price: number;
-    quantity: number;
+    quantity?: number;
 }
 
 export interface MenuItemVariant {
@@ -24,7 +24,7 @@ export interface MenuItemProps {
     variants: MenuItemVariant[];
     is_active: boolean;
     images?: { id: string; image_url: string; menu_item_id: number }[],
-    addon_groups?: { id: string; name: string; min_selection: number; max_selection: number; addons: { id: string; name: string; price: number }[] }[],
+    addon_groups?: { id: string; name: string; min_selection: number; max_selection: number; max_quantity_per_addon?: number; addons: { id: string; name: string; price: number }[] }[],
     category?: {
         id: string;
         menu_id: string;
@@ -53,7 +53,7 @@ export interface MenuCategoryProps {
         category_id: string;
         description?: string;
         images?: { id: string; image_url: string; menu_item_id: number }[],
-        addon_groups?: { id: string; name: string; min_selection: number; max_selection: number; addons: { id: string; name: string; price: number }[] }[],
+        addon_groups?: { id: string; name: string; min_selection: number; max_selection: number; max_quantity_per_addon?: number; addons: { id: string; name: string; price: number }[] }[],
     }[];
 }
 
@@ -98,10 +98,13 @@ export interface Deal {
 }
 
 export interface OrderItemCreate {
+    menu_item_id?: string;
+    variant_id?: string;
     quantity: number;
-    addons: { addon_id: number }[];
-    order_deal_id?: number;
-    deal_selection_group_id?: number;
+    addons: { addon_id: string }[];
+    order_deal_id?: string;
+    deal_selection_group_id?: string | number;
+    deal_selection_option_id?: string | number;
 }
 
 export interface OrderDealCreate {
@@ -177,7 +180,7 @@ export const useStoreFrontMenuCategories = (params?: { q?: string }) => {
     });
 };
 
-export const useStoreFrontMenuItems = (params?: { menu_id?: number; category_id?: number; q?: string }) => {
+export const useStoreFrontMenuItems = (params?: { menu_id?: string; category_id?: string; q?: string }) => {
     return useQuery({
         queryKey: ['store-front-menu-items', params],
         queryFn: async () => {
@@ -187,7 +190,7 @@ export const useStoreFrontMenuItems = (params?: { menu_id?: number; category_id?
     });
 };
 
-export const useStoreFrontDeals = (params?: { store_id?: number; q?: string }) => {
+export const useStoreFrontDeals = (params?: { store_id?: string; q?: string }) => {
     return useQuery({
         queryKey: ['store-front-deals', params],
         queryFn: async () => {
@@ -233,7 +236,7 @@ export const useStores = () => {
 export const useUpdateOrderStatus = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ orderId, status, paymentStatus }: { orderid: string; status: string; paymentStatus?: string }) => {
+        mutationFn: async ({ orderId, status, paymentStatus }: { orderId: string; status: string; paymentStatus?: string }) => {
             const { data } = await api.patch<OrderResponse>(`orders/${orderId}`, { status, payment_status: paymentStatus });
             return data;
         },

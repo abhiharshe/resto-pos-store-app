@@ -1,9 +1,7 @@
-import { useState } from "react";
-import { MenuItemProps, SelectedAddon } from "../api/posApi";
+import { MenuItemProps } from "../api/posApi";
 import defaultMenuItemImage from "../../../assets/img/default/menu-item.png";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { addToCart, decrementQuantity, incrementQuantity } from "../slices/cartSlice";
-import CustomizationModal from "./CustomizationModal";
 import moment from "moment";
 
 interface ItemCardProps {

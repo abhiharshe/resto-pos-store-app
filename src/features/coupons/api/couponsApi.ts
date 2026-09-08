@@ -54,7 +54,7 @@ export interface CouponValidateResponse {
     coupon?: Coupon;
 }
 
-export const useCoupons = (params?: { store_id?: number; skip?: number; limit?: number }) => {
+export const useCoupons = (params?: { store_id?: string; skip?: number; limit?: number }) => {
     return useQuery({
         queryKey: ['coupons', params],
         queryFn: async () => {
@@ -64,7 +64,7 @@ export const useCoupons = (params?: { store_id?: number; skip?: number; limit?: 
     });
 };
 
-export const useCoupon = (id: number) => {
+export const useCoupon = (id?: string) => {
     return useQuery({
         queryKey: ['coupons', id],
         queryFn: async () => {
@@ -91,7 +91,7 @@ export const useCreateCoupon = () => {
 export const useUpdateCoupon = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ id, ...coupon }: Partial<Coupon> & { id: number }) => {
+        mutationFn: async ({ id, ...coupon }: Partial<Coupon> & { id: string }) => {
             const { data } = await api.patch<Coupon>(`/coupons/${id}`, coupon);
             return data;
         },
@@ -105,7 +105,7 @@ export const useUpdateCoupon = () => {
 export const useDeleteCoupon = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (id: number) => {
+        mutationFn: async (id: string) => {
             await api.delete(`/coupons/${id}`);
         },
         onSuccess: () => {

@@ -1,17 +1,15 @@
-import { useMenuItems, Asset } from '../../menu/api/menuApi';
+import { useMenuItems } from '../../menu/api/menuApi';
 import { useStores } from '../../stores/api/storesApi';
 import Card from '../../../components/common/Card';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import AssetUpload from '../../../components/common/AssetUpload';
-import { useAssets } from '../../../hooks/useAssets';
 import React, { useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import { FieldArray, Form, Formik } from 'formik';
 import { Input } from '../../../components/common/Input';
 import { Select } from '../../../components/common/Select';
 import { Button } from '../../../components/common/Button';
-
+import { DealCreate } from '../api/dealsApi';
+import { toast } from 'react-hot-toast';
 
 const DealSchema = Yup.object().shape({
     title: Yup.string().required('Title is required').max(255),
@@ -28,7 +26,7 @@ const DealSchema = Yup.object().shape({
     ).test(
         'at-least-one-active',
         'At least one store must be active for this deal',
-        (prices) => !!prices && prices.some(sp => sp.is_active === true)
+        (prices) => !!prices && prices.some((sp: any) => sp.is_active === true)
     ),
     selection_groups: Yup.array().of(
         Yup.object().shape({
@@ -74,7 +72,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
         const item = menuItems?.find(i => String(i.id) === String(itemId));
         return [
             { label: 'Select variant...', value: '' },
-            ...(item?.variants.map(v => ({ label: `${v.name} (₹${v.price})`, value: v.id! })) || [])
+            ...(item?.variants?.map(v => ({ label: `${v.name} (₹${v.price})`, value: v.id! })) || [])
         ];
     };
 
@@ -241,8 +239,8 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {stores?.map((store) => {
-                                            const spIndex = values.store_prices.findIndex(sp => sp.store_id === store.id);
+                                        {stores?.map((store: any) => {
+                                            const spIndex = values.store_prices.findIndex((sp: any) => sp.store_id === store.id);
                                             const storePrice = spIndex !== -1 ? values.store_prices[spIndex] : { store_id: store.id, price: 0, is_active: true };
                                             const isActive = storePrice?.is_active ?? true;
 
@@ -262,7 +260,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                             </div>
                                                             <div>
                                                                 <h4 className="font-semibold text-zinc-900 dark:text-white">{store.name}</h4>
-                                                                <span className="text-[10px] uppercase font-black tracking-widest text-zinc-500">{store.location || 'Default Location'}</span>
+                                                                <span className="text-[10px] uppercase font-black tracking-widest text-zinc-500">{store.address || 'Default Location'}</span>
                                                             </div>
                                                         </div>
                                                         {/* Toggle is_active */}
@@ -333,7 +331,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                         <FieldArray name="selection_groups">
                                             {({ push, remove }) => (
                                                 <div className="space-y-6">
-                                                    {values.selection_groups.map((group, gIndex) => {
+                                                    {values.selection_groups.map((group: any, gIndex: number) => {
                                                         const groupErrors = (errors.selection_groups as any)?.[gIndex];
                                                         const groupTouched = (touched.selection_groups as any)?.[gIndex];
 
@@ -401,7 +399,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                                     <FieldArray name={`selection_groups.${gIndex}.options`}>
                                                                         {({ push: pushOpt, remove: removeOpt }) => (
                                                                             <div className="space-y-3">
-                                                                                {group.options.map((option, oIndex) => {
+                                                                                {group.options.map((option: any, oIndex: number) => {
                                                                                     const optionErrors = groupErrors?.options?.[oIndex];
                                                                                     const optionTouched = groupTouched?.options?.[oIndex];
 
@@ -512,7 +510,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                 const stepErrors = await validateForm();
                                                 const hasStep1Errors = currentStep === 1 && !!stepErrors.title;
                                                 const hasStep2Errors = currentStep === 2 && (
-                                                    Array.isArray(stepErrors.store_prices) ? stepErrors.store_prices.some(e => !!e) : !!stepErrors.store_prices
+                                                    Array.isArray(stepErrors.store_prices) ? (stepErrors.store_prices as any[]).some((e: any) => !!e) : !!stepErrors.store_prices
                                                 );
 
                                                 if ((currentStep === 1 && hasStep1Errors) || (currentStep === 2 && hasStep2Errors)) {

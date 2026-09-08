@@ -5,6 +5,7 @@ export interface SelectedAddon {
     id: string;
     name: string;
     price: number;
+    quantity?: number;
 }
 
 export interface CartItem {
@@ -22,7 +23,7 @@ export interface CartItem {
     originalItem: any; // Full MenuItemProps for editing
     timeStamp: number;
     isPromoItem?: boolean; // If true, this is a free item from BXGY
-    promotionId?: number;
+    promotionId?: string;
 }
 
 export interface CartDealItem {
@@ -62,8 +63,8 @@ export interface CartState {
     items: CartItem[];
     deals: CartDeal[];
     activePromotions: Promotion[];
-    activeOrderId: number | null;
-    selectedStoreId: number | null;
+    activeOrderId: string | null;
+    selectedStoreId: string | null;
     selectedStore: {
         id: string;
         name: string;
@@ -154,7 +155,7 @@ const applyPromotions = (state: CartState) => {
                     uniqueId: `promo-${promo.get_item_id}`,
                     id: promo.get_item_id,
                     name: promo.get_item?.name || 'Free Item',
-                    variantId: 0,
+                    variantId: '0',
                     variantName: 'Promo',
                     price: 0,
                     discountedPrice: 0,

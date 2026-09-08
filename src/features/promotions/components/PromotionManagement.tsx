@@ -32,7 +32,7 @@ const PromotionManagement = () => {
         setIsFormOpen(true);
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         if (window.confirm('Are you sure you want to delete this promotion?')) {
             const promise = deleteMutation.mutateAsync(id);
             toast.promise(promise, {
@@ -165,7 +165,7 @@ const PromotionManagement = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
                     <PromotionForm
                         title={selectedPromo ? 'Edit Promotional Offer' : 'Launch New Offer'}
-                        initialValues={selectedPromo}
+                        initialData={selectedPromo}
                         onSubmit={handleFormSubmit}
                         onCancel={() => {
                             setIsFormOpen(false);

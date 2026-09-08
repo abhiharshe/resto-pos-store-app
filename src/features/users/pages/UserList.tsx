@@ -174,7 +174,13 @@ const UserList = () => {
     const handleResetPasswordForRequest = (req: PasswordResetRequest) => {
         setIsRequestsModalOpen(false);
         setActiveRequestId(req.id);
-        setSelectedUserForReset(req.user || { id: req.user_id, email: req.user?.email || 'user', full_name: req.user?.full_name });
+        setSelectedUserForReset(req.user || {
+            id: req.user_id,
+            email: (req as any).user?.email || 'user@example.com',
+            full_name: (req as any).user?.full_name || 'Staff User',
+            role: 'CASHIER',
+            is_active: true
+        });
     };
 
     return (

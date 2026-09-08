@@ -45,7 +45,6 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
         discountAmount,
         couponCode: appliedCouponCode,
         selectedStoreId,
-        selectedStore
     } = useAppSelector((state) => state.cart);
 
     const [distanceKm, setDistanceKm] = useState<string>("5");
@@ -115,7 +114,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
         try {
             const result = await validateCouponMutation.mutateAsync({
                 code: couponInput,
-                store_id: selectedStoreId || 1,
+                store_id: selectedStoreId || '',
                 subtotal: subtotal,
                 customer_phone: customerPhone || undefined
             });
@@ -128,7 +127,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
                 toast.error(result.message);
             }
         } catch (error) {
-            toast.error("Failed to validate coupon");
+            toast.error("Invalid coupon code");
         }
     };
 
@@ -154,7 +153,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
             const distNum = orderType === 'DELIVERY' ? parseFloat(distanceKm) || 0 : undefined;
 
             const orderData = {
-                store_id: selectedStoreId || 1,
+                store_id: selectedStoreId || '',
                 order_type: orderType,
                 payment_method: paymentMode,
                 guest_name: customerName,
@@ -193,7 +192,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
 
             if (activeOrderId) {
                 await updateOrderStatusMutation.mutateAsync({
-                    orderId: activeOrderId,
+                    orderId: String(activeOrderId),
                     status: 'CANCELLED'
                 });
             }

@@ -16,7 +16,7 @@ interface DraftOrdersModalProps {
 const DraftOrdersModal: React.FC<DraftOrdersModalProps> = ({ isOpen, onClose }) => {
     const dispatch = useAppDispatch();
     const selectedStoreId = useAppSelector((state) => state.cart.selectedStoreId);
-    const { data: drafts, isLoading } = useOrders({ store_id: selectedStoreId || 1, status: 'DRAFT' });
+    const { data: drafts, isLoading } = useOrders({ store_id: selectedStoreId || '', status: 'DRAFT' });
     const { data: menuItems } = useStoreFrontMenuItems();
 
     if (!isOpen) return null;
@@ -63,15 +63,19 @@ const DraftOrdersModal: React.FC<DraftOrdersModalProps> = ({ isOpen, onClose }) 
 
             dispatch(loadOrder({
                 items,
+                deals: [],
+                activePromotions: [],
                 activeOrderId: draft.id,
                 selectedStoreId: draft.store_id || selectedStoreId,
                 selectedStore: null,
                 customerName: draft.guest_name || '',
                 customerPhone: draft.guest_phone || '',
                 customerAddress: draft.guest_address || '',
+                isWalkIn: !draft.guest_name,
                 orderType: draft.order_type as any,
                 paymentMode: draft.payment_method as any,
                 couponCode: '',
+                discountAmount: 0,
                 subtotal: draft.total_amount - (draft.total_amount * 0.05 / 1.05), // Reverse calculation or just simplify
                 tax: draft.total_amount * 0.05 / 1.05,
                 total: draft.total_amount

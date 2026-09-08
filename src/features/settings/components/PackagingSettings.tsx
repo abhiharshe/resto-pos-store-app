@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useGetGlobalPackagingConfig, useUpdateGlobalPackagingConfig, PackagingRule, PackagingConfigPayload } from '../api/chargesApi';
 import { Button } from '../../../components/common/Button';
-import { Input } from '../../../components/common/Input';
 import IconButton from '../../../components/common/IconButton';
 import { toast } from 'react-hot-toast';
 

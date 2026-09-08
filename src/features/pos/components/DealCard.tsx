@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Deal } from "../api/posApi";
 import { useAppSelector } from "../../../app/hooks";
 import defaultDealImage from "../../../assets/img/default/menu-item.png";
@@ -12,7 +12,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, onSelect }) => {
     const selectedStoreId = useAppSelector((state) => state.cart.selectedStoreId);
 
     // Find the price for the current store
-    const storePriceObj = deal.store_prices.find(p => p.store_id === selectedStoreId);
+    const storePriceObj = deal.store_prices.find(p => String(p.store_id) === String(selectedStoreId));
     const price = storePriceObj ? storePriceObj.price : 0;
 
     const dealImage = deal.images && deal.images.length > 0 ? deal.images[0].image_url : defaultDealImage;

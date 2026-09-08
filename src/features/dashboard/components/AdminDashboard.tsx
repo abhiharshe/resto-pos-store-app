@@ -116,7 +116,7 @@ const AdminDashboard = () => {
                             Date Range
                         </label>
                         <Datepicker
-                            value={dateValue}
+                            value={dateValue as any}
                             onChange={(newValue: any) => setDateValue(newValue)}
                             showShortcuts={true}
                             primaryColor={"indigo"}

@@ -83,7 +83,7 @@ const ErrorUI = ({ message, onRetry }: { message: string, onRetry: () => void })
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
     return (
         <ErrorUI
-            message={error.message}
+            message={(error as any)?.message || 'Unknown error'}
             onRetry={() => {
                 resetErrorBoundary();
                 window.location.reload();

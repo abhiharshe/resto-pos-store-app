@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDeal, useUpdateDeal, DealCreate as DealCreateType } from '../api/dealsApi';
 import { DealEditForm } from '../components/DealEditForm';

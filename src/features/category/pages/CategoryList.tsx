@@ -36,7 +36,7 @@ const CategoryList = () => {
         });
     }, [categories, searchQuery, selectedMenuId]);
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         if (window.confirm('Are you sure you want to delete this category?')) {
             const promise = deleteMutation.mutateAsync(id);
 

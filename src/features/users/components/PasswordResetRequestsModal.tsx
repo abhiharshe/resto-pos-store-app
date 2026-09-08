@@ -155,7 +155,7 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                                                     ? 'warning'
                                                     : req.status === 'COMPLETED'
                                                         ? 'success'
-                                                        : 'danger'
+                                                        : 'error'
                                             }
                                         />
                                     </div>

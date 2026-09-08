@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import { Deal, DealSelectionGroup, DealSelectionOption, MenuItemProps, SelectedAddon } from "../api/posApi";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { addDealToCart, CartDealItem } from "../slices/cartSlice";
@@ -9,7 +9,7 @@ import moment from "moment";
 interface DealConfiguratorProps {
     deal: Deal;
     onBack: () => void;
-    onCustomizeItem: (groupId: number, option: DealSelectionOption, currentState: any) => void;
+    onCustomizeItem: (groupId: string, option: DealSelectionOption, currentState: any) => void;
     onComplete: () => void;
     selections: SelectionState;
     setSelections: React.Dispatch<React.SetStateAction<SelectionState>>;
@@ -43,7 +43,7 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
     const dispatch = useAppDispatch();
     const selectedStoreId = useAppSelector((state) => state.cart.selectedStoreId);
 
-    const storePrice = deal.store_prices.find(p => p.store_id === selectedStoreId)?.price || 0;
+    const storePrice = deal.store_prices.find(p => String(p.store_id) === String(selectedStoreId))?.price || 0;
 
     const groupCounts = useMemo(() => {
         const counts: { [groupId: string]: number } = {};

@@ -14,7 +14,7 @@ import DealConfigurator, { SelectionState } from "./DealConfigurator";
 import ItemCustomizer from "./ItemCustomizer";
 
 
-const DEALS_CATEGORY_ID = -1;
+const DEALS_CATEGORY_ID = '-1';
 
 type ActiveView = 'GRID' | 'DEAL_CONFIG' | 'ITEM_CUSTOMIZE';
 
@@ -28,15 +28,15 @@ interface MenuItemNavigationProps {
 const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditComplete }) => {
     const dispatch = useAppDispatch();
     const [view, setView] = useState<ActiveView>('GRID');
-    const [selectedMenuId, setSelectedMenuId] = useState<number | undefined>(undefined);
-    const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>(undefined);
+    const [selectedMenuId, setSelectedMenuId] = useState<string | undefined>(undefined);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(undefined);
     const [searchQuery, setSearchQuery] = useState("");
     const carouselRef = useRef<HTMLDivElement>(null);
 
     // Configuration State
     const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
     const [dealSelections, setDealSelections] = useState<SelectionState>({});
-    const [customizingItem, setCustomizingItem] = useState<{ groupId: number | string, option: DealSelectionOption, item: MenuItemProps, groupOptions: DealSelectionOption[] } | null>(null);
+    const [customizingItem, setCustomizingItem] = useState<{ groupId: string, option: DealSelectionOption, item: MenuItemProps, groupOptions: DealSelectionOption[] } | null>(null);
     const [standaloneItem, setStandaloneItem] = useState<MenuItemProps | null>(null);
 
     const selectedStoreId = useAppSelector((state) => state.cart.selectedStoreId);
@@ -65,12 +65,12 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
         q: searchQuery || undefined
     });
 
-    const handleMenuClick = (menuId: number) => {
+    const handleMenuClick = (menuId: string) => {
         setSelectedMenuId(prev => prev === menuId ? undefined : menuId);
         setSelectedCategoryId(undefined);
     }
 
-    const handleCategoryClick = (categoryId: number) => {
+    const handleCategoryClick = (categoryId: string) => {
         setSelectedCategoryId(prev => prev === categoryId ? undefined : categoryId);
         if (categoryId === DEALS_CATEGORY_ID) {
             setSelectedMenuId(undefined);
@@ -116,7 +116,7 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
         setView('ITEM_CUSTOMIZE');
     };
 
-    const handleCustomizeDealItem = (groupId: number | string, option: DealSelectionOption, currentState: any) => {
+    const handleCustomizeDealItem = (groupId: string, option: DealSelectionOption, _currentState?: any) => {
         if (!option.menu_item) return;
         const group = selectedDeal?.selection_groups.find(g => String(g.id) === String(groupId));
         setCustomizingItem({

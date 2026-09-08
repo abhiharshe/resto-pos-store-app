@@ -39,7 +39,7 @@ export const ApprovalStatusBadge: React.FC<ApprovalStatusBadgeProps> = ({
 
         if (rejectionReason) {
             return (
-                <Tooltip text={`Reason: ${rejectionReason}`} position="top">
+                <Tooltip content={`Reason: ${rejectionReason}`} position="top">
                     {badge}
                 </Tooltip>
             );

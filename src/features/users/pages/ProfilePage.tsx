@@ -142,7 +142,7 @@ const ProfilePage: React.FC = () => {
                             onSubmit={onSubmit}
                             enableReinitialize
                         >
-                            {({ values, errors, touched, handleChange, handleBlur, isSubmitting, dirty }) => (
+                            {({ values, errors, touched, handleChange, handleBlur, dirty }) => (
                                 <Form className="space-y-6">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <Input

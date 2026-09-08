@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { useOrders, useUpdateOrderStatus, useDeleteOrder, Order, OrderFilters } from '../api/ordersApi';
+import { useOrders, useDeleteOrder, Order, OrderFilters } from '../api/ordersApi';
 import { DataTable } from '../../../components/common/DataTable';
 import { Button } from '../../../components/common/Button';
 import { StatusBadge } from '../../../components/common/StatusBadge';
@@ -8,7 +8,7 @@ import { useAppSelector } from '../../../app/hooks';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '../../../components/common/IconButton';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Select } from '../../../components/common/Select';
 import { ConfirmDialog } from '../../../components/common/ConfirmDialog';
 import { toast } from 'react-hot-toast';
@@ -27,12 +27,12 @@ const OrderList = () => {
         status: '',
         order_type: '',
         payment_method: '',
-        from_date: '',
-        to_date: '',
+        start_date: '',
+        end_date: '',
     });
 
     const [isFilterVisible, setIsFilterVisible] = useState(false);
-    const [deleteId, setDeleteId] = useState<number | null>(null);
+    const [deleteId, setDeleteId] = useState<string | null>(null);
 
     const [dateValue, setDateValue] = useState({
         startDate: null,
@@ -43,8 +43,8 @@ const OrderList = () => {
         setDateValue(newValue);
         setFilters((prev: any) => ({
             ...prev,
-            from_date: newValue?.startDate ? moment(newValue.startDate).format('YYYY-MM-DD 00:00:00') : '',
-            to_date: newValue?.endDate ? moment(newValue.endDate).format('YYYY-MM-DD 23:59:59') : '',
+            start_date: newValue?.startDate ? moment(newValue.startDate).format('YYYY-MM-DD 00:00:00') : '',
+            end_date: newValue?.endDate ? moment(newValue.endDate).format('YYYY-MM-DD 23:59:59') : '',
         }));
     };
 
@@ -63,13 +63,13 @@ const OrderList = () => {
             status: '',
             order_type: '',
             payment_method: '',
-            from_date: '',
-            to_date: '',
+            start_date: '',
+            end_date: '',
         });
         setDateValue({ startDate: null, endDate: null });
     };
 
-    const handleViewOrder = (id: number) => {
+    const handleViewOrder = (id: string) => {
         navigate(`/orders/${id}`);
     };
 
@@ -163,7 +163,7 @@ const OrderList = () => {
                             icon="ri-eye-line"
                             variant="outline"
                             size="sm"
-                            onClick={() => handleViewOrder(info.row.original.id as any)}
+                            onClick={() => handleViewOrder(info.row.original.id)}
                             title="View Details"
                         />
                         {canDelete && (
@@ -171,7 +171,7 @@ const OrderList = () => {
                                 icon="ri-delete-bin-line"
                                 variant="danger"
                                 size="sm"
-                                onClick={() => setDeleteId(info.row.original.id as any)}
+                                onClick={() => setDeleteId(info.row.original.id)}
                                 title="Delete Order"
                                 disabled={deleteOrderMutation.isPending}
                             />
