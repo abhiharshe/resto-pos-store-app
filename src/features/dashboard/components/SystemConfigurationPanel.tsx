@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../../components/common/Card';
-import { Button } from '../../../components/common/Button';
+import Button from '../../../components/common/Button';
 import { SystemConfigurationStatusResponse, ConfigurationStepStatus } from '../api/dashboardApi';
 
 interface SystemConfigurationPanelProps {
@@ -132,7 +132,7 @@ export const SystemConfigurationPanel: React.FC<SystemConfigurationPanelProps> =
             {/* Overall Progress Bar */}
             <div className="w-full bg-zinc-100 dark:bg-zinc-800 h-2 rounded-full mt-4 overflow-hidden">
                 <div
-                    className={`h-2 rounded-full transition-all duration-500 ${isAllConfigured ? 'bg-emerald-500' : 'bg-gradient-to-r from-indigo-500 to-indigo-600'
+                    className={`h-2 rounded-full transition-all duration-500 ${isAllConfigured ? 'bg-emerald-500' : 'bg-linear-to-r from-indigo-500 to-indigo-600'
                         }`}
                     style={{ width: `${overall_progress_pct}%` }}
                 />
