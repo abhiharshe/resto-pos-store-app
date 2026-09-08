@@ -7,7 +7,7 @@ const AuthLayout = () => {
     const { theme } = useAppSelector((state) => state.ui);
 
     return (
-        <div className="min-h-dvh bg-gray-50 dark:bg-zinc-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-200">
+        <div className="min-h-dvh bg-linear-to-br from-mauve-200 to-mauve-400 dark:from-mauve-800 dark:to-mauve-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-200">
             <div className="absolute top-4 right-4">
                 <button
                     onClick={() => dispatch(toggleTheme())}
@@ -15,9 +15,9 @@ const AuthLayout = () => {
                     aria-label="Toggle Theme"
                 >
                     {theme === 'light' ? (
-                        <i className="ri-moon-line text-xl" />
+                        <i className="ri-moon-line"></i>
                     ) : (
-                        <i className="ri-sun-line text-xl" />
+                        <i className="ri-sun-line"></i>
                     )}
                 </button>
             </div>
@@ -27,7 +27,7 @@ const AuthLayout = () => {
                 </div>
             </div>
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md text-center">
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                <p className="text-sm text-zinc-200 dark:text-zinc-400">
                     &copy; {new Date().getFullYear()} restopos POS. All rights reserved.
                 </p>
             </div>

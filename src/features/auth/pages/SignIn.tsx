@@ -10,9 +10,9 @@ const SignIn = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
-    
+
     const resetSuccess = searchParams.get('reset') === 'success';
-    
+
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -58,7 +58,8 @@ const SignIn = () => {
     return (
         <div className="space-y-6">
             <div>
-                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+                <h1 className='text-center text-3xl font-extrabold text-mauve-600 dark:text-white'>Resto-POS</h1>
+                <h2 className="mt-6 text-center text-2xl font-medium text-gray-900 dark:text-white">
                     Sign in to your account
                 </h2>
                 <p className="mt-2 text-center text-sm text-gray-600 dark:text-zinc-400">
