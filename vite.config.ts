@@ -8,6 +8,7 @@ export default defineConfig({
     server: {
         hmr: {
             overlay: false,
-        }
-    }
+        },
+        allowedHosts: ['resto-pos-store-app.vercel.app']
+    },
 })
