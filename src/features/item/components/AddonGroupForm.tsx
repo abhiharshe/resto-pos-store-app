@@ -69,7 +69,7 @@ export const AddonGroupForm = ({ initialValues, onCancel }: AddonGroupFormProps)
 
     return (
         <div className="w-full">
-            <h3 className="text-xl font-semibold text-zinc-900 dark:text-white mb-6">
+            <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-6">
                 {initialValues?.id ? 'Edit Add-On Group' : 'Create Add-On Group'}
             </h3>
             <Card className="w-full">
@@ -136,7 +136,7 @@ export const AddonGroupForm = ({ initialValues, onCancel }: AddonGroupFormProps)
                             </div>
 
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between border-b pb-2 dark:border-zinc-800">
+                                <div className="flex items-center justify-between border-b pb-2 dark:border-mauve-800">
                                     <h4 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">Add-Ons & Pricing</h4>
                                     <span className="text-xs text-zinc-500">{values.addons.length} Items</span>
                                 </div>
@@ -145,7 +145,7 @@ export const AddonGroupForm = ({ initialValues, onCancel }: AddonGroupFormProps)
                                     {({ push, remove }) => (
                                         <div className="space-y-4">
                                             {values.addons.map((addon, index) => (
-                                                <div key={index} className="flex gap-4 items-start p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl relative group">
+                                                <div key={index} className="flex gap-4 items-start p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl relative group">
                                                     <div className="flex-1 grid grid-cols-2 gap-4">
                                                         <Input
                                                             label="Add-On Name"
@@ -215,7 +215,7 @@ export const AddonGroupForm = ({ initialValues, onCancel }: AddonGroupFormProps)
                                     )}
                                 </FieldArray>
                             </div>
-                            <div className="flex gap-3 pt-6 border-t dark:border-zinc-800">
+                            <div className="flex gap-3 pt-6 border-t dark:border-mauve-800">
                                 <Button
                                     type="submit"
                                     isLoading={isSubmitting || createGroupMutation.isPending || updateGroupMutation.isPending}

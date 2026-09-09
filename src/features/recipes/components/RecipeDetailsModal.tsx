@@ -30,7 +30,7 @@ const statusBadges: Record<RecipeStatus, { label: string; bg: string; text: stri
     },
     DRAFT: {
         label: 'Draft',
-        bg: 'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700',
+        bg: 'bg-neutral-100 dark:bg-neutral-800 border-mauve-200 dark:border-zinc-700',
         text: 'text-zinc-700 dark:text-zinc-300',
         icon: 'ri-draft-line',
     },
@@ -66,25 +66,25 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 10 }}
                     transition={{ duration: 0.2 }}
-                    className="relative w-full max-w-3xl max-h-[90vh] flex flex-col bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden"
+                    className="relative w-full max-w-3xl max-h-[90vh] flex flex-col bg-white dark:bg-mauve-900 rounded-2xl shadow-2xl border border-mauve-200 dark:border-mauve-800 overflow-hidden"
                 >
                     {/* Header */}
-                    <div className="flex items-start justify-between p-6 border-b border-zinc-100 dark:border-zinc-800 bg-gradient-to-r from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-800/50">
+                    <div className="flex items-start justify-between p-6 border-b border-zinc-100 dark:border-mauve-800 bg-gradient-to-r from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-800/50">
                         <div className="space-y-1">
                             <div className="flex items-center gap-2">
                                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${badge.bg} ${badge.text}`}>
                                     <i className={badge.icon} />
                                     {badge.label}
                                 </span>
-                                <span className="text-xs font-medium px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                                <span className="text-xs font-medium px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-zinc-600 dark:text-zinc-400">
                                     v{recipe.version}
                                 </span>
                             </div>
-                            <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
+                            <h2 className="text-2xl font-semibold text-neutral-900 dark:text-zinc-100">
                                 {recipe.recipe_name}
                             </h2>
                             {recipe.menu_item_name && (
-                                <p className="text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
+                                <p className="text-sm text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
                                     <i className="ri-restaurant-line text-indigo-500" />
                                     Menu Item: <strong className="text-zinc-700 dark:text-zinc-200">{recipe.menu_item_name}</strong>
                                 </p>
@@ -92,7 +92,7 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                         </div>
                         <button
                             onClick={onClose}
-                            className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                            className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                         >
                             <i className="ri-close-line text-xl" />
                         </button>
@@ -128,7 +128,7 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                         {recipe.description && (
                             <div>
                                 <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Description</h3>
-                                <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed bg-zinc-50 dark:bg-zinc-800/40 p-3.5 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                                <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed bg-neutral-50 dark:bg-neutral-800/40 p-3.5 rounded-xl border border-zinc-100 dark:border-mauve-800">
                                     {recipe.description}
                                 </p>
                             </div>
@@ -136,30 +136,30 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
 
                         {/* Prep / Cook / Servings Metrics */}
                         <div className="grid grid-cols-3 gap-3">
-                            <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-800 text-center">
-                                <div className="flex items-center justify-center gap-1 text-zinc-500 dark:text-zinc-400 text-xs mb-1">
+                            <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 border border-zinc-100 dark:border-mauve-800 text-center">
+                                <div className="flex items-center justify-center gap-1 text-neutral-500 dark:text-neutral-400 text-xs mb-1">
                                     <i className="ri-time-line text-indigo-500" />
                                     Prep Time
                                 </div>
-                                <span className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                                <span className="text-base font-semibold text-neutral-900 dark:text-zinc-100">
                                     {recipe.prep_time_minutes ? `${recipe.prep_time_minutes} mins` : '—'}
                                 </span>
                             </div>
-                            <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-800 text-center">
-                                <div className="flex items-center justify-center gap-1 text-zinc-500 dark:text-zinc-400 text-xs mb-1">
+                            <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 border border-zinc-100 dark:border-mauve-800 text-center">
+                                <div className="flex items-center justify-center gap-1 text-neutral-500 dark:text-neutral-400 text-xs mb-1">
                                     <i className="ri-fire-line text-amber-500" />
                                     Cook Time
                                 </div>
-                                <span className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                                <span className="text-base font-semibold text-neutral-900 dark:text-zinc-100">
                                     {recipe.cook_time_minutes ? `${recipe.cook_time_minutes} mins` : '—'}
                                 </span>
                             </div>
-                            <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-800 text-center">
-                                <div className="flex items-center justify-center gap-1 text-zinc-500 dark:text-zinc-400 text-xs mb-1">
+                            <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 border border-zinc-100 dark:border-mauve-800 text-center">
+                                <div className="flex items-center justify-center gap-1 text-neutral-500 dark:text-neutral-400 text-xs mb-1">
                                     <i className="ri-user-smile-line text-emerald-500" />
                                     Servings
                                 </div>
-                                <span className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                                <span className="text-base font-semibold text-neutral-900 dark:text-zinc-100">
                                     {recipe.servings || 1}
                                 </span>
                             </div>
@@ -193,9 +193,9 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                                 Ingredients & Quantities
                             </h3>
                             {recipe.ingredients && recipe.ingredients.length > 0 ? (
-                                <div className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+                                <div className="border border-mauve-200 dark:border-mauve-800 rounded-xl overflow-hidden shadow-sm">
                                     <table className="w-full text-left text-sm">
-                                        <thead className="bg-zinc-50 dark:bg-zinc-800/75 text-zinc-500 dark:text-zinc-400 text-xs uppercase tracking-wider">
+                                        <thead className="bg-neutral-50 dark:bg-neutral-800/75 text-neutral-500 dark:text-neutral-400 text-xs uppercase tracking-wider">
                                             <tr>
                                                 <th className="px-4 py-2.5 font-semibold">Ingredient</th>
                                                 <th className="px-4 py-2.5 font-semibold">Inventory ID</th>
@@ -205,17 +205,17 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                                         </thead>
                                         <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                                             {recipe.ingredients.map((ing, idx) => (
-                                                <tr key={idx} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30">
-                                                    <td className="px-4 py-2.5 font-medium text-zinc-900 dark:text-zinc-100">
+                                                <tr key={idx} className="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30">
+                                                    <td className="px-4 py-2.5 font-medium text-neutral-900 dark:text-zinc-100">
                                                         {ing.name || '—'}
                                                     </td>
-                                                    <td className="px-4 py-2.5 font-mono text-xs text-zinc-500 dark:text-zinc-400">
+                                                    <td className="px-4 py-2.5 font-mono text-xs text-neutral-500 dark:text-neutral-400">
                                                         {ing.ingredient_id || '—'}
                                                     </td>
                                                     <td className="px-4 py-2.5 text-zinc-700 dark:text-zinc-300">
                                                         <span className="font-semibold text-indigo-600 dark:text-indigo-400">{ing.quantity}</span> {ing.uom}
                                                     </td>
-                                                    <td className="px-4 py-2.5 text-xs text-zinc-500 dark:text-zinc-400">
+                                                    <td className="px-4 py-2.5 text-xs text-neutral-500 dark:text-neutral-400">
                                                         {ing.notes || '—'}
                                                     </td>
                                                 </tr>
@@ -235,14 +235,14 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                                     <i className="ri-file-list-3-line text-indigo-500" />
                                     Preparation & Cooking Instructions
                                 </h3>
-                                <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800 text-sm text-zinc-800 dark:text-zinc-200 whitespace-pre-line leading-relaxed font-sans">
+                                <div className="bg-neutral-50 dark:bg-neutral-800/40 p-4 rounded-xl border border-zinc-100 dark:border-mauve-800 text-sm text-zinc-800 dark:text-zinc-200 whitespace-pre-line leading-relaxed font-sans">
                                     {recipe.instructions}
                                 </div>
                             </div>
                         )}
 
                         {/* Audit Log Footer */}
-                        <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+                        <div className="pt-4 border-t border-zinc-100 dark:border-mauve-800 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-neutral-500 dark:text-neutral-400">
                             <div>
                                 <span className="font-medium text-zinc-700 dark:text-zinc-300">Created by: </span>
                                 {recipe.created_by_name || 'Staff'} ({moment(recipe.created_at).format('MMM D, YYYY h:mm A')})
@@ -257,7 +257,7 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                     </div>
 
                     {/* Modal Actions Footer */}
-                    <div className="p-4 px-6 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 flex flex-wrap items-center justify-between gap-3">
+                    <div className="p-4 px-6 border-t border-zinc-100 dark:border-mauve-800 bg-neutral-50 dark:bg-mauve-900 flex flex-wrap items-center justify-between gap-3">
                         <div className="flex items-center gap-2">
                             {isAdmin && onDelete && (
                                 <button
@@ -275,7 +275,7 @@ export const RecipeDetailsModal: React.FC<RecipeDetailsModalProps> = ({
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-xl transition-colors"
+                                className="px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-xl transition-colors"
                             >
                                 Close
                             </button>

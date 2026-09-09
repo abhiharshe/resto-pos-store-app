@@ -11,7 +11,7 @@ const AuthLayout = () => {
             <div className="absolute top-4 right-4">
                 <button
                     onClick={() => dispatch(toggleTheme())}
-                    className="w-12 h-12 p-2 rounded-full text-zinc-400 dark:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 transition-colors"
+                    className="w-12 h-12 p-2 rounded-full text-zinc-400 dark:text-zinc-50 hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-mauve-200 dark:border-zinc-700 transition-colors"
                     aria-label="Toggle Theme"
                 >
                     {theme === 'light' ? (
@@ -22,7 +22,7 @@ const AuthLayout = () => {
                 </button>
             </div>
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-white dark:bg-zinc-800 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-zinc-200 dark:border-zinc-700">
+                <div className="bg-white dark:bg-neutral-800 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-mauve-200 dark:border-zinc-700">
                     <Outlet />
                 </div>
             </div>

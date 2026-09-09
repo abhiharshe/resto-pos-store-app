@@ -57,7 +57,7 @@ const ProfilePage: React.FC = () => {
                 {/* Avatar Overlay */}
                 <div className="absolute -bottom-16 left-8 flex items-end gap-6">
                     <div className="relative group">
-                        <div className="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden border-8 border-white dark:border-zinc-900 shadow-2xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+                        <div className="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden border-8 border-white dark:border-zinc-900 shadow-2xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
                             {avatarUrl ? (
                                 <img src={getMediaURL(avatarUrl)} alt="Avatar" className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500" />
                             ) : (
@@ -74,7 +74,7 @@ const ProfilePage: React.FC = () => {
                     </div>
 
                     <div className="pb-4 hidden md:block">
-                        <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-white leading-tight">
+                        <h1 className="text-3xl font-extrabold text-neutral-900 dark:text-white leading-tight">
                             {user?.full_name}
                         </h1>
                         <p className="text-indigo-600 dark:text-indigo-400 font-semibold tracking-wide uppercase text-xs flex items-center gap-2">
@@ -88,7 +88,7 @@ const ProfilePage: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-4">
                 {/* Left Sidebar Info */}
                 <div className="space-y-6">
-                    <Card className="p-6 border-none shadow-xl bg-white/50 dark:bg-zinc-800/50 backdrop-blur-sm">
+                    <Card className="p-6 border-none shadow-xl bg-white/50 dark:bg-neutral-800/50 backdrop-blur-sm">
                         <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-widest mb-4">Account Status</h3>
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
@@ -97,11 +97,11 @@ const ProfilePage: React.FC = () => {
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-zinc-600 dark:text-zinc-400">Store ID</span>
-                                <span className="text-sm font-mono text-zinc-900 dark:text-zinc-200">{user?.store_id ? user.store_id.substring(0, 8) + '...' : 'Global'}</span>
+                                <span className="text-sm font-mono text-neutral-900 dark:text-zinc-200">{user?.store_id ? user.store_id.substring(0, 8) + '...' : 'Global'}</span>
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-zinc-600 dark:text-zinc-400">Member Since</span>
-                                <span className="text-sm text-zinc-900 dark:text-zinc-200">May 2026</span>
+                                <span className="text-sm text-neutral-900 dark:text-zinc-200">May 2026</span>
                             </div>
                         </div>
                     </Card>
@@ -129,7 +129,7 @@ const ProfilePage: React.FC = () => {
                                 <i className="ri-user-settings-line text-xl"></i>
                             </div>
                             <div>
-                                <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">Profile Information</h2>
+                                <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Profile Information</h2>
                                 <p className="text-sm text-zinc-500">Update your account details and contact information.</p>
                             </div>
                         </div>
@@ -172,7 +172,7 @@ const ProfilePage: React.FC = () => {
                                         />
                                     </div>
 
-                                    <div className="flex items-center justify-end gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                                    <div className="flex items-center justify-end gap-4 pt-4 border-t border-zinc-100 dark:border-mauve-800">
                                         <Button
                                             type="button"
                                             variant="outline"
@@ -203,7 +203,7 @@ const ProfilePage: React.FC = () => {
                                     <i className="ri-shield-keyhole-line text-xl"></i>
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">Security & Privacy</h2>
+                                    <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Security & Privacy</h2>
                                     <p className="text-sm text-zinc-500">Keep your account secure with a strong password.</p>
                                 </div>
                             </div>

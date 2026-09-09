@@ -29,15 +29,15 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="w-screen max-w-md bg-white dark:bg-zinc-900 shadow-2xl flex flex-col"
+                        className="w-screen max-w-md bg-white dark:bg-mauve-900 shadow-2xl flex flex-col"
                     >
                         {/* Header */}
-                        <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center bg-zinc-50/50 dark:bg-zinc-800/50">
+                        <div className="p-6 border-b border-zinc-100 dark:border-mauve-800 flex justify-between items-center bg-neutral-50/50 dark:bg-neutral-800/50">
                             <div>
-                                <h2 className="text-xl font-semibold text-zinc-900 dark:text-white flex items-center gap-2">
+                                <h2 className="text-xl font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
                                     Order {order.order_number || `#${order.id}`}
                                 </h2>
-                                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                                <p className="text-sm text-neutral-500 dark:text-neutral-400">
                                     Placed {moment(order.created_at).format('MMM Do, h:mm A')}
                                 </p>
                             </div>
@@ -48,11 +48,11 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                         <div className="flex-grow overflow-y-auto p-6 space-y-8">
                             {/* Order Info */}
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-100 dark:border-zinc-800">
+                                <div className="p-3 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg border border-zinc-100 dark:border-mauve-800">
                                     <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-widest mb-1">Type</p>
                                     <StatusBadge status={order.order_type} />
                                 </div>
-                                <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-100 dark:border-zinc-800">
+                                <div className="p-3 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg border border-zinc-100 dark:border-mauve-800">
                                     <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-widest mb-1">Status</p>
                                     <StatusBadge status={order.status} />
                                 </div>
@@ -61,12 +61,12 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                             {/* Customer Info */}
                             {(order.customer || order.guest_name) && (
                                 <div>
-                                    <h3 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-2">
+                                    <h3 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider mb-3 flex items-center gap-2">
                                         <i className="ri-user-heart-line text-indigo-500"></i>
                                         Customer Details
                                     </h3>
-                                    <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800">
-                                        <p className="font-semibold text-zinc-900 dark:text-white">
+                                    <div className="bg-neutral-50 dark:bg-neutral-800/50 p-4 rounded-xl border border-zinc-100 dark:border-mauve-800">
+                                        <p className="font-semibold text-neutral-900 dark:text-white">
                                             {order.customer?.full_name || order.guest_name}
                                         </p>
                                         {order.guest_phone && (
@@ -85,7 +85,7 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
 
                             {/* Items */}
                             <div>
-                                <h3 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
                                     <i className="ri-list-check text-emerald-500"></i>
                                     Items Breakdown
                                 </h3>
@@ -103,11 +103,11 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                                                 {deal.items.map((item) => (
                                                     <div key={item.id} className="last:border-0 pb-0">
                                                         <div className="flex justify-between items-start">
-                                                            <span className="font-semibold text-sm text-zinc-900 dark:text-white">
+                                                            <span className="font-semibold text-sm text-neutral-900 dark:text-white">
                                                                 {item.quantity}x {item.name}
                                                             </span>
                                                             <span className={`text-[9px] px-2 py-0.5 rounded-full font-black uppercase tracking-tighter
-                                                                ${item.status === 'READY' ? 'bg-emerald-100 text-emerald-700' : 'bg-zinc-100 text-zinc-500'}
+                                                                ${item.status === 'READY' ? 'bg-emerald-100 text-emerald-700' : 'bg-neutral-100 text-zinc-500'}
                                                             `}>
                                                                 {item.status}
                                                             </span>
@@ -134,13 +134,13 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
 
                                     {/* Standalone Items */}
                                     {order.items.filter(item => !item.order_deal_id).map((item) => (
-                                        <div key={item.id} className="border-b border-zinc-100 dark:border-zinc-800 pb-4 last:border-0 last:pb-0">
+                                        <div key={item.id} className="border-b border-zinc-100 dark:border-mauve-800 pb-4 last:border-0 last:pb-0">
                                             <div className="flex justify-between">
-                                                <span className="font-semibold text-zinc-900 dark:text-white">
+                                                <span className="font-semibold text-neutral-900 dark:text-white">
                                                     {item.quantity}x {item.name}
                                                 </span>
                                                 <span className={`text-[9px] px-2 py-0.5 rounded-full font-black uppercase tracking-tighter
-                                                    ${item.status === 'READY' ? 'bg-emerald-100 text-emerald-700' : 'bg-zinc-100 text-zinc-500'}
+                                                    ${item.status === 'READY' ? 'bg-emerald-100 text-emerald-700' : 'bg-neutral-100 text-zinc-500'}
                                                 `}>
                                                     {item.status}
                                                 </span>
@@ -168,10 +168,10 @@ export const KdsSidebar: React.FC<KdsSidebarProps> = ({ order, onClose }) => {
                         </div>
 
                         {/* Footer */}
-                        <div className="p-6 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/50">
+                        <div className="p-6 border-t border-zinc-100 dark:border-mauve-800 bg-neutral-50/50 dark:bg-neutral-800/50">
                             <div className="flex justify-between items-center mb-4">
                                 <span className="text-zinc-500 font-medium">Order Total</span>
-                                <span className="text-2xl font-black text-zinc-900 dark:text-white">
+                                <span className="text-2xl font-black text-neutral-900 dark:text-white">
                                     ₹{order.total_amount.toFixed(2)}
                                 </span>
                             </div>

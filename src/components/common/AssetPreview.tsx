@@ -89,10 +89,10 @@ export const AssetPreview: React.FC<AssetPreviewProps> = ({
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-7xl h-[90vh] mx-4 bg-white dark:bg-zinc-950 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-white/10"
+                        className="relative w-full max-w-7xl h-[90vh] mx-4 bg-white dark:bg-neutral-950 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-white/10"
                     >
                         {/* Main Preview Area */}
-                        <div className="flex-1 bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center overflow-hidden relative">
+                        <div className="flex-1 bg-neutral-100 dark:bg-mauve-900 flex items-center justify-center overflow-hidden relative">
                             {isImage ? (
                                 <img
                                     src={getMediaURL(asset.url || asset.storage_key)}
@@ -113,10 +113,10 @@ export const AssetPreview: React.FC<AssetPreviewProps> = ({
                                 />
                             ) : (
                                 <div className="text-center space-y-4 p-8">
-                                    <div className="w-32 h-32 bg-zinc-200 dark:bg-zinc-800 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                                    <div className="w-32 h-32 bg-neutral-200 dark:bg-neutral-800 rounded-3xl flex items-center justify-center mx-auto mb-6">
                                         <i className="ri-file-3-line text-6xl text-zinc-400"></i>
                                     </div>
-                                    <h3 className="text-2xl font-black text-zinc-900 dark:text-white">Preview Not Available</h3>
+                                    <h3 className="text-2xl font-black text-neutral-900 dark:text-white">Preview Not Available</h3>
                                     <p className="text-zinc-500 max-w-xs mx-auto">This file type ({asset.mime_type}) cannot be previewed in the browser.</p>
                                     <Button icon="ri-download-line" onClick={handleDownload}>
                                         Download to View
@@ -136,34 +136,34 @@ export const AssetPreview: React.FC<AssetPreviewProps> = ({
                         </div>
 
                         {/* Sidebar Info */}
-                        <div className="w-full md:w-80 border-l border-zinc-100 dark:border-white/10 flex flex-col bg-white dark:bg-zinc-950">
+                        <div className="w-full md:w-80 border-l border-zinc-100 dark:border-white/10 flex flex-col bg-white dark:bg-neutral-950">
                             <div className="p-8 flex-1 overflow-y-auto space-y-8">
                                 <div>
                                     <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4">File Details</h4>
                                     <div className="space-y-4">
                                         <div className="space-y-1">
                                             <p className="text-[11px] text-zinc-400 font-semibold uppercase">Name</p>
-                                            <p className="text-sm font-black text-zinc-900 dark:text-white break-all leading-tight">
+                                            <p className="text-sm font-black text-neutral-900 dark:text-white break-all leading-tight">
                                                 {asset.original_name}
                                             </p>
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="space-y-1">
                                                 <p className="text-[11px] text-zinc-400 font-semibold uppercase">Size</p>
-                                                <p className="text-sm font-semibold text-zinc-900 dark:text-white">
+                                                <p className="text-sm font-semibold text-neutral-900 dark:text-white">
                                                     {formatSize(asset.file_size)}
                                                 </p>
                                             </div>
                                             <div className="space-y-1">
                                                 <p className="text-[11px] text-zinc-400 font-semibold uppercase">Type</p>
-                                                <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate uppercase">
+                                                <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate uppercase">
                                                     {asset.mime_type.split('/')[1]}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="space-y-1">
                                             <p className="text-[11px] text-zinc-400 font-semibold uppercase">Uploaded At</p>
-                                            <p className="text-sm font-semibold text-zinc-900 dark:text-white">
+                                            <p className="text-sm font-semibold text-neutral-900 dark:text-white">
                                                 {dayjs(asset.created_at).format('MMMM D, YYYY')}
                                                 <span className="block text-[10px] text-zinc-400 font-medium">
                                                     {dayjs(asset.created_at).format('h:mm A')}
@@ -176,11 +176,11 @@ export const AssetPreview: React.FC<AssetPreviewProps> = ({
                                 {asset.metadata && Object.keys(asset.metadata).length > 0 && (
                                     <div>
                                         <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-4">Metadata</h4>
-                                        <div className="bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-4 space-y-3">
+                                        <div className="bg-neutral-50 dark:bg-mauve-900 rounded-2xl p-4 space-y-3">
                                             {Object.entries(asset.metadata).map(([key, value]) => (
                                                 <div key={key} className="flex justify-between items-center text-xs">
                                                     <span className="text-zinc-500 font-semibold capitalize">{key.replace(/_/g, ' ')}</span>
-                                                    <span className="text-zinc-900 dark:text-white font-black truncate max-w-[120px]">{String(value)}</span>
+                                                    <span className="text-neutral-900 dark:text-white font-black truncate max-w-[120px]">{String(value)}</span>
                                                 </div>
                                             ))}
                                         </div>

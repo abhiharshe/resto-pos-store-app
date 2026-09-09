@@ -221,7 +221,7 @@ const AssetUpload: React.FC<AssetUploadProps> = ({
                     ${isUploading ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer'}
                     ${isDragging && !isUploading
                         ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/10'
-                        : 'border-zinc-300 dark:border-zinc-700 hover:border-indigo-400 bg-zinc-50 dark:bg-zinc-900/50'}
+                        : 'border-zinc-300 dark:border-zinc-700 hover:border-indigo-400 bg-neutral-50 dark:bg-mauve-900/50'}
                 `}
             >
                 <input
@@ -233,7 +233,7 @@ const AssetUpload: React.FC<AssetUploadProps> = ({
                     accept={allowedTypes.join(',')}
                     className="hidden"
                 />
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-2 ${isDragging ? 'bg-indigo-100 text-indigo-600' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400'}`}>
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-2 ${isDragging ? 'bg-indigo-100 text-indigo-600' : 'bg-neutral-100 dark:bg-neutral-800 text-zinc-400'}`}>
                     <i className="ri-upload-cloud-2-line text-3xl"></i>
                 </div>
                 <div className="text-center">
@@ -250,9 +250,9 @@ const AssetUpload: React.FC<AssetUploadProps> = ({
             {files.length > 0 && (
                 <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                     {files.map((f) => (
-                        <div key={f.id} className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 flex items-center space-x-4 shadow-sm animate-in slide-in-from-bottom-2">
+                        <div key={f.id} className="bg-white dark:bg-mauve-900 border border-zinc-100 dark:border-mauve-800 rounded-2xl p-4 flex items-center space-x-4 shadow-sm animate-in slide-in-from-bottom-2">
                             {/* Preview/Icon */}
-                            <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex-shrink-0 flex items-center justify-center overflow-hidden border border-zinc-200 dark:border-zinc-700">
+                            <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex-shrink-0 flex items-center justify-center overflow-hidden border border-mauve-200 dark:border-zinc-700">
                                 {f.preview ? (
                                     <img src={f.preview} alt="preview" className="w-full h-full object-cover" />
                                 ) : (
@@ -263,7 +263,7 @@ const AssetUpload: React.FC<AssetUploadProps> = ({
                             {/* Details */}
                             <div className="flex-1 min-w-0">
                                 <div className="flex justify-between items-start mb-2">
-                                    <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate" title={f.file.name}>
+                                    <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate" title={f.file.name}>
                                         {f.file.name}
                                     </p>
                                     <button
@@ -285,7 +285,7 @@ const AssetUpload: React.FC<AssetUploadProps> = ({
                                     </div>
                                 ) : (
                                     <div className="space-y-2">
-                                        <div className="w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                                        <div className="w-full bg-neutral-100 dark:bg-neutral-800 rounded-full h-1.5 overflow-hidden">
                                             <div
                                                 className={`h-full transition-all duration-500 ease-out ${f.status === 'completed' ? 'bg-emerald-500' : 'bg-indigo-600'}`}
                                                 style={{ width: `${f.progress}%` }}

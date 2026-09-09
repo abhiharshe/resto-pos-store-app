@@ -33,7 +33,7 @@ const OrderShow = () => {
     if (!order) {
         return (
             <div className="p-8 text-center space-y-4">
-                <h2 className="text-2xl font-semibold text-zinc-900 dark:text-white">Order Not Found</h2>
+                <h2 className="text-2xl font-semibold text-neutral-900 dark:text-white">Order Not Found</h2>
                 <p className="text-zinc-500">The order you are looking for does not exist or has been deleted.</p>
                 <Button onClick={() => navigate('/orders')}>Back to Orders</Button>
             </div>
@@ -52,7 +52,7 @@ const OrderShow = () => {
                         title="Back to Orders"
                     />
                     <div>
-                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white flex items-center gap-3">
+                        <h1 className="text-2xl font-semibold text-neutral-900 dark:text-white flex items-center gap-3">
                             <span>Order #{order.id}</span>
                             <span className="px-2 py-1 border border-green-700 text-green-700 bg-gray-200 text-sm rounded-full">{order.order_type}</span>
                         </h1>
@@ -72,13 +72,13 @@ const OrderShow = () => {
                 {/* Main Content: Items */}
                 <div className="lg:col-span-2 space-y-6">
                     <div>
-                        <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/50">
-                            <h3 className="font-semibold text-zinc-900 dark:text-white uppercase tracking-wider text-xs">Order Items</h3>
+                        <div className="p-4 border-b border-zinc-100 dark:border-mauve-800 bg-neutral-50/50 dark:bg-neutral-800/50">
+                            <h3 className="font-semibold text-neutral-900 dark:text-white uppercase tracking-wider text-xs">Order Items</h3>
                         </div>
                         <div className="p-4 divide-y divide-zinc-100 dark:divide-zinc-800">
                             {/* Deals Sections */}
                             {order.deals && order.deals.length > 0 && order.deals.map((deal) => (
-                                <div key={deal.id} className="py-6 first:pt-0 border-b border-zinc-100 dark:border-zinc-800 last:border-0 border-dashed">
+                                <div key={deal.id} className="py-6 first:pt-0 border-b border-zinc-100 dark:border-mauve-800 last:border-0 border-dashed">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center rounded-xl">
@@ -90,7 +90,7 @@ const OrderShow = () => {
                                             </div>
                                         </div>
                                         <div className="text-right">
-                                            <p className="font-black text-zinc-900 dark:text-white leading-none">
+                                            <p className="font-black text-neutral-900 dark:text-white leading-none">
                                                 <span className='text-xs me-1'>{currency}</span>{deal.total_price.toFixed(2)}
                                             </p>
                                             <p className="text-[10px] text-zinc-400 font-semibold uppercase tracking-tight line-through mt-1">
@@ -100,19 +100,19 @@ const OrderShow = () => {
                                     </div>
                                     <div className="pl-12 space-y-4">
                                         {deal.items.map((item) => (
-                                            <div key={item.id} className="flex justify-between items-start bg-zinc-50 dark:bg-zinc-900/30 p-3 rounded-2xl border border-zinc-100 dark:border-zinc-800/50">
+                                            <div key={item.id} className="flex justify-between items-start bg-neutral-50 dark:bg-mauve-900/30 p-3 rounded-2xl border border-zinc-100 dark:border-mauve-800/50">
                                                 <div className="space-y-1">
                                                     <div className="flex items-center gap-2">
                                                         <span className="text-[10px] font-black text-zinc-400">×{item.quantity}</span>
                                                         <span className="font-semibold text-sm text-zinc-800 dark:text-zinc-200">{item.name}</span>
                                                         {item.variant_name && item.variant_name !== 'Default' && (
-                                                            <span className="text-[10px] bg-zinc-200 dark:bg-zinc-800 px-2 py-0.5 rounded-full text-zinc-600 dark:text-zinc-400 font-semibold">{item.variant_name}</span>
+                                                            <span className="text-[10px] bg-neutral-200 dark:bg-neutral-800 px-2 py-0.5 rounded-full text-zinc-600 dark:text-zinc-400 font-semibold">{item.variant_name}</span>
                                                         )}
                                                     </div>
                                                     {item.addons && item.addons.length > 0 && (
                                                         <div className="flex flex-wrap gap-1">
                                                             {item.addons.map(a => (
-                                                                <span key={a.id} className="text-[9px] text-zinc-400 bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 px-2 py-0.5 rounded-md">
+                                                                <span key={a.id} className="text-[9px] text-zinc-400 bg-white dark:bg-neutral-800 border border-zinc-100 dark:border-zinc-700 px-2 py-0.5 rounded-md">
                                                                     + {a.name}
                                                                 </span>
                                                             ))}
@@ -131,11 +131,11 @@ const OrderShow = () => {
                                 <div key={item.id} className="py-4 first:pt-0 last:pb-0 flex justify-between items-start">
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-3">
-                                            <span className="w-8 h-8 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm font-semibold text-zinc-900 dark:text-white">
+                                            <span className="w-8 h-8 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm font-semibold text-neutral-900 dark:text-white">
                                                 {item.quantity}
                                             </span>
                                             <div className="flex flex-col">
-                                                <span className="font-semibold text-zinc-900 dark:text-white">
+                                                <span className="font-semibold text-neutral-900 dark:text-white">
                                                     {item.name}
                                                 </span>
                                                 {item.variant_name && item.variant_name !== 'Default' && (
@@ -158,7 +158,7 @@ const OrderShow = () => {
                                         )}
                                     </div>
                                     <div className="text-right">
-                                        <p className="font-black text-zinc-900 dark:text-white leading-none">
+                                        <p className="font-black text-neutral-900 dark:text-white leading-none">
                                             <span className='text-xs me-1'>{currency}</span>{item.subtotal.toFixed(2)}
                                         </p>
                                         <p className="text-[10px] text-zinc-400 font-semibold uppercase tracking-tight mt-1">@<span className='text-xs me-0.5'>{currency}</span>{item.unit_price.toFixed(2)}</p>
@@ -179,7 +179,7 @@ const OrderShow = () => {
                     </div>
 
                     {/* Summary / Internal Info */}
-                    <div className="bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800">
+                    <div className="bg-neutral-50 dark:bg-mauve-900/50 rounded-2xl p-6 border border-mauve-200 dark:border-mauve-800">
                         <div className="flex items-center gap-2 text-zinc-400 mb-4">
                             <i className="ri-information-line"></i>
                             <span className="text-xs font-semibold uppercase tracking-widest">Order Notes / Internal Info</span>
@@ -191,10 +191,10 @@ const OrderShow = () => {
                 {/* Sidebar: Totals & Details */}
                 <div className="space-y-4">
                     {/* Status & Customer info */}
-                    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm space-y-6">
+                    <div className="bg-white dark:bg-mauve-900 rounded-2xl border border-mauve-200 dark:border-mauve-800 p-6 shadow-sm space-y-6">
                         <div className="space-y-4">
                             <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Order Status</h4>
-                            <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                            <div className="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl">
                                 <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Current</span>
                                 <StatusBadge status={order.status} />
                             </div>
@@ -203,7 +203,7 @@ const OrderShow = () => {
                         <div className="space-y-4">
                             <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Customer Details</h4>
                             <div className="space-y-2">
-                                <p className="font-semibold text-zinc-900 dark:text-white">
+                                <p className="font-semibold text-neutral-900 dark:text-white">
                                     {order.guest_name || order.customer?.full_name || 'Guest Customer'}
                                 </p>
                                 {order.guest_phone && (
@@ -222,11 +222,11 @@ const OrderShow = () => {
                         <div className="space-y-4">
                             <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Payment & Type</h4>
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                                <div className="p-3 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl">
                                     <p className="text-[10px] font-semibold text-zinc-400 uppercase">Method</p>
-                                    <p className="text-sm font-semibold text-zinc-900 dark:text-white">{order.payment_method}</p>
+                                    <p className="text-sm font-semibold text-neutral-900 dark:text-white">{order.payment_method}</p>
                                 </div>
-                                <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                                <div className="p-3 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl">
                                     <p className="text-[10px] font-semibold text-zinc-400 uppercase">Status</p>
                                     <p className={`text-sm font-semibold ${order.payment_status === 'PAID' ? 'text-green-600' : 'text-amber-500'}`}>
                                         {order.payment_status}
@@ -234,12 +234,12 @@ const OrderShow = () => {
                                 </div>
                             </div>
                             {order.payment_method === 'CASH' && (order.cash_received != null || order.change_amount != null || order.change != null) && (
-                                <div className="grid grid-cols-2 gap-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                                    <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                                <div className="grid grid-cols-2 gap-4 pt-2 border-t border-zinc-100 dark:border-mauve-800">
+                                    <div className="p-3 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl">
                                         <p className="text-[10px] font-semibold text-zinc-400 uppercase">Cash Received</p>
-                                        <p className="text-sm font-semibold text-zinc-900 dark:text-white">{currency}{(order.cash_received ?? 0).toFixed(2)}</p>
+                                        <p className="text-sm font-semibold text-neutral-900 dark:text-white">{currency}{(order.cash_received ?? 0).toFixed(2)}</p>
                                     </div>
-                                    <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                                    <div className="p-3 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl">
                                         <p className="text-[10px] font-semibold text-zinc-400 uppercase">Change</p>
                                         <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{currency}{(order.change_amount ?? order.change ?? 0).toFixed(2)}</p>
                                     </div>
@@ -249,7 +249,7 @@ const OrderShow = () => {
                     </div>
 
                     {/* Financial Summary */}
-                    <div className="bg-zinc-800 dark:bg-black rounded-2xl p-6 shadow-xl text-white space-y-4">
+                    <div className="bg-neutral-800 dark:bg-black rounded-2xl p-6 shadow-xl text-white space-y-4">
                         <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Financial Summary</h4>
                         <div className="space-y-3">
                             <div className="flex justify-between text-sm">
@@ -274,12 +274,12 @@ const OrderShow = () => {
                                     <span className="text-red-400 font-medium">-<span className='text-xs me-1'>{currency}</span>{order.discount_amount.toFixed(2)}</span>
                                 </div>
                             )}
-                            <div className="pt-4 border-t border-zinc-800 flex justify-between items-end">
+                            <div className="pt-4 border-t border-mauve-800 flex justify-between items-end">
                                 <span className="text-sm font-semibold text-zinc-400 uppercase">Total Amount</span>
                                 <span className="text-3xl font-black text-red-500 leading-none"><span className='text-xs me-1'>{currency}</span>{order.total_amount.toFixed(2)}</span>
                             </div>
                             {order.payment_method === 'CASH' && order.cash_received != null && (
-                                <div className="pt-3 border-t border-zinc-800 space-y-2 text-xs text-zinc-400">
+                                <div className="pt-3 border-t border-mauve-800 space-y-2 text-xs text-zinc-400">
                                     <div className="flex justify-between">
                                         <span>Cash Received:</span>
                                         <span className="font-semibold text-white"><span className='text-[10px] me-0.5'>{currency}</span>{order.cash_received.toFixed(2)}</span>
@@ -303,14 +303,14 @@ const OrderShow = () => {
 
             {/* Print Preview Overlay */}
             {showPrintPreview && (
-                <div className="fixed inset-0 z-100 bg-zinc-900/90 backdrop-blur-sm flex items-center justify-center p-4 print:hidden">
-                    <div className="bg-white dark:bg-zinc-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col h-[90vh]">
+                <div className="fixed inset-0 z-100 bg-neutral-900/90 backdrop-blur-sm flex items-center justify-center p-4 print:hidden">
+                    <div className="bg-white dark:bg-neutral-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col h-[90vh]">
                         <div className="p-4 border-b dark:border-zinc-700 flex justify-between items-center">
                             <h3 className="font-semibold flex items-center gap-2">
                                 <i className="ri-printer-line text-indigo-500"></i>
                                 Print Preview
                             </h3>
-                            <button onClick={() => setShowPrintPreview(false)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+                            <button onClick={() => setShowPrintPreview(false)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
                                 <i className="ri-close-line text-xl"></i>
                             </button>
                         </div>

@@ -69,7 +69,7 @@ const PromotionManagement = () => {
                     {info.row.original.image_url && (
                         <img src={getMediaURL(info.row.original.image_url)} alt="" className="w-10 h-10 rounded-lg object-cover" />
                     )}
-                    <span className="font-semibold text-zinc-900 dark:text-white uppercase tracking-tight">{info.getValue() as string}</span>
+                    <span className="font-semibold text-neutral-900 dark:text-white uppercase tracking-tight">{info.getValue() as string}</span>
                 </div>
             )
         },
@@ -77,7 +77,7 @@ const PromotionManagement = () => {
             accessorKey: 'type',
             header: 'Type',
             cell: (info) => (
-                <span className="text-xs font-black px-2 py-1 bg-zinc-100 dark:bg-zinc-800 rounded uppercase tracking-wider text-zinc-500">
+                <span className="text-xs font-black px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded uppercase tracking-wider text-zinc-500">
                     {info.getValue() === 'BXGY' ? 'Buy X Get Y' : 'Item Discount'}
                 </span>
             )
@@ -147,8 +147,8 @@ const PromotionManagement = () => {
         <div className="space-y-6">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-xl font-black text-zinc-900 dark:text-white uppercase tracking-tight">Active Promotions</h3>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">Manage your automated buy-get and discount offers.</p>
+                    <h3 className="text-xl font-black text-neutral-900 dark:text-white uppercase tracking-tight">Active Promotions</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Manage your automated buy-get and discount offers.</p>
                 </div>
                 <Button
                     variant="primary"
@@ -176,7 +176,7 @@ const PromotionManagement = () => {
                 </div>
             )}
 
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl border dark:border-zinc-800 shadow-sm overflow-hidden animate-in slide-in-from-bottom-2 duration-300">
+            <div className="bg-white dark:bg-mauve-900 rounded-2xl border dark:border-mauve-800 shadow-sm overflow-hidden animate-in slide-in-from-bottom-2 duration-300">
                 <DataTable data={promotions || []} columns={columns} isLoading={isLoading} />
             </div>
         </div>

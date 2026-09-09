@@ -30,7 +30,7 @@ const StoreList = () => {
             header: 'Store Name',
             cell: (info) => (
                 <div className="flex flex-col">
-                    <span className="font-medium text-zinc-900 dark:text-white">{info.getValue() as string}</span>
+                    <span className="font-medium text-neutral-900 dark:text-white">{info.getValue() as string}</span>
                     <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{info.row.original.prefix}</span>
                 </div>
             )
@@ -48,7 +48,7 @@ const StoreList = () => {
                         title={info.row.original.has_pos ? 'POS Enabled' : 'POS Disabled'}
                         className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all ${info.row.original.has_pos
                             ? 'bg-indigo-50 border-indigo-100 text-indigo-600 dark:bg-indigo-900/20 dark:border-indigo-800 dark:text-indigo-400'
-                            : 'bg-zinc-50 border-zinc-100 text-zinc-300 dark:bg-zinc-800/50 dark:border-zinc-800 dark:text-zinc-700'
+                            : 'bg-neutral-50 border-zinc-100 text-zinc-300 dark:bg-neutral-800/50 dark:border-mauve-800 dark:text-zinc-700'
                             }`}
                     >
                         <i className="ri-shopping-cart-line text-sm" />
@@ -57,7 +57,7 @@ const StoreList = () => {
                         title={info.row.original.has_kds ? 'KDS Enabled' : 'KDS Disabled'}
                         className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all ${info.row.original.has_kds
                             ? 'bg-amber-50 border-amber-100 text-amber-600 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-400'
-                            : 'bg-zinc-50 border-zinc-100 text-zinc-300 dark:bg-zinc-800/50 dark:border-zinc-800 dark:text-zinc-700'
+                            : 'bg-neutral-50 border-zinc-100 text-zinc-300 dark:bg-neutral-800/50 dark:border-mauve-800 dark:text-zinc-700'
                             }`}
                     >
                         <i className="ri-restaurant-2-line text-sm" />
@@ -109,8 +109,8 @@ const StoreList = () => {
         <Container>
             <div className="flex items-center justify-between">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Stores</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">Manage your store locations and configurations.</p>
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">Stores</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Manage your store locations and configurations.</p>
                 </div>
                 <Button
                     variant="primary"
@@ -121,7 +121,7 @@ const StoreList = () => {
                 </Button>
             </div>
 
-            <div className='border border-zinc-200 dark:border-zinc-700 rounded-lg'>
+            <div className='border border-mauve-200 dark:border-zinc-700 rounded-lg'>
                 <DataTable data={stores || []} columns={columns} isLoading={isLoading} />
             </div>
 

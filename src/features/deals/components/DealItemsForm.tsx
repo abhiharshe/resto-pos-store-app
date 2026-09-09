@@ -86,13 +86,13 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                 <Form className="space-y-8">
                     <Card className="overflow-visible">
                         <div className="space-y-6">
-                            <div className="flex items-center justify-between border-b dark:border-zinc-800 pb-4">
+                            <div className="flex items-center justify-between border-b dark:border-mauve-800 pb-4">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-500/20">
                                         <i className="ri-list-settings-line text-xl"></i>
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-semibold text-zinc-900 dark:text-white leading-none">Deal Selection Slots</h3>
+                                        <h3 className="text-lg font-semibold text-neutral-900 dark:text-white leading-none">Deal Selection Slots</h3>
                                         <p className="text-xs text-zinc-500 mt-1 uppercase tracking-widest font-black">Configure Choice Groups & Items</p>
                                     </div>
                                 </div>
@@ -109,12 +109,12 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                             const groupTouched = (touched.selection_groups as any)?.[gIndex];
 
                                             return (
-                                                <div key={gIndex} className={`p-6 bg-zinc-50 dark:bg-zinc-900/40 rounded-3xl border transition-all duration-300 relative group animate-in slide-in-from-bottom-2 ${groupErrors ? 'border-red-500/30 bg-red-50/10 shadow-lg shadow-red-500/5' : 'border-zinc-200 dark:border-zinc-800 hover:border-indigo-500/20'
+                                                <div key={gIndex} className={`p-6 bg-neutral-50 dark:bg-mauve-900/40 rounded-3xl border transition-all duration-300 relative group animate-in slide-in-from-bottom-2 ${groupErrors ? 'border-red-500/30 bg-red-50/10 shadow-lg shadow-red-500/5' : 'border-mauve-200 dark:border-mauve-800 hover:border-indigo-500/20'
                                                     }`}>
                                                     <button
                                                         type="button"
                                                         onClick={() => remove(gIndex)}
-                                                        className="absolute -top-3 -right-3 w-8 h-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-md active:scale-90 z-10"
+                                                        className="absolute -top-3 -right-3 w-8 h-8 bg-white dark:bg-neutral-800 border border-mauve-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-md active:scale-90 z-10"
                                                     >
                                                         <i className="ri-close-line"></i>
                                                     </button>
@@ -149,14 +149,14 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                                             required
                                                         />
 
-                                                        <div className="md:col-span-4 flex items-center justify-between p-3 bg-white dark:bg-zinc-900/40 rounded-xl border border-zinc-100 dark:border-zinc-800/50">
+                                                        <div className="md:col-span-4 flex items-center justify-between p-3 bg-white dark:bg-mauve-900/40 rounded-xl border border-zinc-100 dark:border-mauve-800/50">
                                                             <div className="flex items-center gap-3">
                                                                 <i className="ri-checkbox-circle-line text-emerald-500 text-lg"></i>
                                                                 <span className="text-sm font-semibold text-zinc-700 dark:text-white">Is selection mandatory?</span>
                                                             </div>
                                                             <div
                                                                 onClick={() => setFieldValue(`selection_groups.${gIndex}.is_required`, !group.is_required)}
-                                                                className={`w-11 h-6 rounded-full transition-all relative cursor-pointer ${group.is_required ? 'bg-indigo-600 shadow-inner' : 'bg-zinc-200 dark:bg-zinc-700'}`}
+                                                                className={`w-11 h-6 rounded-full transition-all relative cursor-pointer ${group.is_required ? 'bg-indigo-600 shadow-inner' : 'bg-neutral-200 dark:bg-neutral-700'}`}
                                                             >
                                                                 <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all shadow-sm ${group.is_required ? 'left-6' : 'left-1'}`} />
                                                             </div>
@@ -166,7 +166,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                                     <div className="space-y-3">
                                                         <div className="flex items-center justify-between mb-2 px-1">
                                                             <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest leading-none">Items in Group</span>
-                                                            <span className="h-1 flex-1 mx-4 bg-zinc-200 dark:bg-zinc-800 opacity-30"></span>
+                                                            <span className="h-1 flex-1 mx-4 bg-neutral-200 dark:bg-neutral-800 opacity-30"></span>
                                                         </div>
 
                                                         <FieldArray name={`selection_groups.${gIndex}.options`}>
@@ -177,7 +177,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                                                         const optionTouched = groupTouched?.options?.[oIndex];
 
                                                                         return (
-                                                                            <div key={oIndex} className={`flex flex-col lg:flex-row gap-3 items-start lg:items-end bg-white dark:bg-zinc-900/50 p-4 rounded-2xl border transition-all hover:shadow-lg hover:shadow-indigo-500/5 ${optionErrors ? 'border-red-200' : 'border-zinc-100 dark:border-zinc-800/50'
+                                                                            <div key={oIndex} className={`flex flex-col lg:flex-row gap-3 items-start lg:items-end bg-white dark:bg-mauve-900/50 p-4 rounded-2xl border transition-all hover:shadow-lg hover:shadow-indigo-500/5 ${optionErrors ? 'border-red-200' : 'border-zinc-100 dark:border-mauve-800/50'
                                                                                 }`}>
                                                                                 <div className="flex-1 w-full">
                                                                                     <Select
@@ -227,7 +227,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                                                         type="button"
                                                                         variant="outline"
                                                                         size="sm"
-                                                                        className="w-full py-4 border-dashed rounded-2xl flex items-center justify-center gap-2 text-zinc-500 hover:text-indigo-600 hover:border-indigo-600 transition-all font-semibold text-xs uppercase tracking-widest bg-zinc-50/50 dark:bg-zinc-800/30"
+                                                                        className="w-full py-4 border-dashed rounded-2xl flex items-center justify-center gap-2 text-zinc-500 hover:text-indigo-600 hover:border-indigo-600 transition-all font-semibold text-xs uppercase tracking-widest bg-neutral-50/50 dark:bg-neutral-800/30"
                                                                         onClick={() => pushOpt({ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false })}
                                                                     >
                                                                         <i className="ri-add-circle-line text-lg"></i>
@@ -242,7 +242,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                                         })}
                                         <Button
                                             type="button"
-                                            className="w-full py-8 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-500 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3"
+                                            className="w-full py-8 rounded-3xl border-2 border-dashed border-mauve-200 dark:border-zinc-700 bg-transparent text-zinc-500 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3"
                                             onClick={() => push({ name: '', min_selection: 1, max_selection: 1, is_required: true, options: [{ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false }] })}
                                         >
                                             <i className="ri-add-line text-xl"></i>
@@ -262,7 +262,7 @@ export const DealItemsForm: React.FC<DealItemsFormProps> = ({
                         </div>
                     </Card>
 
-                    <div className="flex justify-between items-center bg-white dark:bg-zinc-900 p-4 border border-zinc-200 dark:border-zinc-800 shadow-lg sticky bottom-0 z-20 backdrop-blur-md bg-opacity-80">
+                    <div className="flex justify-between items-center bg-white dark:bg-mauve-900 p-4 border border-mauve-200 dark:border-mauve-800 shadow-lg sticky bottom-0 z-20 backdrop-blur-md bg-opacity-80">
                         <Button
                             type="button"
                             variant="ghost"

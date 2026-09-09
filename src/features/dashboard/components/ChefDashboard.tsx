@@ -10,7 +10,7 @@ const ChefDashboard = () => {
 
     return (
         <div className="space-y-6">
-            <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
+            <div className="bg-neutral-900 border border-mauve-800 p-8 rounded-3xl text-white shadow-xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full -mr-32 -mt-32" />
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="space-y-1">
@@ -27,8 +27,8 @@ const ChefDashboard = () => {
                             <i className="ri-restaurant-2-line text-4xl" />
                         </div>
                         <div className="space-y-2">
-                            <h3 className="text-2xl font-black text-zinc-900 dark:text-white uppercase tracking-tight text-center">Open Kitchen Display (KDS)</h3>
-                            <p className="text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto text-center">Manage live orders, monitor prep times, and mark orders as ready for service.</p>
+                            <h3 className="text-2xl font-black text-neutral-900 dark:text-white uppercase tracking-tight text-center">Open Kitchen Display (KDS)</h3>
+                            <p className="text-neutral-500 dark:text-neutral-400 max-w-sm mx-auto text-center">Manage live orders, monitor prep times, and mark orders as ready for service.</p>
                         </div>
                         <Button
                             variant="primary"
@@ -64,10 +64,10 @@ const ChefDashboard = () => {
                             {user?.name?.[0]}
                         </div>
                         <div className="space-y-1">
-                            <h4 className="text-base font-black text-zinc-900 dark:text-white uppercase">{user?.name}</h4>
+                            <h4 className="text-base font-black text-neutral-900 dark:text-white uppercase">{user?.name}</h4>
                             <p className="text-xs text-zinc-500 font-medium">Head Chef</p>
                         </div>
-                        <div className="w-full border-t border-zinc-100 dark:border-zinc-800 my-2 pt-4">
+                        <div className="w-full border-t border-zinc-100 dark:border-mauve-800 my-2 pt-4">
                             <Button
                                 variant="outline"
                                 size="sm"

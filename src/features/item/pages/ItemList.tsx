@@ -40,7 +40,7 @@ const ItemList = () => {
                 const imageUrl = image?.variants?.thumbnail || image?.url;
                 return (
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-200 dark:border-zinc-700">
+                        <div className="w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center overflow-hidden border border-mauve-200 dark:border-zinc-700">
                             {imageUrl ? (
                                 <img src={getMediaURL(imageUrl)} alt="Item" className="w-full h-full object-cover" />
                             ) : (
@@ -48,7 +48,7 @@ const ItemList = () => {
                             )}
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-semibold text-zinc-900 dark:text-white line-clamp-1">{info.row.original.name}</span>
+                            <span className="font-semibold text-neutral-900 dark:text-white line-clamp-1">{info.row.original.name}</span>
                             <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">{info.row.original.category?.name}</span>
                         </div>
                     </div>
@@ -78,11 +78,11 @@ const ItemList = () => {
             cell: (info) => {
                 const variants = info.getValue() as any[];
                 if (!variants || variants.length === 0) return <span>-</span>;
-                if (variants.length === 1) return <span className="text-zinc-900 dark:text-white font-medium">₹{variants[0].price}</span>;
+                if (variants.length === 1) return <span className="text-neutral-900 dark:text-white font-medium">₹{variants[0].price}</span>;
 
                 const minPrice = Math.min(...variants.map(v => v.price));
                 const maxPrice = Math.max(...variants.map(v => v.price));
-                return <span className="text-zinc-900 dark:text-white font-medium">₹{minPrice} - ₹{maxPrice}</span>;
+                return <span className="text-neutral-900 dark:text-white font-medium">₹{minPrice} - ₹{maxPrice}</span>;
             }
         },
         {
@@ -154,15 +154,15 @@ const ItemList = () => {
         <Container>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Menu Items</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">Manage your menu offerings, prices and availability.</p>
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">Menu Items</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Manage your menu offerings, prices and availability.</p>
                 </div>
                 <Button onClick={() => navigate('/menu/items/new')} className="hidden sm:flex">
                     <i className="ri-add-line mr-2" /> Add New Item
                 </Button>
             </div>
 
-            <div className='border border-zinc-200 dark:border-zinc-700 rounded-lg'>
+            <div className='border border-mauve-200 dark:border-zinc-700 rounded-lg'>
                 <DataTable data={items || []} columns={columns} isLoading={isLoading} />
             </div>
 

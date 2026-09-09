@@ -78,11 +78,11 @@ const ApprovalList = () => {
                 const icon = entityIcons[type] || 'ri-file-list-line text-zinc-500';
                 return (
                     <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center shrink-0">
                             <i className={`${icon} text-lg`} />
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-semibold text-zinc-900 dark:text-white capitalize text-sm">
+                            <span className="font-semibold text-neutral-900 dark:text-white capitalize text-sm">
                                 {type.toLowerCase().replace('_', ' ')}
                             </span>
                             <span className="text-xs text-zinc-400 font-mono truncate max-w-[140px]">
@@ -176,11 +176,11 @@ const ApprovalList = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-black text-zinc-900 dark:text-white flex items-center gap-2.5">
+                    <h2 className="text-2xl font-black text-neutral-900 dark:text-white flex items-center gap-2.5">
                         <i className="ri-shield-check-line text-primary" />
                         Approvals & Change Management
                     </h2>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-1">
+                    <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">
                         {isSuperAdmin
                             ? 'Review, verify, and approve store-created menu items, deals, coupons, and promotions.'
                             : 'Track the approval status of your store’s submissions and change requests.'}
@@ -192,109 +192,103 @@ const ApprovalList = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 <div
                     onClick={() => { setSelectedEntityType(''); setSelectedStatus('PENDING'); }}
-                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${
-                        selectedStatus === 'PENDING' && !selectedEntityType
-                            ? 'bg-amber-500/10 border-amber-500/40 shadow-sm'
-                            : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-amber-400/50'
-                    }`}
+                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${selectedStatus === 'PENDING' && !selectedEntityType
+                        ? 'bg-amber-500/10 border-amber-500/40 shadow-sm'
+                        : 'bg-white dark:bg-mauve-900 border-mauve-200 dark:border-mauve-800 hover:border-amber-400/50'
+                        }`}
                 >
-                    <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
+                    <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
                         <span className="text-xs font-bold uppercase tracking-wider">Total Pending</span>
                         <i className="ri-hourglass-2-line text-amber-500" />
                     </div>
-                    <div className="text-2xl font-black text-zinc-900 dark:text-white mt-2">
+                    <div className="text-2xl font-black text-neutral-900 dark:text-white mt-2">
                         {isStatsLoading ? '-' : stats?.total_pending ?? 0}
                     </div>
                 </div>
 
                 <div
                     onClick={() => { setSelectedEntityType('MENU_ITEM'); setSelectedStatus('PENDING'); }}
-                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${
-                        selectedEntityType === 'MENU_ITEM'
-                            ? 'bg-emerald-500/10 border-emerald-500/40 shadow-sm'
-                            : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-emerald-400/50'
-                    }`}
+                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${selectedEntityType === 'MENU_ITEM'
+                        ? 'bg-emerald-500/10 border-emerald-500/40 shadow-sm'
+                        : 'bg-white dark:bg-mauve-900 border-mauve-200 dark:border-mauve-800 hover:border-emerald-400/50'
+                        }`}
                 >
-                    <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
+                    <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
                         <span className="text-xs font-bold uppercase tracking-wider">Items</span>
                         <i className="ri-restaurant-line text-emerald-500" />
                     </div>
-                    <div className="text-2xl font-black text-zinc-900 dark:text-white mt-2">
+                    <div className="text-2xl font-black text-neutral-900 dark:text-white mt-2">
                         {isStatsLoading ? '-' : stats?.menu_items_pending ?? 0}
                     </div>
                 </div>
 
                 <div
                     onClick={() => { setSelectedEntityType('CATEGORY'); setSelectedStatus('PENDING'); }}
-                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${
-                        selectedEntityType === 'CATEGORY'
-                            ? 'bg-blue-500/10 border-blue-500/40 shadow-sm'
-                            : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-blue-400/50'
-                    }`}
+                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${selectedEntityType === 'CATEGORY'
+                        ? 'bg-blue-500/10 border-blue-500/40 shadow-sm'
+                        : 'bg-white dark:bg-mauve-900 border-mauve-200 dark:border-mauve-800 hover:border-blue-400/50'
+                        }`}
                 >
-                    <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
+                    <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
                         <span className="text-xs font-bold uppercase tracking-wider">Categories</span>
                         <i className="ri-folders-line text-blue-500" />
                     </div>
-                    <div className="text-2xl font-black text-zinc-900 dark:text-white mt-2">
+                    <div className="text-2xl font-black text-neutral-900 dark:text-white mt-2">
                         {isStatsLoading ? '-' : stats?.categories_pending ?? 0}
                     </div>
                 </div>
 
                 <div
                     onClick={() => { setSelectedEntityType('DEAL'); setSelectedStatus('PENDING'); }}
-                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${
-                        selectedEntityType === 'DEAL'
-                            ? 'bg-amber-500/10 border-amber-500/40 shadow-sm'
-                            : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-amber-400/50'
-                    }`}
+                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${selectedEntityType === 'DEAL'
+                        ? 'bg-amber-500/10 border-amber-500/40 shadow-sm'
+                        : 'bg-white dark:bg-mauve-900 border-mauve-200 dark:border-mauve-800 hover:border-amber-400/50'
+                        }`}
                 >
-                    <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
+                    <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
                         <span className="text-xs font-bold uppercase tracking-wider">Deals</span>
                         <i className="ri-percent-line text-amber-500" />
                     </div>
-                    <div className="text-2xl font-black text-zinc-900 dark:text-white mt-2">
+                    <div className="text-2xl font-black text-neutral-900 dark:text-white mt-2">
                         {isStatsLoading ? '-' : stats?.deals_pending ?? 0}
                     </div>
                 </div>
 
                 <div
                     onClick={() => { setSelectedEntityType('COUPON'); setSelectedStatus('PENDING'); }}
-                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${
-                        selectedEntityType === 'COUPON'
-                            ? 'bg-purple-500/10 border-purple-500/40 shadow-sm'
-                            : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-purple-400/50'
-                    }`}
+                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${selectedEntityType === 'COUPON'
+                        ? 'bg-purple-500/10 border-purple-500/40 shadow-sm'
+                        : 'bg-white dark:bg-mauve-900 border-mauve-200 dark:border-mauve-800 hover:border-purple-400/50'
+                        }`}
                 >
-                    <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
+                    <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
                         <span className="text-xs font-bold uppercase tracking-wider">Coupons</span>
                         <i className="ri-price-tag-3-line text-purple-500" />
                     </div>
-                    <div className="text-2xl font-black text-zinc-900 dark:text-white mt-2">
+                    <div className="text-2xl font-black text-neutral-900 dark:text-white mt-2">
                         {isStatsLoading ? '-' : stats?.coupons_pending ?? 0}
                     </div>
                 </div>
 
                 <div
                     onClick={() => { setSelectedEntityType('PROMOTION'); setSelectedStatus('PENDING'); }}
-                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${
-                        selectedEntityType === 'PROMOTION'
-                            ? 'bg-rose-500/10 border-rose-500/40 shadow-sm'
-                            : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-rose-400/50'
-                    }`}
+                    className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 ${selectedEntityType === 'PROMOTION'
+                        ? 'bg-rose-500/10 border-rose-500/40 shadow-sm'
+                        : 'bg-white dark:bg-mauve-900 border-mauve-200 dark:border-mauve-800 hover:border-rose-400/50'
+                        }`}
                 >
-                    <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400">
+                    <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
                         <span className="text-xs font-bold uppercase tracking-wider">Promotions</span>
                         <i className="ri-megaphone-line text-rose-500" />
                     </div>
-                    <div className="text-2xl font-black text-zinc-900 dark:text-white mt-2">
+                    <div className="text-2xl font-black text-neutral-900 dark:text-white mt-2">
                         {isStatsLoading ? '-' : stats?.promotions_pending ?? 0}
                     </div>
                 </div>
             </div>
 
             {/* Filter Toolbar */}
-            <div className="flex flex-wrap items-center gap-3 p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
+            <div className="flex flex-wrap items-center gap-3 p-4 bg-white dark:bg-mauve-900 rounded-2xl border border-mauve-200 dark:border-mauve-800 shadow-sm">
                 {isSuperAdmin && (
                     <div className="w-full sm:w-56">
                         <Select
@@ -356,7 +350,7 @@ const ApprovalList = () => {
             </div>
 
             {/* Table */}
-            <div className="border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 shadow-sm">
+            <div className="border border-mauve-200 dark:border-mauve-800 rounded-2xl overflow-hidden bg-white dark:bg-mauve-900 shadow-sm">
                 <DataTable
                     data={approvals || []}
                     columns={columns}

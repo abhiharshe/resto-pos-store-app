@@ -49,7 +49,7 @@ const ItemPricing = () => {
     if (!item) {
         return (
             <div className="text-center py-12">
-                <h3 className="text-lg font-medium text-zinc-900 dark:text-white">Item not found</h3>
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-white">Item not found</h3>
                 <button onClick={() => navigate('/menu/items')} className="mt-4 text-indigo-600 hover:text-indigo-700">Go back to list</button>
             </div>
         );
@@ -60,8 +60,8 @@ const ItemPricing = () => {
             <div className="w-full">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Manage Pricing for {item.name}</h3>
-                        <p className="text-zinc-500 dark:text-zinc-400">Set base price and store-wise overrides.</p>
+                        <h3 className="text-xl font-semibold text-neutral-900 dark:text-white">Manage Pricing for {item.name}</h3>
+                        <p className="text-sm text-neutral-500 dark:text-neutral-400">Set base price and store-wise overrides.</p>
                     </div>
                     <div className="flex gap-2">
                         <Button

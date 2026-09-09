@@ -35,7 +35,7 @@ const CouponList = () => {
         {
             accessorKey: 'code',
             header: 'Coupon Code',
-            cell: (info) => <span className="font-semibold text-zinc-900 dark:text-white uppercase tracking-wider">{info.getValue() as string}</span>
+            cell: (info) => <span className="font-semibold text-neutral-900 dark:text-white uppercase tracking-wider">{info.getValue() as string}</span>
         },
         {
             id: 'scope',
@@ -144,8 +144,8 @@ const CouponList = () => {
         <Container>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Coupons</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">Manage promotional codes and discounts.</p>
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">Coupons</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Manage promotional codes and discounts.</p>
                 </div>
                 <Button
                     variant="primary"
@@ -156,7 +156,7 @@ const CouponList = () => {
                 </Button>
             </div>
 
-            <div className='border border-zinc-200 dark:border-zinc-700 rounded-lg'>
+            <div className='border border-mauve-200 dark:border-zinc-700 rounded-lg'>
                 <DataTable data={coupons || []} columns={columns} isLoading={isLoading} />
             </div>
 

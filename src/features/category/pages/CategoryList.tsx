@@ -63,7 +63,7 @@ const CategoryList = () => {
                 const imgUrl = info.row.original.image?.variants?.thumbnail || info.row.original.image?.url;
                 return (
                     <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0 border border-zinc-200 dark:border-zinc-700">
+                        <div className="w-12 h-12 rounded-md overflow-hidden bg-neutral-100 dark:bg-neutral-800 shrink-0 border border-mauve-200 dark:border-zinc-700">
                             {imgUrl ? (
                                 <img src={getMediaURL(imgUrl)} alt="" className="w-full h-full object-cover" />
                             ) : (
@@ -73,7 +73,7 @@ const CategoryList = () => {
                             )}
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-semibold text-zinc-900 dark:text-white">
+                            <span className="font-semibold text-neutral-900 dark:text-white">
                                 {info.row.original.name}
                             </span>
                         </div>
@@ -84,7 +84,7 @@ const CategoryList = () => {
         {
             accessorKey: 'menu.title',
             header: 'Assigned Menu',
-            cell: (info) => <span className="text-zinc-500 dark:text-zinc-400 text-sm uppercase tracking-wider">{info.getValue() as string || 'N/A'}</span>
+            cell: (info) => <span className="text-neutral-500 dark:text-neutral-400 text-sm uppercase tracking-wider">{info.getValue() as string || 'N/A'}</span>
         },
         {
             id: 'scope',
@@ -153,8 +153,8 @@ const CategoryList = () => {
         <Container>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Categories</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">Organize your menu items into logical groups.</p>
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">Categories</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Organize your menu items into logical groups.</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <Button
@@ -171,7 +171,7 @@ const CategoryList = () => {
             </div>
 
             {isFilterVisible && (
-                <div className="flex flex-col sm:flex-row gap-4 mb-6 p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-200 dark:border-zinc-700">
+                <div className="flex flex-col sm:flex-row gap-4 mb-6 p-4 bg-gray-50 dark:bg-neutral-800/50 rounded-lg border border-mauve-200 dark:border-zinc-700">
                     <div className="w-full sm:w-64">
                         <Input
                             name="search"
@@ -200,7 +200,7 @@ const CategoryList = () => {
                 </div>
             )}
 
-            <div className='border border-zinc-200 dark:border-zinc-700 rounded-lg'>
+            <div className='border border-mauve-200 dark:border-zinc-700 rounded-lg'>
                 <DataTable data={filteredCategories} columns={columns} isLoading={isLoading} />
             </div>
 

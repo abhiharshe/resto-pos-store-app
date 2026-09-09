@@ -28,8 +28,8 @@ const IconButton = ({
     const variants = {
         primary: "border-transparent text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 shadow-sm hover:shadow-md",
         secondary: "border-transparent text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:ring-indigo-500",
-        outline: "border-gray-300 dark:border-zinc-600 text-gray-700 dark:text-zinc-300 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 focus:ring-indigo-500",
-        ghost: "border-transparent text-gray-600 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-zinc-200",
+        outline: "border-gray-300 dark:border-zinc-600 text-gray-700 dark:text-zinc-300 bg-white dark:bg-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-700 focus:ring-indigo-500",
+        ghost: "border-transparent text-gray-600 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-neutral-800 hover:text-gray-900 dark:hover:text-zinc-200",
         danger: "border border-red-300 text-red-600 bg-red-100 hover:bg-red-200 focus:ring-red-500",
         success: "border border-green-300 text-green-600 bg-green-100 hover:bg-green-200 focus:ring-green-500",
         warning: "border border-yellow-300 text-yellow-600 bg-yellow-100 hover:bg-yellow-200 focus:ring-yellow-500",

@@ -50,7 +50,7 @@ const ItemPricingForm = ({ item, stores, onSubmit, onCancel, isSaving }: ItemPri
                                 render={(arrayHelpers) => (
                                     <div className="space-y-4">
                                         {values.variants.map((variant: any, index: number) => (
-                                            <div key={index} className="flex gap-4 items-start p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl relative">
+                                            <div key={index} className="flex gap-4 items-start p-4 bg-neutral-50 dark:bg-mauve-900 border border-mauve-200 dark:border-mauve-800 rounded-xl relative">
                                                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                     <Input
                                                         label="Variant Name"
@@ -88,7 +88,7 @@ const ItemPricingForm = ({ item, stores, onSubmit, onCancel, isSaving }: ItemPri
                                                             label="Is Serving (identifies portions)"
                                                         />
                                                     </div>
-                                                    <div className="sm:col-span-2 mt-4 space-y-4 border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                                                    <div className="sm:col-span-2 mt-4 space-y-4 border-t border-mauve-200 dark:border-mauve-800 pt-4">
                                                         <div>
                                                             <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Store Specific Prices & Availability</label>
                                                             <p className="text-xs text-zinc-500 mb-2">Leave blank to use the base price for the store. Uncheck to make unavailable.</p>
@@ -102,7 +102,7 @@ const ItemPricingForm = ({ item, stores, onSubmit, onCancel, isSaving }: ItemPri
                                                                 const isWebsiteApp = isStorePriceSet ? (variant.store_prices[storePriceIndex].is_website_app ?? true) : true;
 
                                                                 return (
-                                                                    <div key={store.id} className="flex flex-col gap-2 p-3 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
+                                                                    <div key={store.id} className="flex flex-col gap-2 p-3 rounded-lg bg-white dark:bg-neutral-800 border border-mauve-200 dark:border-zinc-700">
                                                                         <div className="flex items-center justify-between">
                                                                             <span className="text-md font-medium truncate flex-1 mr-2" title={store.name}>{store.name}</span>
                                                                         </div>
@@ -198,7 +198,7 @@ const ItemPricingForm = ({ item, stores, onSubmit, onCancel, isSaving }: ItemPri
                                 )}
                             />
                         </div>
-                        <div className="flex gap-4 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                        <div className="flex gap-4 pt-4 border-t border-mauve-200 dark:border-mauve-800">
                             <Button
                                 type="submit"
                                 isLoading={isSaving || isSubmitting}

@@ -228,7 +228,7 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
     };
 
     return (
-        <div className="flex-1 h-full overflow-hidden flex flex-col bg-zinc-50 dark:bg-zinc-950">
+        <div className="flex-1 h-full overflow-hidden flex flex-col bg-neutral-50 dark:bg-neutral-950">
             <AnimatePresence mode="wait">
                 {view === 'GRID' && (
                     <motion.div
@@ -240,14 +240,14 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
                     >
                         {
                             menusData && menusData.length > 1 && (
-                                <div className="flex items-start gap-2 bg-white dark:bg-zinc-900 p-2 border-b border-zinc-100 dark:border-zinc-800">
+                                <div className="flex items-start gap-2 bg-white dark:bg-mauve-900 p-2 border-b border-zinc-100 dark:border-mauve-800">
                                     {
                                         menusData?.map((menu, index) => (
                                             <button
                                                 key={`${menu.id}-${index}`}
                                                 onClick={() => handleMenuClick(menu.id)}
-                                                className={`flex flex-col items-start border-b-2 px-4 py-2 transition-all duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 ${selectedMenuId === menu.id
-                                                    ? "bg-zinc-100 dark:bg-zinc-800 border-indigo-600 dark:border-indigo-500 font-black"
+                                                className={`flex flex-col items-start border-b-2 px-4 py-2 transition-all duration-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 ${selectedMenuId === menu.id
+                                                    ? "bg-neutral-100 dark:bg-neutral-800 border-indigo-600 dark:border-indigo-500 font-black"
                                                     : "bg-transparent border-transparent text-zinc-400 font-semibold"
                                                     }`}
                                             >
@@ -260,14 +260,14 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
                             )
                         }
                         <div className="relative flex-1 flex flex-col w-full min-h-0 transition-all">
-                            <div className="sticky top-0 z-10 w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-zinc-50 dark:bg-zinc-900/50 backdrop-blur-md p-3 sm:p-2 border-b border-zinc-200 dark:border-zinc-800">
+                            <div className="sticky top-0 z-10 w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-neutral-50 dark:bg-mauve-900/50 backdrop-blur-md p-3 sm:p-2 border-b border-mauve-200 dark:border-mauve-800">
                                 {
                                     categoriesData && categoriesData.length > 0 && (
                                         <div className="flex-1 flex flex-row items-center gap-2 overflow-hidden">
                                             <div className="shrink-0 text-zinc-400 dark:text-zinc-600 px-2">
                                                 <i className="ri-filter-3-line text-lg"></i>
                                             </div>
-                                            <div className="shrink-0 text-[10px] font-black uppercase text-zinc-400 dark:text-zinc-600 mr-2 border-r border-zinc-200 dark:border-zinc-800 pr-3">Filter</div>
+                                            <div className="shrink-0 text-[10px] font-black uppercase text-zinc-400 dark:text-zinc-600 mr-2 border-r border-mauve-200 dark:border-mauve-800 pr-3">Filter</div>
                                             <div className="shrink-0">
                                                 <Button
                                                     variant={selectedMenuId === undefined && selectedCategoryId === undefined && searchQuery === "" ? "primary" : "outline"}
@@ -328,7 +328,7 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
                                         icon="ri-search-line"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="rounded-2xl border-2 border-zinc-100 dark:border-zinc-800 transition-all focus:border-indigo-500"
+                                        className="rounded-2xl border-2 border-zinc-100 dark:border-mauve-800 transition-all focus:border-indigo-500"
                                     />
                                 </div>
                             </div>
@@ -345,7 +345,7 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
                                                     <DealCard key={`${deal.id}-${index}`} deal={deal} onSelect={() => handleSelectDeal(deal)} />
                                                 ))
                                             ) : (
-                                                <div className="col-span-full flex flex-col items-center justify-center py-20 text-zinc-400 bg-white dark:bg-zinc-900 rounded-3xl border-2 border-dashed border-zinc-100 dark:border-zinc-800 shadow-inner">
+                                                <div className="col-span-full flex flex-col items-center justify-center py-20 text-zinc-400 bg-white dark:bg-mauve-900 rounded-3xl border-2 border-dashed border-zinc-100 dark:border-mauve-800 shadow-inner">
                                                     <i className="ri-magic-line text-5xl mb-3 opacity-10"></i>
                                                     <p className="font-black uppercase tracking-widest text-xs">No active deals found</p>
                                                     <p className="text-[10px] mt-1">Try another category or store</p>
@@ -361,7 +361,7 @@ const MenuItems: React.FC<MenuItemNavigationProps> = ({ editingCartItem, onEditC
                                                     <ItemCard key={`${menuItem.id}-${index}`} item={menuItem} onSelect={() => handleSelectItem(menuItem)} />
                                                 ))
                                             ) : (
-                                                <div className="col-span-full flex flex-col items-center justify-center py-20 text-zinc-400 bg-white dark:bg-zinc-900 rounded-3xl border-2 border-dashed border-zinc-100 dark:border-zinc-800 shadow-inner">
+                                                <div className="col-span-full flex flex-col items-center justify-center py-20 text-zinc-400 bg-white dark:bg-mauve-900 rounded-3xl border-2 border-dashed border-zinc-100 dark:border-mauve-800 shadow-inner">
                                                     <i className="ri-search-2-line text-5xl mb-3 opacity-10"></i>
                                                     <p className="font-black uppercase tracking-widest text-xs">No items found</p>
                                                     <p className="text-[10px] mt-1">Try searching for something else</p>

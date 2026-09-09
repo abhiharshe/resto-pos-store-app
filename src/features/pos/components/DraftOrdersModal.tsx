@@ -95,9 +95,9 @@ const DraftOrdersModal: React.FC<DraftOrdersModalProps> = ({ isOpen, onClose }) 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="bg-white dark:bg-zinc-900 rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden border border-zinc-100 dark:border-zinc-800"
+                className="bg-white dark:bg-mauve-900 rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden border border-zinc-100 dark:border-mauve-800"
             >
-                <div className="p-6 border-b border-zinc-50 dark:border-zinc-800 flex justify-between items-center bg-zinc-50 dark:bg-zinc-900/50">
+                <div className="p-6 border-b border-zinc-50 dark:border-mauve-800 flex justify-between items-center bg-neutral-50 dark:bg-mauve-900/50">
                     <div>
                         <h2 className="text-xl font-black dark:text-white">Draft Orders</h2>
                         <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider">Saved pending orders</p>
@@ -122,7 +122,7 @@ const DraftOrdersModal: React.FC<DraftOrdersModalProps> = ({ isOpen, onClose }) 
                                 key={draft.id}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl flex items-center justify-between group hover:border-indigo-500 transition-all hover:shadow-lg"
+                                className="p-4 bg-neutral-50 dark:bg-mauve-900 border border-zinc-100 dark:border-mauve-800 rounded-2xl flex items-center justify-between group hover:border-indigo-500 transition-all hover:shadow-lg"
                             >
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">

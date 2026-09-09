@@ -28,7 +28,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ onNext, onBack }) => {
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="p-4 sm:p-8 space-y-6 max-w-2xl mx-auto h-full flex flex-col justify-center overflow-y-auto"
             >
-                <Card className="space-y-6 p-8 bg-white dark:bg-zinc-800 shadow-2xl rounded-3xl border dark:border-zinc-700 overflow-visible">
+                <Card className="space-y-6 p-8 bg-white dark:bg-neutral-800 shadow-2xl rounded-3xl border dark:border-zinc-700 overflow-visible">
                     <div>
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                             <div className="flex items-center gap-3">
@@ -42,8 +42,8 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ onNext, onBack }) => {
                             <button
                                 onClick={() => dispatch(toggleWalkIn())}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all group ${isWalkIn
-                                        ? 'bg-indigo-600 border-indigo-600 text-white'
-                                        : 'border-zinc-100 dark:border-zinc-700 text-gray-500 hover:border-indigo-200'
+                                    ? 'bg-indigo-600 border-indigo-600 text-white'
+                                    : 'border-zinc-100 dark:border-zinc-700 text-gray-500 hover:border-indigo-200'
                                     }`}
                             >
                                 <i className={`ri-walk-line text-lg ${isWalkIn ? 'text-white' : 'text-gray-400 group-hover:text-indigo-400'}`}></i>
@@ -76,7 +76,7 @@ const CustomerInfo: React.FC<CustomerInfoProps> = ({ onNext, onBack }) => {
                                 <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-zinc-100 dark:border-zinc-800 flex items-start gap-3 mt-2"
+                                    className="p-4 bg-neutral-50 dark:bg-mauve-900/50 rounded-2xl border border-dashed border-zinc-100 dark:border-mauve-800 flex items-start gap-3 mt-2"
                                 >
                                     <i className="ri-information-line text-indigo-500 mt-0.5"></i>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed italic">

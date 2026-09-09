@@ -36,7 +36,7 @@ export const MaintenanceOverlay: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-xl"
+                className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-neutral-950/80 backdrop-blur-xl"
             >
                 {/* Decorative background glow */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -45,7 +45,7 @@ export const MaintenanceOverlay: React.FC = () => {
                     initial={{ scale: 0.92, opacity: 0, y: 20 }}
                     animate={{ scale: 1, opacity: 1, y: 0 }}
                     transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                    className="relative w-full max-w-lg bg-white/90 dark:bg-zinc-900/90 border border-amber-500/30 dark:border-amber-500/20 rounded-3xl p-8 shadow-2xl backdrop-blur-2xl text-center overflow-hidden"
+                    className="relative w-full max-w-lg bg-white/90 dark:bg-mauve-900/90 border border-amber-500/30 dark:border-amber-500/20 rounded-3xl p-8 shadow-2xl backdrop-blur-2xl text-center overflow-hidden"
                 >
                     {/* Top amber accent line */}
                     <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600" />
@@ -61,13 +61,13 @@ export const MaintenanceOverlay: React.FC = () => {
 
                     {/* Store & Title */}
                     {store?.name && (
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-semibold text-zinc-600 dark:text-zinc-300 mb-3 border border-zinc-200 dark:border-zinc-700">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-zinc-600 dark:text-zinc-300 mb-3 border border-mauve-200 dark:border-zinc-700">
                             <i className="ri-store-2-line text-amber-500" />
                             <span>{store.name}</span>
                         </div>
                     )}
 
-                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white mb-3">
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-white mb-3">
                         Store Under Maintenance
                     </h2>
 
@@ -77,7 +77,7 @@ export const MaintenanceOverlay: React.FC = () => {
 
                     {/* Scheduled Times if present */}
                     {(startTime || endTime) && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-zinc-100/80 dark:bg-zinc-800/60 border border-zinc-200/80 dark:border-zinc-700/60 text-left mb-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-neutral-100/80 dark:bg-neutral-800/60 border border-mauve-200/80 dark:border-zinc-700/60 text-left mb-6">
                             {startTime && (
                                 <div>
                                     <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block mb-0.5">
@@ -122,7 +122,7 @@ export const MaintenanceOverlay: React.FC = () => {
                         <button
                             type="button"
                             onClick={handleLogout}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 font-medium text-sm transition-colors"
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-zinc-800 dark:text-zinc-200 font-medium text-sm transition-colors"
                         >
                             <i className="ri-logout-box-r-line" />
                             <span>Sign Out</span>

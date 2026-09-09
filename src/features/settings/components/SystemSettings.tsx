@@ -30,7 +30,7 @@ const SystemSettings = () => {
     return (
         <form onSubmit={formik.handleSubmit} className="space-y-8 max-w-3xl">
             <div className="space-y-4">
-                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Application State</h3>
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-zinc-100">Application State</h3>
 
                 <div className="p-4 border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-500/10 rounded-lg flex items-start gap-4">
                     <div className="mt-1">
@@ -54,8 +54,8 @@ const SystemSettings = () => {
                 </div>
             </div>
 
-            <div className="border-t border-zinc-200 dark:border-zinc-700 pt-8 space-y-4">
-                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">UI Constraints</h3>
+            <div className="border-t border-mauve-200 dark:border-zinc-700 pt-8 space-y-4">
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-zinc-100">UI Constraints</h3>
                 <div className="max-w-xs">
                     <Input
                         label="Records Per Page (Datatables)"

@@ -106,9 +106,9 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                     <button
                         type="button"
                         onClick={() => !disabled && setIsOpen(!isOpen)}
-                        className={`flex items-center h-full px-3 gap-2 bg-zinc-50 dark:bg-zinc-900 border-y border-l rounded-l-lg transition-all
-                            ${error ? 'border-red-500' : 'border-zinc-200 dark:border-zinc-800'}
-                            hover:bg-zinc-100 dark:hover:bg-zinc-800
+                        className={`flex items-center h-full px-3 gap-2 bg-neutral-50 dark:bg-mauve-900 border-y border-l rounded-l-lg transition-all
+                            ${error ? 'border-red-500' : 'border-mauve-200 dark:border-mauve-800'}
+                            hover:bg-neutral-100 dark:hover:bg-neutral-800
                         `}
                     >
                         <span className="text-xl">{selectedCountry.flag}</span>
@@ -122,9 +122,9 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                className="absolute left-0 top-full mt-2 z-100 min-w-[280px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-2xl overflow-hidden flex flex-col"
+                                className="absolute left-0 top-full mt-2 z-100 min-w-[280px] bg-white dark:bg-mauve-900 border border-mauve-200 dark:border-mauve-800 rounded-lg shadow-2xl overflow-hidden flex flex-col"
                             >
-                                <div className="p-2 border-b border-zinc-100 dark:border-zinc-800">
+                                <div className="p-2 border-b border-zinc-100 dark:border-mauve-800">
                                     <div className="relative">
                                         <i className="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
                                         <input
@@ -133,7 +133,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                                             placeholder="Search country..."
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
-                                            className="w-full pl-9 pr-4 py-2 bg-zinc-50 dark:bg-zinc-800/50 border-none rounded-md text-xs focus:ring-1 focus:ring-indigo-500 outline-none"
+                                            className="w-full pl-9 pr-4 py-2 bg-neutral-50 dark:bg-neutral-800/50 border-none rounded-md text-xs focus:ring-1 focus:ring-indigo-500 outline-none"
                                         />
                                     </div>
                                 </div>
@@ -146,7 +146,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                                             className={`w-full flex items-center gap-3 px-3 py-2 rounded-md transition-colors
                                                 ${selectedCountry.code === country.code
                                                     ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400'
-                                                    : 'hover:bg-zinc-50 dark:hover:bg-zinc-800 text-gray-700 dark:text-zinc-300'}
+                                                    : 'hover:bg-neutral-50 dark:hover:bg-neutral-800 text-gray-700 dark:text-zinc-300'}
                                             `}
                                         >
                                             <span className="text-xl">{country.flag}</span>
@@ -172,10 +172,10 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
                         value={getPhoneNumber()}
                         onChange={handleNumberChange}
                         placeholder={placeholder}
-                        className={`w-full px-4 py-2 h-full bg-white dark:bg-zinc-900 border-y border-r rounded-r-lg transition-all outline-none font-medium text-sm
+                        className={`w-full px-4 py-2 h-full bg-white dark:bg-mauve-900 border-y border-r rounded-r-lg transition-all outline-none font-medium text-sm
                             ${error || (isTouched && !isValid)
                                 ? 'border-red-500 text-red-500 placeholder-red-300'
-                                : 'border-zinc-200 dark:border-zinc-800 text-gray-900 dark:text-white placeholder-gray-400 focus:border-indigo-500'}
+                                : 'border-mauve-200 dark:border-mauve-800 text-gray-900 dark:text-white placeholder-gray-400 focus:border-indigo-500'}
                         `}
                     />
                     {isTouched && isValid && (

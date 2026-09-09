@@ -121,17 +121,17 @@ const KdsPage: React.FC = () => {
     }
 
     return (
-        <div className="h-full flex flex-col bg-zinc-50 dark:bg-black">
+        <div className="h-full flex flex-col bg-neutral-50 dark:bg-black">
             {/* Header / Toolbar */}
-            <div className="bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 p-4 sticky top-0 z-10">
+            <div className="bg-white dark:bg-mauve-900 border-b border-mauve-200 dark:border-mauve-800 p-4 sticky top-0 z-10">
                 <div className="mx-auto flex flex-row justify-between items-center gap-4">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
                             <i className="ri-restaurant-2-line text-xl"></i>
                         </div>
                         <div>
-                            <h1 className="text-xl font-semibold text-zinc-900 dark:text-white leading-tight">KDS</h1>
-                            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">{kdsOrders.length} active orders</p>
+                            <h1 className="text-xl font-semibold text-neutral-900 dark:text-white leading-tight">KDS</h1>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">{kdsOrders.length} active orders</p>
                         </div>
                         <div className="flex items-center gap-2 min-w-[200px]">
                             {user?.role === 'SUPER_ADMIN' ? (
@@ -141,7 +141,7 @@ const KdsPage: React.FC = () => {
                                     onChange={(val) => setSelectedStoreId(String(val))}
                                 />
                             ) : (
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-mauve-200 dark:border-zinc-700 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
                                     <i className="ri-store-2-line text-emerald-500" />
                                     <span>{user?.store?.name || stores?.find(s => s.id === selectedStoreId)?.name || 'Allocated Store'}</span>
                                 </div>
@@ -183,7 +183,7 @@ const KdsPage: React.FC = () => {
                     {ordersLoading ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {[1, 2, 3, 4].map(i => (
-                                <div key={i} className="h-64 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4">
+                                <div key={i} className="h-64 bg-white dark:bg-mauve-900 rounded-xl border border-mauve-200 dark:border-mauve-800 p-4">
                                     <Skeleton className="h-6 w-1/2 mb-4" />
                                     <Skeleton className="h-4 w-full mb-2" />
                                     <Skeleton className="h-4 w-full mb-2" />
@@ -203,11 +203,11 @@ const KdsPage: React.FC = () => {
                         </div>
                     ) : (
                         <div className="h-[60vh] flex flex-col items-center justify-center text-center">
-                            <div className="w-20 h-20 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center mb-4 text-zinc-400">
+                            <div className="w-20 h-20 bg-neutral-100 dark:bg-neutral-800/50 rounded-full flex items-center justify-center mb-4 text-zinc-400">
                                 <i className="ri-inbox-line text-4xl"></i>
                             </div>
-                            <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-2">Kitchen is clear!</h2>
-                            <p className="text-zinc-500 dark:text-zinc-400 max-w-xs mx-auto">
+                            <h2 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">Kitchen is clear!</h2>
+                            <p className="text-neutral-500 dark:text-neutral-400 max-w-xs mx-auto">
                                 All orders have been prepared. New orders will appear here automatically in real-time.
                             </p>
                         </div>

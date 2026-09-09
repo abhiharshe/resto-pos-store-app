@@ -51,13 +51,13 @@ const Settings = () => {
         <Container>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Settings</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">Manage your global application configurations.</p>
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">Settings</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Manage your global application configurations.</p>
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-                <div className="border-b border-zinc-200 dark:border-zinc-700">
+            <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-mauve-200 dark:border-zinc-700 overflow-hidden">
+                <div className="border-b border-mauve-200 dark:border-zinc-700">
                     <nav className="flex overflow-x-auto select-none" aria-label="Tabs">
                         {tabs.map((tab) => (
                             <button

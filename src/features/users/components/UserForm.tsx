@@ -95,8 +95,8 @@ export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }
         <div className="max-w-4xl">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">{initialValues?.id ? 'Update details for ' + initialValues.full_name : 'Fill the form to create a new user'}</p>
+                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white">{title}</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{initialValues?.id ? 'Update details for ' + initialValues.full_name : 'Fill the form to create a new user'}</p>
                 </div>
                 <Button variant="ghost" onClick={() => navigate('/users')} icon="ri-arrow-left-line">
                     Back to List
@@ -106,7 +106,7 @@ export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }
             <Card className="w-full mb-6">
                 <div className="mb-8 flex flex-col items-center">
                     <div className="relative group">
-                        <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-zinc-800 shadow-lg bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center">
+                        <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-mauve-800 shadow-lg bg-neutral-100 dark:bg-mauve-900 flex items-center justify-center">
                             {avatar?.url ? (
                                 <img src={getMediaURL(avatar.variants?.medium || avatar.url)} alt="Avatar" className="w-full h-full object-cover" />
                             ) : (
@@ -219,7 +219,7 @@ export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }
                                 />
                             </div>
 
-                            <div className="flex items-center gap-3 p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                            <div className="flex items-center gap-3 p-4 bg-neutral-50 dark:bg-mauve-900/50 rounded-xl border border-zinc-100 dark:border-mauve-800">
                                 <div className="flex items-center h-5">
                                     <input
                                         type="checkbox"
@@ -231,12 +231,12 @@ export const UserForm = ({ initialValues, onSubmit, isLoading, onCancel, title }
                                     />
                                 </div>
                                 <div className="text-sm leading-6">
-                                    <label htmlFor="is_active" className="font-medium text-zinc-900 dark:text-white">Active Status</label>
+                                    <label htmlFor="is_active" className="font-medium text-neutral-900 dark:text-white">Active Status</label>
                                     <p className="text-zinc-500">Enable or disable this user account.</p>
                                 </div>
                             </div>
 
-                            <div className="flex gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                            <div className="flex gap-4 pt-4 border-t border-zinc-100 dark:border-mauve-800">
                                 <Button
                                     type="submit"
                                     isLoading={isLoading || isSubmitting}

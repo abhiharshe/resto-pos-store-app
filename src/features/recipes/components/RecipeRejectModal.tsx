@@ -33,7 +33,7 @@ export const RecipeRejectModal: React.FC<RecipeRejectModalProps> = ({
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden"
+                    className="w-full max-w-md bg-white dark:bg-mauve-900 rounded-2xl shadow-2xl border border-mauve-200 dark:border-mauve-800 overflow-hidden"
                 >
                     <form onSubmit={handleSubmit}>
                         <div className="p-6 space-y-4">
@@ -42,10 +42,10 @@ export const RecipeRejectModal: React.FC<RecipeRejectModalProps> = ({
                             </div>
 
                             <div>
-                                <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                                <h3 className="text-lg font-semibold text-neutral-900 dark:text-zinc-100">
                                     Reject Recipe Submission
                                 </h3>
-                                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+                                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
                                     Rejecting <strong className="text-zinc-700 dark:text-zinc-200">{recipe.recipe_name}</strong>. Provide feedback or instructions for the kitchen staff.
                                 </p>
                             </div>
@@ -59,17 +59,17 @@ export const RecipeRejectModal: React.FC<RecipeRejectModalProps> = ({
                                     onChange={(e) => setReason(e.target.value)}
                                     placeholder="e.g. Please adjust cook time, clarify missing ingredient quantities..."
                                     rows={3}
-                                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all resize-none"
+                                    className="w-full px-3.5 py-2.5 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all resize-none"
                                 />
                             </div>
                         </div>
 
-                        <div className="p-4 px-6 bg-zinc-50 dark:bg-zinc-900/50 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-end gap-2">
+                        <div className="p-4 px-6 bg-neutral-50 dark:bg-mauve-900/50 border-t border-zinc-100 dark:border-mauve-800 flex items-center justify-end gap-2">
                             <button
                                 type="button"
                                 onClick={onClose}
                                 disabled={isLoading}
-                                className="px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-xl transition-colors"
+                                className="px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-xl transition-colors"
                             >
                                 Cancel
                             </button>

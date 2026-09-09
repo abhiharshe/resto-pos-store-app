@@ -37,7 +37,7 @@ const PromotionList = () => {
             header: 'Promotion Title',
             cell: (info) => (
                 <div className="flex flex-col">
-                    <span className="font-semibold text-zinc-900 dark:text-white">{info.getValue() as string}</span>
+                    <span className="font-semibold text-neutral-900 dark:text-white">{info.getValue() as string}</span>
                     <span className="text-[10px] text-zinc-500 uppercase tracking-widest">{info.row.original.type}</span>
                 </div>
             )
@@ -131,15 +131,15 @@ const PromotionList = () => {
         <Container>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Promotions</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400 font-medium">Manage store-wide BXGY and Item Discount offers.</p>
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">Promotions</h3>
+                    <p className="text-neutral-500 dark:text-neutral-400 font-medium">Manage store-wide BXGY and Item Discount offers.</p>
                 </div>
                 <Button variant="primary" onClick={() => navigate('/promotions/new')} icon="ri-add-line" className="hidden md:inline-flex">
                     Create Promotion
                 </Button>
             </div>
 
-            <div className='border border-zinc-200 dark:border-zinc-700 rounded-lg'>
+            <div className='border border-mauve-200 dark:border-zinc-700 rounded-lg'>
                 <DataTable data={promotions || []} columns={columns} isLoading={isLoading} />
             </div>
 

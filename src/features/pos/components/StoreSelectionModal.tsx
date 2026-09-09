@@ -25,7 +25,7 @@ const StoreSelectionModal: React.FC<StoreSelectionModalProps> = ({ isOpen, onClo
             <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="bg-white dark:bg-zinc-900 rounded-xl shadow-2xl w-full max-w-md overflow-hidden border dark:border-zinc-800"
+                className="bg-white dark:bg-mauve-900 rounded-xl shadow-2xl w-full max-w-md overflow-hidden border dark:border-mauve-800"
             >
                 <div className="p-4 flex flex-row items-center gap-2 bg-linear-to-b from-indigo-50/50 to-transparent dark:from-indigo-900/10">
                     <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/40 rounded-2xl flex items-center justify-center">
@@ -33,7 +33,7 @@ const StoreSelectionModal: React.FC<StoreSelectionModalProps> = ({ isOpen, onClo
                     </div>
                     <div className="flex flex-col items-start justify-center gap">
                         <h2 className="text-2xl font-black dark:text-white tracking-tight ">Select Store</h2>
-                        <span className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">Please select a store to start placing orders</span>
+                        <span className="text-neutral-500 dark:text-neutral-400 text-sm font-medium">Please select a store to start placing orders</span>
                     </div>
                 </div>
 
@@ -48,13 +48,13 @@ const StoreSelectionModal: React.FC<StoreSelectionModalProps> = ({ isOpen, onClo
                             <button
                                 key={store.id}
                                 onClick={() => handleSelect(store)}
-                                className="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-800/50 hover:bg-white dark:hover:bg-zinc-800 border dark:border-zinc-700/50 hover:border-indigo-500 rounded-lg flex items-center justify-between transition-all group hover:shadow-xl hover:-translate-y-1"
+                                className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-800/50 hover:bg-white dark:hover:bg-neutral-800 border dark:border-zinc-700/50 hover:border-indigo-500 rounded-lg flex items-center justify-between transition-all group hover:shadow-xl hover:-translate-y-1"
                             >
                                 <div className="text-left">
                                     <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{store.name}</h3>
-                                    <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium truncate max-w-[200px]">{store.address || 'Standard Location'}</p>
+                                    <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium truncate max-w-[200px]">{store.address || 'Standard Location'}</p>
                                 </div>
-                                <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-900 border dark:border-zinc-700 flex items-center justify-center group-hover:bg-indigo-600 group-hover:border-indigo-600 transition-all">
+                                <div className="w-10 h-10 rounded-xl bg-white dark:bg-mauve-900 border dark:border-zinc-700 flex items-center justify-center group-hover:bg-indigo-600 group-hover:border-indigo-600 transition-all">
                                     <i className="ri-arrow-right-line text-zinc-400 group-hover:text-white transition-colors"></i>
                                 </div>
                             </button>

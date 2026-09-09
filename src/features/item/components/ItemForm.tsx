@@ -63,8 +63,8 @@ export const ItemForm = ({ initialValues, onSubmit, isLoading, title }: ItemForm
         <div className="w-full">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">{initialValues ? 'Update details for ' + initialValues.name : 'Fill the form to create a new item'}</p>
+                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white">{title}</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{initialValues ? 'Update details for ' + initialValues.name : 'Fill the form to create a new item'}</p>
                 </div>
                 <div className='flex gap-2'>
                     {
@@ -129,7 +129,7 @@ export const ItemForm = ({ initialValues, onSubmit, isLoading, title }: ItemForm
                                 <textarea
                                     name="description"
                                     rows={3}
-                                    className="w-full px-3 py-2 text-sm text-zinc-900 dark:text-white bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-shadow"
+                                    className="w-full px-3 py-2 text-sm text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 border border-mauve-200 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-shadow"
                                     placeholder="Brief description of the item..."
                                     value={values.description}
                                     onChange={handleChange}
@@ -156,7 +156,7 @@ export const ItemForm = ({ initialValues, onSubmit, isLoading, title }: ItemForm
 
                                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                     {assets.map((asset: any) => (
-                                        <div key={asset.id} className="relative aspect-square rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 group">
+                                        <div key={asset.id} className="relative aspect-square rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 border border-mauve-200 dark:border-zinc-700 group">
                                             <img
                                                 src={getMediaURL(asset.variants?.medium || asset.url)}
                                                 alt="Gallery"
@@ -217,7 +217,7 @@ export const ItemForm = ({ initialValues, onSubmit, isLoading, title }: ItemForm
                                 <p className="text-[10px] text-zinc-500 mt-1">Select one or more groups that apply to this item. You can also remove items by clicking the "x" on the tags.</p>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-neutral-50 dark:bg-mauve-900/50 rounded-xl border border-zinc-100 dark:border-mauve-800">
                                 <Checkbox
                                     id="is_active"
                                     name="is_active"

@@ -38,10 +38,10 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                     initial={{ scale: 0.95, opacity: 0, y: 20 }}
                     animate={{ scale: 1, opacity: 1, y: 0 }}
                     exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                    className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden"
+                    className="relative w-full max-w-md bg-white dark:bg-mauve-900 rounded-3xl shadow-2xl overflow-hidden"
                 >
                     {/* Header */}
-                    <div className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/50">
+                    <div className="px-6 py-4 border-b border-zinc-100 dark:border-mauve-800 flex items-center justify-between bg-neutral-50 dark:bg-neutral-800/50">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center rounded-xl">
                                 <i className="ri-user-smile-line text-xl"></i>
@@ -53,7 +53,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                         </div>
                         <button
                             onClick={onClose}
-                            className="p-2 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-full transition-colors"
+                            className="p-2 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-full transition-colors"
                         >
                             <i className="ri-close-line text-xl dark:text-gray-400"></i>
                         </button>
@@ -81,7 +81,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                                     Delivery Address
                                 </label>
                                 <textarea
-                                    className="w-full min-h-[100px] px-4 py-3 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-800 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all resize-none text-sm font-inter"
+                                    className="w-full min-h-[100px] px-4 py-3 rounded-2xl border border-zinc-100 dark:border-mauve-800 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all resize-none text-sm font-inter"
                                     placeholder="Enter complete delivery address..."
                                     value={customerAddress}
                                     onChange={(e) => dispatch(updateCustomerDetails({ address: e.target.value }))}
@@ -100,7 +100,7 @@ const CustomerDetailsModal: React.FC<CustomerDetailsModalProps> = ({ isOpen, onC
                     </div>
 
                     {/* Footer */}
-                    <div className="p-4 bg-zinc-50 dark:bg-zinc-800/30 border-t border-zinc-100 dark:border-zinc-800">
+                    <div className="p-4 bg-neutral-50 dark:bg-neutral-800/30 border-t border-zinc-100 dark:border-mauve-800">
                         <Button
                             variant="primary"
                             className="w-full py-4 rounded-2xl font-semibold shadow-lg shadow-indigo-200 dark:shadow-none"

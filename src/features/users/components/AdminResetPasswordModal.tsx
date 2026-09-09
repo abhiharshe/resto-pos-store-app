@@ -108,20 +108,20 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
         >
             <div className="p-6 space-y-6">
                 {/* Target User Info Header */}
-                <div className="flex items-center gap-3.5 p-3.5 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+                <div className="flex items-center gap-3.5 p-3.5 bg-neutral-50 dark:bg-neutral-800/50 rounded-2xl border border-zinc-100 dark:border-mauve-800">
                     <div className="w-11 h-11 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-semibold text-lg shrink-0">
                         {user?.full_name ? user.full_name[0].toUpperCase() : <i className="ri-user-line" />}
                     </div>
                     <div className="flex flex-col min-w-0">
-                        <span className="font-semibold text-zinc-900 dark:text-white truncate">
+                        <span className="font-semibold text-neutral-900 dark:text-white truncate">
                             {user?.full_name || 'Staff User'}
                         </span>
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
+                        <span className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
                             {user?.email}
                         </span>
                     </div>
                     {user?.role && (
-                        <span className="ml-auto px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-zinc-200/70 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 shrink-0">
+                        <span className="ml-auto px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-neutral-200/70 dark:bg-neutral-700 text-zinc-700 dark:text-zinc-300 shrink-0">
                             {user.role.replace('_', ' ')}
                         </span>
                     )}
@@ -140,8 +140,8 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
                             </p>
                         </div>
 
-                        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/60 rounded-2xl border border-zinc-200/80 dark:border-zinc-700 space-y-3">
-                            <div className="flex justify-between items-center text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+                        <div className="p-4 bg-neutral-50 dark:bg-neutral-800/60 rounded-2xl border border-mauve-200/80 dark:border-zinc-700 space-y-3">
+                            <div className="flex justify-between items-center text-xs font-semibold text-neutral-500 dark:text-neutral-400">
                                 <span>NEW CREDENTIALS</span>
                                 <button
                                     type="button"
@@ -152,12 +152,12 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
                                 </button>
                             </div>
                             <div className="space-y-1.5 text-sm">
-                                <div className="flex justify-between items-center p-2 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-100 dark:border-zinc-800">
-                                    <span className="text-zinc-500 dark:text-zinc-400 text-xs">Email:</span>
-                                    <span className="font-semibold text-zinc-900 dark:text-white select-all">{user?.email}</span>
+                                <div className="flex justify-between items-center p-2 bg-white dark:bg-mauve-900 rounded-lg border border-zinc-100 dark:border-mauve-800">
+                                    <span className="text-neutral-500 dark:text-neutral-400 text-xs">Email:</span>
+                                    <span className="font-semibold text-neutral-900 dark:text-white select-all">{user?.email}</span>
                                 </div>
-                                <div className="flex justify-between items-center p-2 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-100 dark:border-zinc-800">
-                                    <span className="text-zinc-500 dark:text-zinc-400 text-xs">Password:</span>
+                                <div className="flex justify-between items-center p-2 bg-white dark:bg-mauve-900 rounded-lg border border-zinc-100 dark:border-mauve-800">
+                                    <span className="text-neutral-500 dark:text-neutral-400 text-xs">Password:</span>
                                     <div className="flex items-center gap-2">
                                         <span className="font-mono font-semibold text-indigo-600 dark:text-indigo-400 select-all">
                                             {resetResult.temporary_password || password}
@@ -165,7 +165,7 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
                                         <button
                                             type="button"
                                             onClick={() => handleCopy(resetResult.temporary_password || password)}
-                                            className="p-1 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded text-zinc-500"
+                                            className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded text-zinc-500"
                                             title="Copy password"
                                         >
                                             <i className="ri-file-copy-line text-sm" />
@@ -231,13 +231,13 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
                                     )}
                                 </div>
                             </div>
-                            <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                            <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
                                 Must be at least 8 characters long.
                             </p>
                         </div>
 
                         {/* Send Email Checkbox */}
-                        <div className="flex items-start gap-3 p-3.5 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                        <div className="flex items-start gap-3 p-3.5 bg-neutral-50 dark:bg-neutral-800/40 rounded-xl border border-zinc-100 dark:border-mauve-800">
                             <input
                                 type="checkbox"
                                 id="send_email"
@@ -246,13 +246,13 @@ export const AdminResetPasswordModal: React.FC<AdminResetPasswordModalProps> = (
                                 className="mt-0.5 w-4 h-4 text-indigo-600 rounded border-zinc-300 focus:ring-indigo-500"
                             />
                             <label htmlFor="send_email" className="text-xs text-zinc-700 dark:text-zinc-300 cursor-pointer select-none">
-                                <span className="font-semibold block text-zinc-900 dark:text-white">Email credentials to user</span>
+                                <span className="font-semibold block text-neutral-900 dark:text-white">Email credentials to user</span>
                                 Send an automated notification with their new login password to {user?.email || 'user'}.
                             </label>
                         </div>
 
                         {/* Actions */}
-                        <div className="flex items-center justify-end gap-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                        <div className="flex items-center justify-end gap-3 pt-3 border-t border-zinc-100 dark:border-mauve-800">
                             <Button
                                 type="button"
                                 variant="outline"

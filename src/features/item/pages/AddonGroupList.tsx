@@ -28,7 +28,7 @@ const AddonGroupList = () => {
         {
             accessorKey: 'name',
             header: 'Group Name',
-            cell: (info) => <span className="font-semibold text-zinc-900 dark:text-white">{info.getValue() as string}</span>
+            cell: (info) => <span className="font-semibold text-neutral-900 dark:text-white">{info.getValue() as string}</span>
         },
         {
             accessorKey: 'addons',
@@ -40,12 +40,12 @@ const AddonGroupList = () => {
                 return (
                     <div className="flex flex-wrap gap-1">
                         {displayedAddons.map((addon) => (
-                            <span key={addon.id} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200">
+                            <span key={addon.id} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-zinc-800 dark:text-zinc-200">
                                 {addon.name} (₹{addon.price})
                             </span>
                         ))}
                         {remaining > 0 && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300">…</span>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-neutral-200 dark:bg-neutral-700 text-zinc-600 dark:text-zinc-300">…</span>
                         )}
                     </div>
                 );
@@ -92,8 +92,8 @@ const AddonGroupList = () => {
         <Container>
             <div className="flex items-center justify-between">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Add-On Groups</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">Manage customizable options for your menu items.</p>
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">Add-On Groups</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Manage customizable options for your menu items.</p>
                 </div>
                 <Button onClick={() => {
                     setEditingGroup(null);

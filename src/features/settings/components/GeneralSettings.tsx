@@ -55,14 +55,14 @@ const GeneralSettings = () => {
     return (
         <form onSubmit={formik.handleSubmit} className="space-y-8 max-w-3xl">
             <div className="space-y-4">
-                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Brand Identity</h3>
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-zinc-100">Brand Identity</h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Main Logo</label>
                         <div className="flex items-center gap-4">
                             {formik.values.logo_url && (
-                                <img src={getMediaURL(formik.values.logo_url)} alt="Logo" className="h-16 w-16 object-contain bg-zinc-100 rounded border" />
+                                <img src={getMediaURL(formik.values.logo_url)} alt="Logo" className="h-16 w-16 object-contain bg-neutral-100 rounded border" />
                             )}
                             <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'logo_url')} className="text-sm" />
                         </div>
@@ -71,7 +71,7 @@ const GeneralSettings = () => {
                         <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Favicon</label>
                         <div className="flex items-center gap-4">
                             {formik.values.favicon_url && (
-                                <img src={getMediaURL(formik.values.favicon_url)} alt="Favicon" className="h-8 w-8 object-contain bg-zinc-100 rounded border" />
+                                <img src={getMediaURL(formik.values.favicon_url)} alt="Favicon" className="h-8 w-8 object-contain bg-neutral-100 rounded border" />
                             )}
                             <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'favicon_url')} className="text-sm" />
                         </div>
@@ -79,8 +79,8 @@ const GeneralSettings = () => {
                 </div>
             </div>
 
-            <div className="border-t border-zinc-200 dark:border-zinc-700 pt-8 space-y-4">
-                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Meta Information</h3>
+            <div className="border-t border-mauve-200 dark:border-zinc-700 pt-8 space-y-4">
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-zinc-100">Meta Information</h3>
                 <div className="grid grid-cols-1 gap-4">
                     <Input
                         label="App Title"
@@ -101,8 +101,8 @@ const GeneralSettings = () => {
                 </div>
             </div>
 
-            <div className="border-t border-zinc-200 dark:border-zinc-700 pt-8 space-y-4">
-                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Social Links</h3>
+            <div className="border-t border-mauve-200 dark:border-zinc-700 pt-8 space-y-4">
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-zinc-100">Social Links</h3>
                 <div className="grid grid-cols-1 gap-4">
                     <Input
                         label="Facebook URL"
@@ -131,8 +131,8 @@ const GeneralSettings = () => {
                 </div>
             </div>
 
-            <div className="border-t border-zinc-200 dark:border-zinc-700 pt-8 space-y-4">
-                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Regional Settings</h3>
+            <div className="border-t border-mauve-200 dark:border-zinc-700 pt-8 space-y-4">
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-zinc-100">Regional Settings</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Input
                         label="Currency Symbol"

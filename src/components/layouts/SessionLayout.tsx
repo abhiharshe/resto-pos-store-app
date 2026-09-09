@@ -104,6 +104,8 @@ const SessionLayout = () => {
     const canOrders = checkUserPermission(user, 'orders:manage');
     const canKds = checkUserPermission(user, 'kds:access') && (user?.role === 'SUPER_ADMIN' || user?.store?.has_kds);
     const canRecipes = checkUserPermission(user, 'recipes:manage');
+    const canFloors = checkUserPermission(user, 'floors:manage');
+    const canReservations = checkUserPermission(user, 'reservations:manage') || checkUserPermission(user, 'reservations:view');
 
     const canMenu = checkUserPermission(user, 'menu:manage');
     const canDeals = checkUserPermission(user, 'deals:manage');
@@ -125,7 +127,7 @@ const SessionLayout = () => {
     const { data: approvalStats } = useApprovalStats(user?.role === 'SUPER_ADMIN' ? undefined : (user?.store_id || undefined));
 
     return (
-        <div className={`flex relative w-full h-screen bg-gray-200 dark:bg-zinc-900 transition-colors duration-200 overflow-hidden`}>
+        <div className={`flex relative w-full h-screen bg-gray-200 dark:bg-mauve-900 transition-colors duration-200 overflow-hidden`}>
             {/* Maintenance Mode Overlay for restricted roles */}
             <MaintenanceOverlay />
 
@@ -144,19 +146,19 @@ const SessionLayout = () => {
 
             {/* Sidebar */}
             <aside
-                className={`fixed md:relative inset-y-0 left-0 z-30 flex flex-col h-full bg-white dark:bg-zinc-900
+                className={`fixed md:relative inset-y-0 left-0 z-30 flex flex-col h-full bg-white dark:bg-mauve-900
                     transform transition-all duration-300 ease-in-out
                     ${isSidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full w-64 md:translate-x-0 md:w-20'}
                 `}
             >
                 {/* Logo Section */}
                 <div className="h-16 flex items-center justify-center overflow-hidden">
-                    <div className="flex items-center min-w-[40px] justify-center">
+                    <div className="flex items-center min-w-10 justify-center">
                         {branding.logoUrl ? (
                             <img
                                 src={getMediaURL(branding.logoUrl)}
                                 alt="Logo"
-                                className="h-8 w-auto min-w-[32px] object-contain transition-transform duration-300 transform rounded"
+                                className="h-8 w-auto min-w-8 object-contain transition-transform duration-300 transform rounded"
                             />
                         ) : (
                             <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center border border-primary/20">
@@ -169,7 +171,7 @@ const SessionLayout = () => {
 
                     <div className={`transition-all duration-300 ease-in-out ${isSidebarOpen ? 'ml-3 opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none w-0 overflow-hidden'
                         }`}>
-                        <h1 className="font-semibold text-lg text-zinc-900 dark:text-zinc-100 font-sans tracking-tight truncate max-w-[140px]">
+                        <h1 className="font-semibold text-lg text-neutral-900 dark:text-zinc-100 font-sans tracking-tight truncate max-w-[140px]">
                             {branding.siteName}
                         </h1>
                     </div>
@@ -180,16 +182,24 @@ const SessionLayout = () => {
                         /* Grouped Sidebar - Default & Mobile */
                         <div className="space-y-1">
                             {canDashboard && (
-                                <NavItem to="/dashboard" icon="ri-dashboard-line" label="Dashboard" isOpen={isSidebarOpen} />
+                                <NavSection label="Analytics">
+                                    <NavItem to="/dashboard" icon="ri-dashboard-line" label="Dashboard" isOpen={isSidebarOpen} />
+                                </NavSection>
                             )}
 
-                            {(canPos || canOrders || canKds || canRecipes) && (
+                            {(canPos || canOrders || canKds || canRecipes || canFloors || canReservations) && (
                                 <NavSection label="Operations">
                                     {canPos && (
                                         <NavItem to="/pos" icon="ri-shopping-cart-line" label="POS Terminal" isOpen={isSidebarOpen} />
                                     )}
                                     {canOrders && (
                                         <NavItem to="/orders" icon="ri-file-list-3-line" label="Orders List" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canFloors && (
+                                        <NavItem to="/tables" icon="ri-layout-grid-line" label="Floors & Tables" isOpen={isSidebarOpen} />
+                                    )}
+                                    {canReservations && (
+                                        <NavItem to="/reservations" icon="ri-calendar-check-line" label="Reservations" isOpen={isSidebarOpen} />
                                     )}
                                     {canKds && (
                                         <NavItem to="/kds" icon="ri-restaurant-2-line" label="Kitchen Display" isOpen={isSidebarOpen} />
@@ -273,6 +283,12 @@ const SessionLayout = () => {
                             {canOrders && (
                                 <NavItem to="/orders" icon="ri-file-list-3-line" label="Orders" isOpen={false} />
                             )}
+                            {canFloors && (
+                                <NavItem to="/tables" icon="ri-layout-grid-line" label="Tables" isOpen={false} />
+                            )}
+                            {canReservations && (
+                                <NavItem to="/reservations" icon="ri-calendar-check-line" label="Reservations" isOpen={false} />
+                            )}
                             {canKds && (
                                 <NavItem to="/kds" icon="ri-restaurant-2-line" label="KDS" isOpen={false} />
                             )}
@@ -337,12 +353,12 @@ const SessionLayout = () => {
             {/* Main Content */}
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden space-y-4 ">
                 {/* Topbar */}
-                <header className="bg-white dark:bg-zinc-800 z-20 p-2 h-16 flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700">
+                <header className="bg-white dark:bg-mauve-900 z-20 p-2 h-16 flex items-center justify-between">
                     <div className="flex items-center">
                         <button
                             title="Toggle Sidebar"
                             onClick={() => dispatch(toggleSidebar())}
-                            className="p-2 rounded-md text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-700 focus:outline-none"
+                            className="p-2 rounded-md text-zinc-500 dark:text-zinc-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none"
                         >
                             <i className={isSidebarOpen ? "ri-menu-fold-line text-xl" : "ri-menu-unfold-line text-xl"} />
                         </button>
@@ -357,7 +373,7 @@ const SessionLayout = () => {
                         <button
                             title={isFullScreen ? "Exit Fullscreen" : "Enter Fullscreen"}
                             onClick={toggleFullscreen}
-                            className="w-10 h-10 rounded-full text-zinc-500 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-700"
+                            className="w-10 h-10 rounded-full text-zinc-500 dark:text-zinc-200 border border-mauve-200 dark:border-zinc-700 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                         >
                             {
                                 isFullScreen ?
@@ -367,14 +383,14 @@ const SessionLayout = () => {
                         <button
                             title="Toggle Theme"
                             onClick={() => dispatch(toggleTheme())}
-                            className="w-10 h-10 rounded-full text-zinc-500 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-700"
+                            className="w-10 h-10 rounded-full text-zinc-500 dark:text-zinc-200 border border-mauve-200 dark:border-zinc-700 hover:bg-neutral-100 dark:hover:bg-neutral-500"
                         >
                             {theme === 'light' ? <i className="ri-moon-line text-xl" /> : <i className="ri-sun-line text-xl" />}
                         </button>
                         <div className="relative" ref={profileRef}>
                             <button
                                 onClick={() => setIsProfileOpen(!isProfileOpen)}
-                                className={`flex items-center gap-2 p-1.5 pr-3 border border-zinc-200 dark:border-zinc-700 rounded-full transition-all duration-200 focus:outline-none ${isProfileOpen ? 'bg-zinc-100 dark:bg-zinc-700' : 'hover:bg-zinc-50 dark:hover:bg-zinc-800'}`}
+                                className={`flex items-center gap-2 p-1.5 pr-3 border border-mauve-200 dark:border-zinc-700 rounded-full transition-all duration-200 focus:outline-none ${isProfileOpen ? 'bg-neutral-100 dark:bg-neutral-700' : 'hover:bg-neutral-50 dark:hover:bg-neutral-800'}`}
                             >
                                 <div className="w-8 h-8 rounded-full overflow-hidden bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-semibold uppercase border border-indigo-200 dark:border-indigo-800">
                                     {user?.avatar?.url ? (
@@ -387,7 +403,7 @@ const SessionLayout = () => {
                                     <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">
                                         {user?.name || user?.username || 'Admin'}
                                     </span>
-                                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest font-semibold">
+                                    <span className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-semibold">
                                         {user?.role || 'Staff'}
                                     </span>
                                 </div>
@@ -401,11 +417,11 @@ const SessionLayout = () => {
                                         animate={{ opacity: 1, scale: 1, y: 0 }}
                                         exit={{ opacity: 0, scale: 0.95, y: 10 }}
                                         transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="absolute right-0 mt-2 w-56 bg-white dark:bg-zinc-800 rounded-xl shadow-xl py-2 z-50 border border-zinc-200 dark:border-zinc-700 origin-top-right overflow-hidden"
+                                        className="absolute right-0 mt-2 w-56 bg-white dark:bg-neutral-800 rounded-xl shadow-xl py-2 z-50 border border-mauve-200 dark:border-zinc-700 origin-top-right overflow-hidden"
                                     >
                                         <div className="px-4 py-3 border-b border-zinc-100 dark:border-zinc-700 mb-1">
                                             <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Signed in as</p>
-                                            <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate">{user?.email}</p>
+                                            <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">{user?.email}</p>
                                         </div>
 
                                         <DropdownItem icon="ri-user-settings-line" label="View Profile" onClick={() => { setIsProfileOpen(false); navigate('/profile'); }} />
@@ -467,7 +483,7 @@ const NavItem = ({ to, icon, label, isOpen, isSubItem, badge, onClick }: NavItem
                     `flex-1 flex items-center justify-between text-sm font-medium rounded-lg transition-all duration-200 group py-1 ${isSubItem ? 'pl-4 pr-4' : 'pl-2 pr-2'
                     } ${isActive
                         ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400'
-                        : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100'
+                        : 'text-zinc-500 hover:bg-neutral-50 hover:text-neutral-900 dark:text-zinc-400 dark:hover:bg-neutral-800 dark:hover:text-zinc-100'
                     }`
                 }
             >
@@ -501,7 +517,7 @@ const NavSection = ({ label, children }: NavSectionProps) => (
     <div className="mt-4 first:mt-0">
         <div className="flex items-center gap-2 px-3 mb-1">
             <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">{label}</span>
-            <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-700/50" />
+            <div className="flex-1 h-px bg-neutral-200 dark:bg-neutral-700/50" />
         </div>
         <div className="space-y-0.5 flex flex-col">
             {children}
@@ -541,7 +557,7 @@ export const NavItemGroup = ({ icon, label, isOpen, children }: NavItemGroupProp
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
-                <div className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors duration-200 ${isAnyChildActive ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400' : 'text-zinc-400 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 group-hover/item:bg-zinc-100 dark:group-hover/item:bg-zinc-800'} cursor-pointer`}>
+                <div className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors duration-200 ${isAnyChildActive ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400' : 'text-zinc-400 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 group-hover/item:bg-neutral-100 dark:group-hover/item:bg-neutral-800'} cursor-pointer`}>
                     <i className={`${icon} text-lg`} />
                 </div>
 
@@ -553,7 +569,7 @@ export const NavItemGroup = ({ icon, label, isOpen, children }: NavItemGroupProp
                             animate={{ opacity: 1, x: 0, scale: 1 }}
                             exit={{ opacity: 0, x: 10, scale: 0.95 }}
                             transition={{ duration: 0.15, ease: 'easeOut' }}
-                            className="absolute left-full top-0 ml-3 w-52 bg-white dark:bg-zinc-800 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-zinc-100 dark:border-zinc-700 p-2 z-[100]"
+                            className="absolute left-full top-0 ml-3 w-52 bg-white dark:bg-neutral-800 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-zinc-100 dark:border-zinc-700 p-2 z-[100]"
                         >
                             <div className="px-3 py-1 border-b border-zinc-50 dark:border-zinc-700/50 mb-1">
                                 <span className="text-[10px] font-semibold text-zinc-400 uppercase tracking-widest">{label}</span>
@@ -583,7 +599,7 @@ export const NavItemGroup = ({ icon, label, isOpen, children }: NavItemGroupProp
         <div className="">
             <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className={`w-full flex items-center justify-between px-2 py-1 text-sm transition-colors duration-200 rounded-lg group text-zinc-600 hover:text-zinc-600 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800`}
+                className={`w-full flex items-center justify-between px-2 py-1 text-sm transition-colors duration-200 rounded-lg group text-zinc-600 hover:text-zinc-600 dark:hover:text-zinc-200 hover:bg-neutral-50 dark:hover:bg-neutral-800`}
             >
                 <div className="flex items-center">
                     <i className={`${icon} text-lg mr-3 ${isExpanded ? 'text-indigo-500' : 'text-zinc-400 group-hover:text-zinc-500'}`} />
@@ -595,7 +611,7 @@ export const NavItemGroup = ({ icon, label, isOpen, children }: NavItemGroupProp
                 initial={false}
                 animate={{ height: isExpanded ? 'auto' : 0, opacity: isExpanded ? 1 : 0 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className="overflow-hidden bg-zinc-100/50 dark:bg-zinc-900/20 rounded-lg my-1 space-y-1"
+                className="overflow-hidden bg-neutral-100/50 dark:bg-mauve-900/20 rounded-lg my-1 space-y-1"
             >
                 {children}
             </motion.div>
@@ -606,7 +622,7 @@ export const NavItemGroup = ({ icon, label, isOpen, children }: NavItemGroupProp
 const DropdownItem = ({ icon, label, onClick }: { icon: string; label: string; onClick: () => void }) => (
     <button
         onClick={onClick}
-        className="flex items-center w-full px-2 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors group"
+        className="flex items-center w-full px-2 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors group"
     >
         <i className={`${icon} mr-3 text-lg text-zinc-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors`} />
         {label}

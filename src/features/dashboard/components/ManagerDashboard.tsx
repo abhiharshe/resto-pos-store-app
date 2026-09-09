@@ -52,13 +52,13 @@ const ManagerDashboard = () => {
                             { action: 'Order Completed', time: '15 mins ago', info: 'Order #842 - Delivered', icon: 'ri-checkbox-circle-line', color: 'blue' },
                             { action: 'Inventory Alert', time: '1 hour ago', info: 'Chicken Patty stock low (5 left)', icon: 'ri-error-warning-line', color: 'amber' },
                         ].map((activity, i) => (
-                            <div key={i} className="flex items-center gap-4 p-3 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
+                            <div key={i} className="flex items-center gap-4 p-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors">
                                 <div className={`w-10 h-10 rounded-xl bg-${activity.color}-100 dark:bg-${activity.color}-900/30 flex items-center justify-center text-${activity.color}-600`}>
                                     <i className={`${activity.icon} text-lg`} />
                                 </div>
                                 <div className="flex-1">
                                     <div className="flex items-center justify-between">
-                                        <p className="text-sm font-semibold text-zinc-900 dark:text-white">{activity.action}</p>
+                                        <p className="text-sm font-semibold text-neutral-900 dark:text-white">{activity.action}</p>
                                         <span className="text-[10px] text-zinc-400 font-medium uppercase tracking-tighter">{activity.time}</span>
                                     </div>
                                     <p className="text-xs text-zinc-500 font-medium font-sans">{activity.info}</p>
@@ -88,16 +88,16 @@ const ManagerDashboard = () => {
 };
 
 const StatBox = ({ label, value, subtext, icon }: any) => (
-    <Card className={`bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow-sm group hover:scale-[1.02] transition-transform duration-300`}>
+    <Card className={`bg-white dark:bg-neutral-800 border border-mauve-200 dark:border-zinc-700 shadow-sm group hover:scale-[1.02] transition-transform duration-300`}>
         <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-zinc-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-zinc-700">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-mauve-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-zinc-700">
                 <i className={`${icon} text-2xl`} />
             </div>
             <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase px-2 py-1 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">Real-Time</span>
         </div>
         <div className="space-y-1">
             <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">{label}</p>
-            <p className="text-3xl font-black text-zinc-900 dark:text-white mb-2">{value}</p>
+            <p className="text-3xl font-black text-neutral-900 dark:text-white mb-2">{value}</p>
             <div className="flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                 <p className="text-[10px] font-semibold text-zinc-500 dark:text-zinc-500 uppercase">{subtext}</p>

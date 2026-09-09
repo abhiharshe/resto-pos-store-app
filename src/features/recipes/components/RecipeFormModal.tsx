@@ -176,21 +176,21 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 10 }}
                     transition={{ duration: 0.2 }}
-                    className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden"
+                    className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-white dark:bg-mauve-900 rounded-2xl shadow-2xl border border-mauve-200 dark:border-mauve-800 overflow-hidden"
                 >
                     {/* Header */}
-                    <div className="flex items-center justify-between p-6 border-b border-zinc-100 dark:border-zinc-800 bg-gradient-to-r from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-800/50">
+                    <div className="flex items-center justify-between p-6 border-b border-zinc-100 dark:border-mauve-800 bg-gradient-to-r from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-800/50">
                         <div>
                             <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                                 {recipeToEdit ? 'Modify Recipe' : 'New Recipe'}
                             </span>
-                            <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+                            <h2 className="text-xl font-semibold text-neutral-900 dark:text-zinc-100">
                                 {recipeToEdit ? `Edit: ${recipeToEdit.recipe_name}` : `Create Recipe for: ${menuItem?.name}`}
                             </h2>
                         </div>
                         <button
                             onClick={onClose}
-                            className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                            className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                         >
                             <i className="ri-close-line text-xl" />
                         </button>
@@ -223,7 +223,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                     value={recipeName}
                                     onChange={(e) => setRecipeName(e.target.value)}
                                     placeholder="e.g. Classic Cheese Burger Recipe"
-                                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
+                                    className="w-full px-3.5 py-2.5 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
                                 />
                             </div>
 
@@ -236,7 +236,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                     onChange={(e) => setDescription(e.target.value)}
                                     placeholder="Brief overview or standard plating notes..."
                                     rows={2}
-                                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all resize-none"
+                                    className="w-full px-3.5 py-2.5 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all resize-none"
                                 />
                             </div>
                         </div>
@@ -253,7 +253,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                     value={prepTime}
                                     onChange={(e) => setPrepTime(e.target.value === '' ? '' : Number(e.target.value))}
                                     placeholder="e.g. 10"
-                                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                                    className="w-full px-3.5 py-2.5 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                                 />
                             </div>
                             <div>
@@ -266,7 +266,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                     value={cookTime}
                                     onChange={(e) => setCookTime(e.target.value === '' ? '' : Number(e.target.value))}
                                     placeholder="e.g. 5"
-                                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                                    className="w-full px-3.5 py-2.5 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                                 />
                             </div>
                             <div>
@@ -279,13 +279,13 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                     value={servings}
                                     onChange={(e) => setServings(e.target.value === '' ? '' : Number(e.target.value))}
                                     placeholder="e.g. 1"
-                                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                                    className="w-full px-3.5 py-2.5 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                                 />
                             </div>
                         </div>
 
                         {/* Allergen & Dietary Tag Selection */}
-                        <div className="space-y-3 bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                        <div className="space-y-3 bg-neutral-50 dark:bg-neutral-800/40 p-4 rounded-xl border border-zinc-100 dark:border-mauve-800">
                             <div className="flex items-center justify-between">
                                 <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
                                     <i className="ri-shield-cross-line text-rose-500" />
@@ -304,7 +304,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
 
                             {/* Active Tags Display */}
                             {allergens.length > 0 ? (
-                                <div className="flex flex-wrap gap-2 p-2.5 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-700">
+                                <div className="flex flex-wrap gap-2 p-2.5 bg-white dark:bg-mauve-900 rounded-xl border border-mauve-200 dark:border-zinc-700">
                                     {allergens.map((allergen) => (
                                         <span
                                             key={allergen}
@@ -341,8 +341,8 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                                 type="button"
                                                 onClick={() => handleToggleAllergen(preset)}
                                                 className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1 border ${isSelected
-                                                        ? 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-900/40 dark:text-rose-200 dark:border-rose-700'
-                                                        : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-700'
+                                                    ? 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-900/40 dark:text-rose-200 dark:border-rose-700'
+                                                    : 'bg-white dark:bg-neutral-800 text-zinc-600 dark:text-zinc-400 border-mauve-200 dark:border-zinc-700 hover:bg-neutral-100 dark:hover:bg-neutral-700'
                                                     }`}
                                             >
                                                 {isSelected ? <i className="ri-check-line text-rose-600 dark:text-rose-400" /> : <i className="ri-add-line text-zinc-400" />}
@@ -363,7 +363,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                         onChange={(e) => setCustomAllergen(e.target.value)}
                                         onKeyDown={handleAddCustomAllergen}
                                         placeholder="Type custom tag (e.g. Vegan, Spicy) & press Enter..."
-                                        className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                                        className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-mauve-900 text-xs text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                                     />
                                 </div>
                                 <button
@@ -393,9 +393,9 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                 </button>
                             </div>
 
-                            <div className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
+                            <div className="border border-mauve-200 dark:border-mauve-800 rounded-xl overflow-hidden shadow-sm">
                                 <table className="w-full text-left text-sm">
-                                    <thead className="bg-zinc-50 dark:bg-zinc-800/75 text-zinc-500 dark:text-zinc-400 text-xs uppercase tracking-wider">
+                                    <thead className="bg-neutral-50 dark:bg-neutral-800/75 text-neutral-500 dark:text-neutral-400 text-xs uppercase tracking-wider">
                                         <tr>
                                             <th className="px-3 py-2 font-semibold">Ingredient Name *</th>
                                             <th className="px-3 py-2 font-semibold">Inventory ID</th>
@@ -407,14 +407,14 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                     </thead>
                                     <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                                         {ingredients.map((ing, idx) => (
-                                            <tr key={idx} className="bg-white dark:bg-zinc-900">
+                                            <tr key={idx} className="bg-white dark:bg-mauve-900">
                                                 <td className="p-2">
                                                     <input
                                                         type="text"
                                                         value={ing.name || ''}
                                                         onChange={(e) => handleIngredientChange(idx, 'name', e.target.value)}
                                                         placeholder="e.g. Beef Patty"
-                                                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                                        className="w-full px-2.5 py-1.5 rounded-lg border border-mauve-200 dark:border-zinc-700 bg-neutral-50/50 dark:bg-neutral-800/50 text-xs text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                                                     />
                                                 </td>
                                                 <td className="p-2">
@@ -423,7 +423,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                                         value={ing.ingredient_id || ''}
                                                         onChange={(e) => handleIngredientChange(idx, 'ingredient_id', e.target.value)}
                                                         placeholder="e.g. inv_001"
-                                                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-xs font-mono text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                                        className="w-full px-2.5 py-1.5 rounded-lg border border-mauve-200 dark:border-zinc-700 bg-neutral-50/50 dark:bg-neutral-800/50 text-xs font-mono text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                                                     />
                                                 </td>
                                                 <td className="p-2">
@@ -439,7 +439,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                                                 e.target.value === '' ? '' : Number(e.target.value)
                                                             )
                                                         }
-                                                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-semibold"
+                                                        className="w-full px-2.5 py-1.5 rounded-lg border border-mauve-200 dark:border-zinc-700 bg-neutral-50/50 dark:bg-neutral-800/50 text-xs text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-semibold"
                                                     />
                                                 </td>
                                                 <td className="p-2">
@@ -449,7 +449,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                                         value={ing.uom}
                                                         onChange={(e) => handleIngredientChange(idx, 'uom', e.target.value)}
                                                         placeholder="piece"
-                                                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                                        className="w-full px-2.5 py-1.5 rounded-lg border border-mauve-200 dark:border-zinc-700 bg-neutral-50/50 dark:bg-neutral-800/50 text-xs text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                                                     />
                                                     <datalist id={`uom-list-${idx}`}>
                                                         {COMMON_UOMS.map((u) => (
@@ -463,7 +463,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                                         value={ing.notes || ''}
                                                         onChange={(e) => handleIngredientChange(idx, 'notes', e.target.value)}
                                                         placeholder="e.g. freshly grated"
-                                                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                                        className="w-full px-2.5 py-1.5 rounded-lg border border-mauve-200 dark:border-zinc-700 bg-neutral-50/50 dark:bg-neutral-800/50 text-xs text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                                                     />
                                                 </td>
                                                 <td className="p-2 text-center">
@@ -493,18 +493,18 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                 onChange={(e) => setInstructions(e.target.value)}
                                 placeholder="1. Toast bun on flat top for 1 minute.&#10;2. Grill burger patty for 4 minutes each side.&#10;3. Melt cheddar cheese slice over patty.&#10;4. Assemble with special sauce and serve immediately."
                                 rows={5}
-                                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono leading-relaxed"
+                                className="w-full px-3.5 py-2.5 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono leading-relaxed"
                             />
                         </div>
                     </div>
 
                     {/* Modal Footer Actions */}
-                    <div className="p-4 px-6 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 flex items-center justify-between gap-3">
+                    <div className="p-4 px-6 border-t border-zinc-100 dark:border-mauve-800 bg-neutral-50 dark:bg-mauve-900 flex items-center justify-between gap-3">
                         <button
                             type="button"
                             onClick={onClose}
                             disabled={isSubmitting}
-                            className="px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-xl transition-colors"
+                            className="px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-xl transition-colors"
                         >
                             Cancel
                         </button>
@@ -516,7 +516,7 @@ export const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
                                         type="button"
                                         onClick={() => handleSubmit(false)}
                                         disabled={isSubmitting || !recipeName.trim()}
-                                        className="px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-750 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-sm transition-all disabled:opacity-50"
+                                        className="px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-750 border border-mauve-200 dark:border-zinc-700 rounded-xl shadow-sm transition-all disabled:opacity-50"
                                     >
                                         Save as Draft
                                     </button>

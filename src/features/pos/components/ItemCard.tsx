@@ -57,10 +57,10 @@ const ItemCard = ({ item, onSelect }: ItemCardProps) => {
     return (
         <div
             onClick={handleAddClick}
-            className="group border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 flex flex-col gap-3 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-indigo-50 dark:hover:shadow-none bg-white dark:bg-zinc-900 border-opacity-60 relative overflow-hidden"
+            className="group border border-mauve-200 dark:border-mauve-800 rounded-lg p-3 flex flex-col gap-3 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-indigo-50 dark:hover:shadow-none bg-white dark:bg-mauve-900 border-opacity-60 relative overflow-hidden"
         >
             <div className="flex flex-row gap-4">
-                <div className="w-24 h-24 rounded-2xl p-2 bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-100 dark:border-zinc-800">
+                <div className="w-24 h-24 rounded-2xl p-2 bg-neutral-50 dark:bg-neutral-800 flex items-center justify-center overflow-hidden border border-zinc-100 dark:border-mauve-800">
                     <img
                         src={menuItemImage}
                         alt={item.name}
@@ -71,7 +71,7 @@ const ItemCard = ({ item, onSelect }: ItemCardProps) => {
                     />
                 </div>
                 <div className="flex-1 min-w-0 flex flex-col justify-center">
-                    <h2 className="font-semibold text-md text-zinc-900 dark:text-zinc-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.name}</h2>
+                    <h2 className="font-semibold text-md text-neutral-900 dark:text-zinc-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.name}</h2>
                     <p className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1 line-clamp-2 leading-tight font-medium">
                         {item.description || "Freshly prepared with the finest ingredients for your satisfaction."}
                     </p>
@@ -91,7 +91,7 @@ const ItemCard = ({ item, onSelect }: ItemCardProps) => {
                         Customizable
                     </div>
                 ) : (
-                    <div className="flex items-center gap-1 text-[8px] font-black text-zinc-400 uppercase tracking-widest bg-zinc-50 dark:bg-zinc-800 px-2 py-0.5 rounded-full">
+                    <div className="flex items-center gap-1 text-[8px] font-black text-zinc-400 uppercase tracking-widest bg-neutral-50 dark:bg-neutral-800 px-2 py-0.5 rounded-full">
                         <i className="ri-check-line"></i>
                         Standard Item
                     </div>
@@ -105,17 +105,17 @@ const ItemCard = ({ item, onSelect }: ItemCardProps) => {
                                     e.stopPropagation();
                                     dispatch(decrementQuantity(cartItem.cartId));
                                 }}
-                                className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-zinc-800 text-indigo-600 shadow-sm hover:bg-indigo-600 hover:text-white transition-all transform active:scale-90"
+                                className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-neutral-800 text-indigo-600 shadow-sm hover:bg-indigo-600 hover:text-white transition-all transform active:scale-90"
                             >
                                 <i className="ri-subtract-line font-black"></i>
                             </button>
-                            <span className="font-black text-zinc-900 dark:text-white min-w-4 text-center">{cartItem.quantity}</span>
+                            <span className="font-black text-neutral-900 dark:text-white min-w-4 text-center">{cartItem.quantity}</span>
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     dispatch(incrementQuantity(cartItem.cartId))
                                 }}
-                                className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-zinc-800 text-indigo-600 shadow-sm hover:bg-indigo-600 hover:text-white transition-all transform active:scale-90"
+                                className="w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-neutral-800 text-indigo-600 shadow-sm hover:bg-indigo-600 hover:text-white transition-all transform active:scale-90"
                             >
                                 <i className="ri-add-line font-black"></i>
                             </button>
@@ -126,7 +126,7 @@ const ItemCard = ({ item, onSelect }: ItemCardProps) => {
                                 e.stopPropagation();
                                 handleAddClick();
                             }}
-                            className={`flex items-center gap-2 rounded-xl px-4 py-1.5 font-black text-xs transition-all shadow-sm border-2 border-indigo-100 dark:border-indigo-900 bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 group-active:scale-95`}
+                            className={`flex items-center gap-2 rounded-xl px-4 py-1.5 font-black text-xs transition-all shadow-sm border-2 border-indigo-100 dark:border-indigo-900 bg-white dark:bg-neutral-800 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 group-active:scale-95`}
                         >
                             <i className={requiresModal ? "ri-equalizer-line" : "ri-add-line"}></i>
                             <span>{requiresModal ? "CONFIGURE" : "ADD"}</span>

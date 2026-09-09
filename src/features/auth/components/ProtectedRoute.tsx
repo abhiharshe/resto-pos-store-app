@@ -49,8 +49,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
                         <div className="w-16 h-16 rounded-2xl bg-red-100 dark:bg-red-950/40 text-red-500 flex items-center justify-center text-3xl mb-4">
                             <i className="ri-shield-cross-line" />
                         </div>
-                        <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Access Denied</h2>
-                        <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-md">
+                        <h2 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">Access Denied</h2>
+                        <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-md">
                             You do not have permission to access this feature. Please contact your administrator.
                         </p>
                     </div>

@@ -47,8 +47,8 @@ export const CategoryForm = ({ initialValues, onSubmit, isLoading, onCancel, tit
         <div>
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">{initialValues ? 'Update configuration for ' + initialValues.name : 'Fill the form to create a new category'}</p>
+                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white">{title}</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{initialValues ? 'Update configuration for ' + initialValues.name : 'Fill the form to create a new category'}</p>
                 </div>
                 <Button variant="ghost" onClick={() => navigate('/menu/categories')} icon="ri-arrow-left-line">
                     Back to List
@@ -88,7 +88,7 @@ export const CategoryForm = ({ initialValues, onSubmit, isLoading, onCancel, tit
 
                                 <div className="flex flex-col items-start">
                                     <div className="relative group">
-                                        <div className="w-full aspect-video max-w-[400px] rounded-xl overflow-hidden border-2 border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 flex items-center justify-center">
+                                        <div className="w-full aspect-video max-w-[400px] rounded-xl overflow-hidden border-2 border-mauve-200 dark:border-zinc-700 bg-neutral-50 dark:bg-mauve-900/50 flex items-center justify-center">
                                             {categoryImage?.url ? (
                                                 <img src={getMediaURL(categoryImage.variants?.medium || categoryImage.url)} alt="Category" className="w-full h-full object-cover" />
                                             ) : (
@@ -131,7 +131,7 @@ export const CategoryForm = ({ initialValues, onSubmit, isLoading, onCancel, tit
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3 p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                            <div className="flex items-center gap-3 p-4 bg-neutral-50 dark:bg-mauve-900/50 rounded-xl border border-zinc-100 dark:border-mauve-800">
                                 <div className="flex items-center h-5">
                                     <input
                                         type="checkbox"
@@ -143,12 +143,12 @@ export const CategoryForm = ({ initialValues, onSubmit, isLoading, onCancel, tit
                                     />
                                 </div>
                                 <div className="text-sm leading-6">
-                                    <label htmlFor="is_active" className="font-medium text-zinc-900 dark:text-white">Active Status</label>
+                                    <label htmlFor="is_active" className="font-medium text-neutral-900 dark:text-white">Active Status</label>
                                     <p className="text-zinc-500">Show this category on the customer storefront.</p>
                                 </div>
                             </div>
 
-                            <div className="flex gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                            <div className="flex gap-4 pt-4 border-t border-zinc-100 dark:border-mauve-800">
                                 <Button
                                     type="submit"
                                     isLoading={isLoading || isSubmitting}

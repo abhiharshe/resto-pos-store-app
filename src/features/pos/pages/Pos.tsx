@@ -107,7 +107,7 @@ const Pos = () => {
     };
 
     return (
-        <div className="flex flex-col lg:flex-row h-full bg-zinc-50 dark:bg-zinc-900 relative">
+        <div className="flex flex-col lg:flex-row h-full bg-neutral-50 dark:bg-mauve-900 relative">
             <StoreSelectionModal
                 isOpen={isStoreModalOpen && !user?.store_id}
                 onClose={() => setIsStoreModalOpen(false)}
@@ -128,7 +128,7 @@ const Pos = () => {
             </div>
 
             {/* Desktop Order Cart Sidebar */}
-            <div className="hidden lg:block lg:w-80 xl:w-96 bg-zinc-50 dark:bg-zinc-800 p-2 border-l border-zinc-100 dark:border-zinc-700 h-full">
+            <div className="hidden lg:block lg:w-80 xl:w-96 bg-neutral-50 dark:bg-neutral-800 p-2 border-l border-zinc-100 dark:border-zinc-700 h-full">
                 <OrderCart
                     setIsCartOpen={setIsCartOpen}
                     onCustomerClick={() => setIsCustomerModalOpen(true)}
@@ -169,7 +169,7 @@ const Pos = () => {
                             animate={{ x: 0 }}
                             exit={{ x: "100%" }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="lg:hidden fixed right-0 top-0 h-full w-[90%] sm:w-[450px] bg-zinc-50 dark:bg-zinc-800 z-60 shadow-2xl overflow-hidden flex flex-col border-l border-zinc-100 dark:border-zinc-700"
+                            className="lg:hidden fixed right-0 top-0 h-full w-[90%] sm:w-[450px] bg-neutral-50 dark:bg-neutral-800 z-60 shadow-2xl overflow-hidden flex flex-col border-l border-zinc-100 dark:border-zinc-700"
                         >
 
                             <div className="flex-1 overflow-hidden p-2">

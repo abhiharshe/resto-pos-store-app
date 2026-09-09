@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { Select } from '../../../components/common/Select';
 import { ConfirmDialog } from '../../../components/common/ConfirmDialog';
 import { toast } from 'react-hot-toast';
-import Datepicker from "react-tailwindcss-datepicker";
+import { DateRangePicker } from '../../../components/common/DateRangePicker';
 import { formatCurrencySymbol } from '../../../utils/currency';
 
 const OrderList = () => {
@@ -91,8 +91,8 @@ const OrderList = () => {
             header: 'Order #',
             cell: (info) => (
                 <div className='flex flex-col items-start'>
-                    <span className="font-semibold text-zinc-900 dark:text-white">{info.getValue() as string || `#${info.row.original.id}`}</span>
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-24">{info.row.original.store?.name}</span>
+                    <span className="font-semibold text-neutral-900 dark:text-white">{info.getValue() as string || `#${info.row.original.id}`}</span>
+                    <span className="text-xs text-neutral-500 dark:text-neutral-400 truncate max-w-24">{info.row.original.store?.name}</span>
                 </div>
             )
         },
@@ -111,12 +111,12 @@ const OrderList = () => {
         {
             accessorKey: 'tax_amount',
             header: 'Tax',
-            cell: (info) => <span className="text-zinc-500 dark:text-zinc-400">{formatCurrencySymbol(selectedStore?.currency)}{(info.getValue() as number || 0).toFixed(2)}</span>
+            cell: (info) => <span className="text-neutral-500 dark:text-neutral-400">{formatCurrencySymbol(selectedStore?.currency)}{(info.getValue() as number || 0).toFixed(2)}</span>
         },
         {
             accessorKey: 'total_amount',
             header: 'Total',
-            cell: (info) => <span className="font-semibold text-zinc-900 dark:text-white">{formatCurrencySymbol(selectedStore?.currency)}{(info.getValue() as number).toFixed(2)}</span>
+            cell: (info) => <span className="font-semibold text-neutral-900 dark:text-white">{formatCurrencySymbol(selectedStore?.currency)}{(info.getValue() as number).toFixed(2)}</span>
         },
         {
             accessorKey: 'payment_method',
@@ -127,7 +127,7 @@ const OrderList = () => {
                     <div className="flex flex-col">
                         <span className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">{order.payment_method}</span>
                         {order.payment_method === 'CASH' && order.cash_received != null && (
-                            <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                            <span className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400">
                                 Rec: {formatCurrencySymbol(selectedStore?.currency)}{order.cash_received.toFixed(2)} | Change: {formatCurrencySymbol(selectedStore?.currency)}{(order.change_amount ?? order.change ?? 0).toFixed(2)}
                             </span>
                         )}
@@ -186,8 +186,8 @@ const OrderList = () => {
         <div className="space-y-6 transition-all duration-300 ease-in-out">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Order History</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">Manage and track all orders across stores.</p>
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">Order History</h3>
+                    <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium">Manage and track all orders across stores.</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <Button
@@ -207,7 +207,7 @@ const OrderList = () => {
             </div>
 
             {isFilterVisible && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-2xl border dark:border-zinc-700 animate-in slide-in-from-top-2 duration-200">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4 bg-gray-50 dark:bg-neutral-800/50 rounded-2xl border dark:border-zinc-700 animate-in slide-in-from-top-2 duration-200">
                     {isSuperAdmin && (
                         <Select
                             label="Store"
@@ -258,14 +258,11 @@ const OrderList = () => {
                         onChange={(val) => handleFilterChange('payment_method', val)}
                     />
                     <div className="flex flex-col gap-1.5 w-full">
-                        <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Date Range</label>
-                        <Datepicker
+                        <DateRangePicker
+                            label="Date Range"
                             value={dateValue}
                             onChange={handleDateChange}
-                            showFooter={true}
-                            displayFormat={"DD/MM/YYYY"}
-                            inputClassName="w-full text-sm font-medium bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 rounded-lg py-2 focus:ring-indigo-500 focus:border-indigo-500 dark:text-white"
-                            containerClassName="relative"
+                            showShortcuts={true}
                         />
                         <button
                             onClick={clearFilters}
@@ -277,7 +274,7 @@ const OrderList = () => {
                 </div>
             )}
 
-            <div className='border border-zinc-200 dark:border-zinc-700 rounded-lg'>
+            <div className='border border-mauve-200 dark:border-zinc-700 rounded-lg'>
                 <DataTable data={orders || []} columns={columns} isLoading={isLoading} />
             </div>
 

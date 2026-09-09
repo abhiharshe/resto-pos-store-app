@@ -18,9 +18,8 @@ const renderValue = (val: any): React.ReactNode => {
     if (typeof val === 'boolean') {
         return (
             <span
-                className={`px-2 py-0.5 rounded text-xs font-semibold ${
-                    val ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
-                }`}
+                className={`px-2 py-0.5 rounded text-xs font-semibold ${val ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-neutral-100 text-zinc-600 dark:bg-neutral-800 dark:text-zinc-400'
+                    }`}
             >
                 {val ? 'Yes / Active' : 'No / Inactive'}
             </span>
@@ -28,7 +27,7 @@ const renderValue = (val: any): React.ReactNode => {
     }
     if (typeof val === 'object') {
         return (
-            <pre className="text-xs bg-zinc-100 dark:bg-zinc-800/80 p-2 rounded max-h-40 overflow-auto font-mono text-zinc-800 dark:text-zinc-200">
+            <pre className="text-xs bg-neutral-100 dark:bg-neutral-800/80 p-2 rounded max-h-40 overflow-auto font-mono text-zinc-800 dark:text-zinc-200">
                 {JSON.stringify(val, null, 2)}
             </pre>
         );
@@ -97,15 +96,15 @@ export const ApprovalDetailModal: React.FC<ApprovalDetailModalProps> = ({
         >
             <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
                 {/* Meta summary card */}
-                <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200/80 dark:border-zinc-700/80 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="p-4 rounded-2xl bg-neutral-50 dark:bg-neutral-800/60 border border-mauve-200/80 dark:border-zinc-700/80 grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div>
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">Entity</span>
-                        <p className="text-sm font-bold text-zinc-900 dark:text-white capitalize">
+                        <span className="text-xs text-neutral-500 dark:text-neutral-400 uppercase font-semibold">Entity</span>
+                        <p className="text-sm font-bold text-neutral-900 dark:text-white capitalize">
                             {request.entity_type.toLowerCase().replace('_', ' ')}
                         </p>
                     </div>
                     <div>
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">Action</span>
+                        <span className="text-xs text-neutral-500 dark:text-neutral-400 uppercase font-semibold">Action</span>
                         <div>
                             <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold border ${actionColors[request.action] || ''}`}>
                                 {request.action}
@@ -113,32 +112,32 @@ export const ApprovalDetailModal: React.FC<ApprovalDetailModalProps> = ({
                         </div>
                     </div>
                     <div>
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">Store</span>
-                        <p className="text-sm font-medium text-zinc-900 dark:text-white truncate">
+                        <span className="text-xs text-neutral-500 dark:text-neutral-400 uppercase font-semibold">Store</span>
+                        <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">
                             {request.store_name || request.store_id || 'Global'}
                         </p>
                     </div>
                     <div>
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">Status</span>
+                        <span className="text-xs text-neutral-500 dark:text-neutral-400 uppercase font-semibold">Status</span>
                         <div>
                             <ApprovalStatusBadge status={request.status} rejectionReason={request.rejection_reason} />
                         </div>
                     </div>
                     <div>
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">Submitted By</span>
+                        <span className="text-xs text-neutral-500 dark:text-neutral-400 uppercase font-semibold">Submitted By</span>
                         <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                             {request.submitter_name || request.submitted_by}
                         </p>
                     </div>
                     <div>
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">Date</span>
+                        <span className="text-xs text-neutral-500 dark:text-neutral-400 uppercase font-semibold">Date</span>
                         <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                             {request.created_at ? moment(request.created_at).format('MMM D, YYYY h:mm A') : '-'}
                         </p>
                     </div>
                     {request.reviewer_name && (
                         <div>
-                            <span className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">Reviewed By</span>
+                            <span className="text-xs text-neutral-500 dark:text-neutral-400 uppercase font-semibold">Reviewed By</span>
                             <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                                 {request.reviewer_name}
                             </p>
@@ -160,12 +159,12 @@ export const ApprovalDetailModal: React.FC<ApprovalDetailModalProps> = ({
                 {/* Diff Viewer for UPDATE */}
                 {request.action === 'UPDATE' && (
                     <div className="space-y-3">
-                        <h4 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-2">
                             <i className="ri-git-commit-line text-purple-500" />
                             Data Comparison (Live vs Proposed)
                         </h4>
-                        <div className="border border-zinc-200 dark:border-zinc-700 rounded-xl overflow-hidden divide-y divide-zinc-200 dark:divide-zinc-700">
-                            <div className="grid grid-cols-12 bg-zinc-100 dark:bg-zinc-800 px-4 py-2 text-xs font-bold text-zinc-600 dark:text-zinc-300">
+                        <div className="border border-mauve-200 dark:border-zinc-700 rounded-xl overflow-hidden divide-y divide-zinc-200 dark:divide-zinc-700">
+                            <div className="grid grid-cols-12 bg-neutral-100 dark:bg-neutral-800 px-4 py-2 text-xs font-bold text-zinc-600 dark:text-zinc-300">
                                 <div className="col-span-4">Field</div>
                                 <div className="col-span-4">Current Live Data</div>
                                 <div className="col-span-4">Proposed Change</div>
@@ -181,11 +180,10 @@ export const ApprovalDetailModal: React.FC<ApprovalDetailModalProps> = ({
                                     return (
                                         <div
                                             key={key}
-                                            className={`grid grid-cols-12 px-4 py-2.5 text-xs items-center gap-2 ${
-                                                isChanged
-                                                    ? 'bg-amber-50/70 dark:bg-amber-950/20'
-                                                    : 'hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30'
-                                            }`}
+                                            className={`grid grid-cols-12 px-4 py-2.5 text-xs items-center gap-2 ${isChanged
+                                                ? 'bg-amber-50/70 dark:bg-amber-950/20'
+                                                : 'hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30'
+                                                }`}
                                         >
                                             <div className="col-span-4 font-mono font-semibold text-zinc-700 dark:text-zinc-300 truncate">
                                                 {key}
@@ -210,17 +208,17 @@ export const ApprovalDetailModal: React.FC<ApprovalDetailModalProps> = ({
                 {/* View for CREATE */}
                 {request.action === 'CREATE' && (
                     <div className="space-y-3">
-                        <h4 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-2">
                             <i className="ri-add-circle-line text-blue-500" />
                             Proposed New Record
                         </h4>
-                        <div className="border border-zinc-200 dark:border-zinc-700 rounded-xl overflow-hidden divide-y divide-zinc-200 dark:divide-zinc-700">
-                            <div className="grid grid-cols-12 bg-zinc-100 dark:bg-zinc-800 px-4 py-2 text-xs font-bold text-zinc-600 dark:text-zinc-300">
+                        <div className="border border-mauve-200 dark:border-zinc-700 rounded-xl overflow-hidden divide-y divide-zinc-200 dark:divide-zinc-700">
+                            <div className="grid grid-cols-12 bg-neutral-100 dark:bg-neutral-800 px-4 py-2 text-xs font-bold text-zinc-600 dark:text-zinc-300">
                                 <div className="col-span-4">Field</div>
                                 <div className="col-span-8">Proposed Value</div>
                             </div>
                             {Object.entries(proposed).map(([key, val]) => (
-                                <div key={key} className="grid grid-cols-12 px-4 py-2 text-xs items-center gap-2 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30">
+                                <div key={key} className="grid grid-cols-12 px-4 py-2 text-xs items-center gap-2 hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30">
                                     <div className="col-span-4 font-mono font-semibold text-zinc-700 dark:text-zinc-300 truncate">
                                         {key}
                                     </div>
@@ -246,7 +244,7 @@ export const ApprovalDetailModal: React.FC<ApprovalDetailModalProps> = ({
                             </p>
                         </div>
                         {current && Object.keys(current).length > 0 && (
-                            <div className="border border-zinc-200 dark:border-zinc-700 rounded-xl overflow-hidden divide-y divide-zinc-200 dark:divide-zinc-700">
+                            <div className="border border-mauve-200 dark:border-zinc-700 rounded-xl overflow-hidden divide-y divide-zinc-200 dark:divide-zinc-700">
                                 {Object.entries(current).map(([key, val]) => (
                                     <div key={key} className="grid grid-cols-12 px-4 py-2 text-xs items-center gap-2">
                                         <div className="col-span-4 font-mono font-semibold text-zinc-700 dark:text-zinc-300 truncate">
@@ -273,7 +271,7 @@ export const ApprovalDetailModal: React.FC<ApprovalDetailModalProps> = ({
                             value={rejectionReason}
                             onChange={(e) => setRejectionReason(e.target.value)}
                             placeholder="Explain why this request is being rejected so the store admin can make necessary corrections..."
-                            className="w-full text-sm rounded-xl border border-rose-200 dark:border-rose-800 bg-white dark:bg-zinc-900 p-3 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                            className="w-full text-sm rounded-xl border border-rose-200 dark:border-rose-800 bg-white dark:bg-mauve-900 p-3 text-neutral-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-rose-500"
                         />
                         <div className="flex justify-end gap-2">
                             <Button
@@ -299,7 +297,7 @@ export const ApprovalDetailModal: React.FC<ApprovalDetailModalProps> = ({
                 )}
 
                 {/* Footer Action Buttons */}
-                <div className="flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                <div className="flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-mauve-800">
                     <Button variant="outline" onClick={onClose}>
                         Close
                     </Button>

@@ -50,9 +50,9 @@ const DealItemsEdit = () => {
                 <div className="flex items-center gap-2 text-zinc-500 mb-2">
                     <button onClick={() => navigate('/deals')} className="hover:text-indigo-600 transition-colors">Deals</button>
                     <i className="ri-arrow-right-s-line"></i>
-                    <span className="text-zinc-900 dark:text-white font-medium">{deal.title}</span>
+                    <span className="text-neutral-900 dark:text-white font-medium">{deal.title}</span>
                 </div>
-                <h1 className="text-3xl font-black text-zinc-900 dark:text-white">Manage Deal Items</h1>
+                <h1 className="text-3xl font-black text-neutral-900 dark:text-white">Manage Deal Items</h1>
                 <p className="text-zinc-500 mt-1 uppercase tracking-widest text-[10px] font-black underline decoration-indigo-500 decoration-2 underline-offset-4">Standalone Group Management</p>
             </div>
 

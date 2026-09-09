@@ -81,7 +81,7 @@ const Tooltip = ({ content, children, position = 'right', delay = 200, disabled 
             {children}
             {isVisible && !disabled && createPortal(
                 <div
-                    className="fixed z-[9999] px-2.5 py-1.5 text-xs font-medium text-white dark:text-zinc-900 bg-zinc-800 dark:bg-zinc-200 rounded-lg shadow-lg whitespace-nowrap pointer-events-none"
+                    className="fixed z-[9999] px-2.5 py-1.5 text-xs font-medium text-white dark:text-neutral-900 bg-neutral-800 dark:bg-neutral-200 rounded-lg shadow-lg whitespace-nowrap pointer-events-none"
                     style={{
                         top: coords.top,
                         left: coords.left,

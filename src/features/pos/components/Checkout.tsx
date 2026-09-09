@@ -78,10 +78,10 @@ const Checkout: React.FC<CheckoutProps> = ({ onBack }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Items Summary */}
                 <Card className="md:col-span-2 overflow-hidden">
-                    <div className="p-4 border-b dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800">
+                    <div className="p-4 border-b dark:border-zinc-700 bg-gray-50 dark:bg-neutral-800">
                         <h3 className="font-semibold">Items</h3>
                     </div>
-                    <div className="divide-y dark:divide-zinc-700 bg-white dark:bg-zinc-900">
+                    <div className="divide-y dark:divide-zinc-700 bg-white dark:bg-mauve-900">
                         {/* Deals */}
                         {deals.map((deal) => (
                             <div key={deal.cartId} className="p-4 border-b border-emerald-100 dark:border-emerald-900/30 bg-emerald-50/10 dark:bg-emerald-900/10">
@@ -95,7 +95,7 @@ const Checkout: React.FC<CheckoutProps> = ({ onBack }) => {
                                             <p className="text-[10px] text-zinc-400 font-semibold uppercase tracking-widest mt-1">Deal Bundle</p>
                                         </div>
                                     </div>
-                                    <p className="font-black text-zinc-900 dark:text-white">₹{deal.totalDealPrice.toFixed(2)}</p>
+                                    <p className="font-black text-neutral-900 dark:text-white">₹{deal.totalDealPrice.toFixed(2)}</p>
                                 </div>
                                 <div className="pl-10 space-y-2">
                                     {deal.items.map((item, idx) => (
@@ -124,7 +124,7 @@ const Checkout: React.FC<CheckoutProps> = ({ onBack }) => {
                                         </p>
                                     </div>
                                 </div>
-                                <p className="font-black text-zinc-900 dark:text-white">₹{item.totalItemPrice.toFixed(2)}</p>
+                                <p className="font-black text-neutral-900 dark:text-white">₹{item.totalItemPrice.toFixed(2)}</p>
                             </div>
                         ))}
 

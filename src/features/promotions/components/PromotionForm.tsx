@@ -105,7 +105,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
         <div>
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">{title}</h3>
                     <p className="text-sm text-zinc-500 font-medium">{initialData ? `Editing promotion: ${initialData.title}` : 'Launch a new automated store offer'}</p>
                 </div>
                 <Button variant="ghost" onClick={() => navigate('/promotions')} icon="ri-arrow-left-line">
@@ -165,7 +165,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
 
                             <div className="space-y-3">
                                 <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Offer Banner Image</label>
-                                <div className="flex items-center gap-6 p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-700">
+                                <div className="flex items-center gap-6 p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-2xl border border-dashed border-mauve-200 dark:border-zinc-700">
                                     {values.image_url ? (
                                         <div className="relative group">
                                             <img src={getMediaURL(values.image_url)} alt="Promotion" className="w-24 h-24 object-cover rounded-xl shadow-md" />
@@ -178,7 +178,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                             </button>
                                         </div>
                                     ) : (
-                                        <div className="w-24 h-24 bg-zinc-100 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-300">
+                                        <div className="w-24 h-24 bg-neutral-100 dark:bg-mauve-900 rounded-xl flex items-center justify-center text-zinc-300">
                                             <i className="ri-image-add-line text-3xl"></i>
                                         </div>
                                     )}
@@ -192,7 +192,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                         />
                                         <label
                                             htmlFor="image-upload"
-                                            className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm font-semibold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-zinc-50 transition-colors shadow-sm"
+                                            className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-mauve-900 border border-mauve-200 dark:border-zinc-700 rounded-lg text-sm font-semibold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-neutral-50 transition-colors shadow-sm"
                                         >
                                             <i className="ri-upload-2-line"></i>
                                             {uploadImageMutation.isPending ? 'Uploading...' : 'Upload Image'}
@@ -202,10 +202,10 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                 </div>
                             </div>
 
-                            <div className="p-6 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 space-y-6">
+                            <div className="p-6 bg-neutral-50 dark:bg-neutral-800/50 rounded-2xl border border-zinc-100 dark:border-mauve-800 space-y-6">
                                 <div className="flex items-center gap-2 mb-2">
                                     <i className="ri-percent-line text-indigo-500 text-xl"></i>
-                                    <h4 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider">Promotion Configuration</h4>
+                                    <h4 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider">Promotion Configuration</h4>
                                 </div>
 
                                 <Select
@@ -267,7 +267,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                 )}
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 border-t border-zinc-100 dark:border-mauve-800">
                                 <Input
                                     label="Start Date"
                                     name="start_date"
@@ -292,7 +292,7 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                 />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-neutral-50 dark:bg-neutral-800/50 p-4 rounded-xl border border-zinc-100 dark:border-mauve-800">
                                 <label className="flex items-center gap-3 cursor-pointer group">
                                     <div className="relative flex items-center">
                                         <input
@@ -301,10 +301,10 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                             checked={values.is_active}
                                             onChange={(e) => setFieldValue('is_active', e.target.checked)}
                                         />
-                                        <div className="w-10 h-6 bg-zinc-200 peer-focus:outline-none dark:bg-zinc-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                        <div className="w-10 h-6 bg-neutral-200 peer-focus:outline-none dark:bg-neutral-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-semibold text-zinc-900 dark:text-white">Active Status</p>
+                                        <p className="text-sm font-semibold text-neutral-900 dark:text-white">Active Status</p>
                                         <p className="text-xs text-zinc-500 font-medium">Allow this offer to be applied to orders.</p>
                                     </div>
                                 </label>
@@ -317,16 +317,16 @@ export const PromotionForm: React.FC<PromotionFormProps> = ({
                                             checked={values.is_stackable}
                                             onChange={(e) => setFieldValue('is_stackable', e.target.checked)}
                                         />
-                                        <div className="w-10 h-6 bg-zinc-200 peer-focus:outline-none dark:bg-zinc-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                        <div className="w-10 h-6 bg-neutral-200 peer-focus:outline-none dark:bg-neutral-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm font-semibold text-zinc-900 dark:text-white">Stackable</p>
+                                        <p className="text-sm font-semibold text-neutral-900 dark:text-white">Stackable</p>
                                         <p className="text-xs text-zinc-500 font-medium">Can be combined with manual coupons.</p>
                                     </div>
                                 </label>
                             </div>
 
-                            <div className="flex justify-end gap-3 pt-6 border-t dark:border-zinc-800">
+                            <div className="flex justify-end gap-3 pt-6 border-t dark:border-mauve-800">
                                 <Button type="button" variant="ghost" onClick={onCancel || (() => navigate('/promotions'))}>
                                     Cancel
                                 </Button>

@@ -195,20 +195,20 @@ export const RecipeList: React.FC = () => {
     return (
         <div className="space-y-6 pb-12">
             {/* Top Banner / Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-zinc-800 p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-700">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-neutral-800 p-6 rounded-2xl shadow-sm border border-mauve-200 dark:border-zinc-700">
                 <div className="space-y-1">
                     <div className="flex items-center gap-2">
                         <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl">
                             <i className="ri-book-open-line" />
                         </div>
-                        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
+                        <h1 className="text-2xl font-semibold text-neutral-900 dark:text-zinc-100">
                             Recipe Management
                         </h1>
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-zinc-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-neutral-100 dark:bg-neutral-700 text-zinc-600 dark:text-zinc-300">
                             {isAdmin ? 'Admin View' : 'Kitchen View'}
                         </span>
                     </div>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
                         {isAdmin
                             ? 'Create, modify, and approve recipes for all active menu items.'
                             : 'View preparation instructions and submit recipe updates for management approval.'}
@@ -241,18 +241,18 @@ export const RecipeList: React.FC = () => {
                             key={tab.key}
                             onClick={() => setActiveTab(tab.key as FilterTab)}
                             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap border ${isActive
-                                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                                    : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-750'
+                                ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                                : 'bg-white dark:bg-neutral-800 text-zinc-600 dark:text-zinc-300 border-mauve-200 dark:border-zinc-700 hover:bg-neutral-50 dark:hover:bg-neutral-750'
                                 }`}
                         >
                             <i className={tab.icon} />
                             <span>{tab.label}</span>
                             <span
                                 className={`text-xs px-2 py-0.5 rounded-full ${isActive
-                                        ? 'bg-white/20 text-white'
-                                        : tab.key === 'PENDING_APPROVAL' && tab.count > 0
-                                            ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 font-semibold'
-                                            : 'bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400'
+                                    ? 'bg-white/20 text-white'
+                                    : tab.key === 'PENDING_APPROVAL' && tab.count > 0
+                                        ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 font-semibold'
+                                        : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400'
                                     }`}
                             >
                                 {tab.count}
@@ -271,7 +271,7 @@ export const RecipeList: React.FC = () => {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search by menu item or recipe name..."
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
                     />
                 </div>
 
@@ -279,7 +279,7 @@ export const RecipeList: React.FC = () => {
                     <select
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-medium text-zinc-700 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm w-full sm:w-48"
+                        className="px-3.5 py-2.5 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-sm font-medium text-zinc-700 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm w-full sm:w-48"
                     >
                         <option value="ALL">All Categories</option>
                         {categories.map((cat) => (
@@ -292,7 +292,7 @@ export const RecipeList: React.FC = () => {
                     <button
                         onClick={() => refetch()}
                         title="Refresh List"
-                        className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors shadow-sm"
+                        className="p-2.5 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-zinc-600 dark:text-zinc-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors shadow-sm"
                     >
                         <i className="ri-refresh-line text-lg" />
                     </button>
@@ -306,20 +306,20 @@ export const RecipeList: React.FC = () => {
                     <p className="text-sm">Loading recipe directory...</p>
                 </div>
             ) : filteredItems.length === 0 ? (
-                <div className="py-16 text-center bg-white dark:bg-zinc-800 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-700 p-8">
-                    <div className="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-700 text-zinc-400 flex items-center justify-center text-2xl mx-auto mb-3">
+                <div className="py-16 text-center bg-white dark:bg-neutral-800 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-700 p-8">
+                    <div className="w-16 h-16 rounded-full bg-neutral-100 dark:bg-neutral-700 text-zinc-400 flex items-center justify-center text-2xl mx-auto mb-3">
                         <i className="ri-book-open-line" />
                     </div>
-                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">No items match your criteria</h3>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 max-w-sm mx-auto">
+                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-zinc-100">No items match your criteria</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 max-w-sm mx-auto">
                         Try clearing your search filters or add a new recipe to get started.
                     </p>
                 </div>
             ) : (
-                <div className="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden">
+                <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-sm border border-mauve-200 dark:border-zinc-700 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm">
-                            <thead className="bg-zinc-50/80 dark:bg-zinc-900/50 text-zinc-500 dark:text-zinc-400 text-xs uppercase tracking-wider border-b border-zinc-200 dark:border-zinc-700">
+                            <thead className="bg-neutral-50/80 dark:bg-mauve-900/50 text-neutral-500 dark:text-neutral-400 text-xs uppercase tracking-wider border-b border-mauve-200 dark:border-zinc-700">
                                 <tr>
                                     <th className="px-6 py-3.5 font-semibold">Menu Item & Category</th>
                                     <th className="px-6 py-3.5 font-semibold">Recipe Details</th>
@@ -332,15 +332,15 @@ export const RecipeList: React.FC = () => {
                                 {filteredItems.map((item) => {
                                     const recipe = item.recipe;
                                     return (
-                                        <tr key={item.id} className="hover:bg-zinc-50/60 dark:hover:bg-zinc-750/30 transition-colors">
+                                        <tr key={item.id} className="hover:bg-neutral-50/60 dark:hover:bg-neutral-750/30 transition-colors">
                                             {/* Item name & category */}
                                             <td className="px-6 py-4">
-                                                <div className="font-semibold text-zinc-900 dark:text-zinc-100 text-base">
+                                                <div className="font-semibold text-neutral-900 dark:text-zinc-100 text-base">
                                                     {item.name}
                                                 </div>
                                                 <div className="flex items-center gap-2 mt-1">
                                                     {item.category_name && (
-                                                        <span className="text-xs px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 font-medium">
+                                                        <span className="text-xs px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-neutral-700 text-zinc-600 dark:text-zinc-300 font-medium">
                                                             {item.category_name}
                                                         </span>
                                                     )}
@@ -356,13 +356,13 @@ export const RecipeList: React.FC = () => {
                                             <td className="px-6 py-4">
                                                 {recipe ? (
                                                     <div className="space-y-1">
-                                                        <div className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                                                        <div className="font-semibold text-neutral-900 dark:text-zinc-100 flex items-center gap-1.5">
                                                             <span>{recipe.recipe_name}</span>
-                                                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400">
+                                                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400">
                                                                 v{recipe.version}
                                                             </span>
                                                         </div>
-                                                        <div className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-3">
+                                                        <div className="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-3">
                                                             <span>{recipe.ingredients?.length || 0} ingredients</span>
                                                             {recipe.allergens && recipe.allergens.length > 0 && (
                                                                 <span className="text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1">
@@ -396,7 +396,7 @@ export const RecipeList: React.FC = () => {
                                                             </span>
                                                         )}
                                                         {recipe.status === 'DRAFT' && (
-                                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-100 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-600">
+                                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-neutral-100 text-zinc-700 dark:bg-neutral-700 dark:text-zinc-300 border border-mauve-200 dark:border-zinc-600">
                                                                 <i className="ri-draft-line" />
                                                                 Draft
                                                             </span>
@@ -412,7 +412,7 @@ export const RecipeList: React.FC = () => {
                                                         </div>
                                                     </div>
                                                 ) : (
-                                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-400">
+                                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-zinc-400">
                                                         Unconfigured
                                                     </span>
                                                 )}
@@ -442,7 +442,7 @@ export const RecipeList: React.FC = () => {
                                                         <>
                                                             <button
                                                                 onClick={() => handleOpenView(recipe)}
-                                                                className="px-3 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-600 rounded-lg transition-colors flex items-center gap-1"
+                                                                className="px-3 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-200 bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg transition-colors flex items-center gap-1"
                                                             >
                                                                 <i className="ri-eye-line" />
                                                                 View

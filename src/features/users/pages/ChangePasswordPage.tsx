@@ -68,12 +68,12 @@ const ChangePasswordPage: React.FC = () => {
             <div className="flex items-center gap-4 mb-10">
                 <button
                     onClick={() => navigate(-1)}
-                    className="w-10 h-10 rounded-full border border-zinc-200 dark:border-zinc-800 flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                    className="w-10 h-10 rounded-full border border-mauve-200 dark:border-mauve-800 flex items-center justify-center hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                 >
                     <i className="ri-arrow-left-line"></i>
                 </button>
                 <div>
-                    <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white">Security Settings</h1>
+                    <h1 className="text-3xl font-semibold text-neutral-900 dark:text-white">Security Settings</h1>
                     <p className="text-zinc-500">Manage your password and account security</p>
                 </div>
             </div>
@@ -107,7 +107,7 @@ const ChangePasswordPage: React.FC = () => {
                                         required
                                     />
 
-                                    <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                                    <div className="pt-4 border-t border-zinc-100 dark:border-mauve-800">
                                         <div className="flex items-center justify-between mb-4">
                                             <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">New Credentials</h3>
                                             <button
@@ -185,7 +185,7 @@ const ChangePasswordPage: React.FC = () => {
                 </div>
 
                 <div className="md:col-span-2 space-y-6">
-                    <Card className="p-6 border-none shadow-xl bg-zinc-900 text-white overflow-hidden relative">
+                    <Card className="p-6 border-none shadow-xl bg-neutral-900 text-white overflow-hidden relative">
                         <div className="absolute top-0 right-0 p-4 opacity-10">
                             <i className="ri-shield-check-line text-8xl"></i>
                         </div>
@@ -216,7 +216,7 @@ const ChangePasswordPage: React.FC = () => {
                                 <p className="text-sm text-zinc-400">Special symbols (@$!%*?&)</p>
                             </div>
                         </div>
-                        <div className="mt-8 pt-6 border-t border-zinc-800">
+                        <div className="mt-8 pt-6 border-t border-mauve-800">
                             <p className="text-xs text-zinc-500 italic">
                                 Last changed: Not available
                             </p>

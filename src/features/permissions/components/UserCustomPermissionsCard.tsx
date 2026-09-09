@@ -85,27 +85,26 @@ export const UserCustomPermissionsCard: React.FC<UserCustomPermissionsCardProps>
     }
 
     return (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="bg-white dark:bg-mauve-900 border border-mauve-200 dark:border-mauve-800 rounded-2xl p-6 shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-100 dark:border-mauve-800">
                 <div>
                     <div className="flex items-center gap-2">
                         <i className="ri-shield-user-line text-indigo-600 text-xl" />
-                        <h3 className="text-base font-bold text-zinc-900 dark:text-white">
+                        <h3 className="text-base font-bold text-neutral-900 dark:text-white">
                             Individual Access Rights & Overrides
                         </h3>
                     </div>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
                         Customize or grant additional feature access for {userName || 'this user'}.
                     </p>
                 </div>
 
                 <div className="flex items-center gap-2">
                     <span
-                        className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
-                            isCustomMode
-                                ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200'
-                                : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-                        }`}
+                        className={`text-xs px-2.5 py-1 rounded-full font-semibold ${isCustomMode
+                            ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200'
+                            : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-zinc-300'
+                            }`}
                     >
                         {isCustomMode ? 'Custom Overrides Active' : `Inheriting ${userRole} Defaults`}
                     </span>
@@ -114,7 +113,7 @@ export const UserCustomPermissionsCard: React.FC<UserCustomPermissionsCardProps>
 
             {/* Quick action bar */}
             <div className="flex items-center justify-between flex-wrap gap-2 text-xs">
-                <span className="text-zinc-500 dark:text-zinc-400">
+                <span className="text-neutral-500 dark:text-neutral-400">
                     {customList.length} of {modules?.length || 0} permissions active for this user
                 </span>
                 <div className="flex items-center gap-2">
@@ -122,7 +121,7 @@ export const UserCustomPermissionsCard: React.FC<UserCustomPermissionsCardProps>
                         <button
                             type="button"
                             onClick={handleResetToRoleDefault}
-                            className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold"
+                            className="px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-zinc-700 dark:text-zinc-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 font-semibold"
                         >
                             Reset to Role Defaults
                         </button>
@@ -146,14 +145,13 @@ export const UserCustomPermissionsCard: React.FC<UserCustomPermissionsCardProps>
                         <div
                             key={mod.key}
                             onClick={() => handleToggle(mod.key)}
-                            className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer select-none transition-all ${
-                                isChecked
-                                    ? 'bg-indigo-50/40 dark:bg-indigo-950/30 border-indigo-200 dark:border-indigo-800'
-                                    : 'bg-zinc-50/40 dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-800'
-                            }`}
+                            className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer select-none transition-all ${isChecked
+                                ? 'bg-indigo-50/40 dark:bg-indigo-950/30 border-indigo-200 dark:border-indigo-800'
+                                : 'bg-neutral-50/40 dark:bg-neutral-800/40 border-mauve-200 dark:border-mauve-800'
+                                }`}
                         >
                             <div className="pr-2">
-                                <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 block">
+                                <span className="text-xs font-bold text-neutral-900 dark:text-zinc-100 block">
                                     {mod.name}
                                 </span>
                                 <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono">
@@ -164,7 +162,7 @@ export const UserCustomPermissionsCard: React.FC<UserCustomPermissionsCardProps>
                             <input
                                 type="checkbox"
                                 checked={isChecked}
-                                onChange={() => {}} // handled by div click
+                                onChange={() => { }} // handled by div click
                                 className="h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500 pointer-events-none"
                             />
                         </div>

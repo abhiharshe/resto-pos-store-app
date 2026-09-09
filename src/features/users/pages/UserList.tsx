@@ -76,7 +76,7 @@ const UserList = () => {
                 const avatarSrc = info.row.original.avatar?.variants?.thumbnail || info.row.original.avatar?.url;
                 return (
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 shrink-0 border border-zinc-200 dark:border-zinc-700">
+                        <div className="w-8 h-8 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-800 shrink-0 border border-mauve-200 dark:border-zinc-700">
                             {avatarSrc ? (
                                 <img src={getMediaURL(avatarSrc)} alt="" className="w-full h-full object-cover" />
                             ) : (
@@ -86,8 +86,8 @@ const UserList = () => {
                             )}
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-semibold text-zinc-900 dark:text-white">{info.getValue() as string}</span>
-                            <span className="text-xs text-zinc-500 dark:text-zinc-400">{info.row.original.email}</span>
+                            <span className="font-semibold text-neutral-900 dark:text-white">{info.getValue() as string}</span>
+                            <span className="text-xs text-neutral-500 dark:text-neutral-400">{info.row.original.email}</span>
                         </div>
                     </div>
                 );
@@ -99,7 +99,7 @@ const UserList = () => {
             cell: (info) => (
                 <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest ${info.getValue() === 'SUPER_ADMIN'
                     ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400'
-                    : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+                    : 'bg-neutral-100 text-zinc-600 dark:bg-neutral-800 dark:text-zinc-400'
                     }`}>
                     {(info.getValue() as string).replace('_', ' ')}
                 </span>
@@ -164,7 +164,7 @@ const UserList = () => {
                                 disabled={deleteMutation.isPending}
                             />
                         ) : (
-                            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-400 text-sm cursor-not-allowed" title="Super Admin cannot be deleted">
+                            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-zinc-400 text-sm cursor-not-allowed" title="Super Admin cannot be deleted">
                                 <i className="ri-lock-line" />
                             </span>
                         )}
@@ -190,8 +190,8 @@ const UserList = () => {
         <div className="space-y-6 transition-all duration-300 ease-in-out">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-black text-zinc-900 dark:text-white">User Management</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">Manage staff and administrators for your stores.</p>
+                    <h3 className="text-2xl font-black text-neutral-900 dark:text-white">User Management</h3>
+                    <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium">Manage staff and administrators for your stores.</p>
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
                     <Button
@@ -221,7 +221,7 @@ const UserList = () => {
             </div>
 
             {isFilterVisible && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-2xl border dark:border-zinc-700 animate-in slide-in-from-top-2 duration-200">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-gray-50 dark:bg-neutral-800/50 rounded-2xl border dark:border-zinc-700 animate-in slide-in-from-top-2 duration-200">
                     <Input
                         label="Search Name"
                         placeholder="Type name..."

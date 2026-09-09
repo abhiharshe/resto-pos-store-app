@@ -48,11 +48,11 @@ export const Modal: React.FC<ModalProps> = ({
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className={`relative w-full ${sizeClasses[size]} bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 ${className}`}
+                        className={`relative w-full ${sizeClasses[size]} bg-white dark:bg-mauve-900 rounded-3xl shadow-2xl overflow-hidden border border-zinc-100 dark:border-mauve-800 ${className}`}
                     >
                         {!hideHeader && (
-                            <div className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/50">
-                                <h3 className="text-xl font-black text-zinc-900 dark:text-white leading-tight">
+                            <div className="px-6 py-4 border-b border-zinc-100 dark:border-mauve-800 flex items-center justify-between bg-neutral-50 dark:bg-neutral-800/50">
+                                <h3 className="text-xl font-black text-neutral-900 dark:text-white leading-tight">
                                     {title}
                                 </h3>
                                 <IconButton

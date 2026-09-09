@@ -65,8 +65,8 @@ const MenuForm = ({ title: title, initialValues: propInitialValues, onSubmit: pr
         <div>
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">{propInitialValues ? 'Edit menu' : 'Create new menu'}</p>
+                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white">{title}</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{propInitialValues ? 'Edit menu' : 'Create new menu'}</p>
                 </div>
                 <Button variant="ghost" onClick={() => navigate('/menu')} icon="ri-arrow-left-line">
                     Back to List

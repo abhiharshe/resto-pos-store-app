@@ -51,10 +51,10 @@ const StoreEdit = () => {
 
                 <StoreMaintenanceCard store={store} />
 
-                <div className="border-t border-zinc-200 dark:border-zinc-800 pt-8">
+                <div className="border-t border-mauve-200 dark:border-mauve-800 pt-8">
                     <div className="mb-6">
-                        <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">Store Delivery & Packaging Overrides</h3>
-                        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                        <h3 className="text-xl font-semibold text-neutral-900 dark:text-white">Store Delivery & Packaging Overrides</h3>
+                        <p className="text-sm text-neutral-500 dark:text-neutral-400">
                             Configure store-specific fee overrides or inherit the global configurations.
                         </p>
                     </div>

@@ -100,7 +100,7 @@ export const PosHeader: React.FC<PosHeaderProps> = ({ onStoreClick, onNewOrderCl
 
     return (
 
-        <header className="flex items-center justify-between p-2 border-b border-zinc-200 dark:border-zinc-700">
+        <header className="flex items-center justify-between p-2 border-b border-mauve-200 dark:border-zinc-700">
             <div className="flex items-center space-x-4">
                 <Button
                     variant='ghost'
@@ -113,7 +113,7 @@ export const PosHeader: React.FC<PosHeaderProps> = ({ onStoreClick, onNewOrderCl
                 </Button>
                 <div className="flex flex-row items-center leading-tight gap-2">
                     <div className="flex flex-col">
-                        <h1 className="text-xl font-semibold text-zinc-900 dark:text-white">POS Order</h1>
+                        <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">POS Order</h1>
                         <button
                             onClick={onStoreClick}
                             disabled={!!user?.store_id}

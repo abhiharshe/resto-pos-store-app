@@ -39,7 +39,7 @@ const AssetSettings = () => {
         <form onSubmit={formik.handleSubmit} className="space-y-8 max-w-3xl">
             <div className="space-y-6">
                 <div>
-                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-1">Storage Configuration</h3>
+                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-zinc-100 mb-1">Storage Configuration</h3>
                     <p className="text-sm text-zinc-500">Choose where your assets (images, documents) are stored.</p>
                 </div>
 
@@ -50,7 +50,7 @@ const AssetSettings = () => {
                             name="storage_backend"
                             value={formik.values.storage_backend}
                             onChange={formik.handleChange}
-                            className="w-full h-11 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
+                            className="w-full h-11 px-4 rounded-xl border border-mauve-200 dark:border-zinc-700 bg-white dark:bg-mauve-900 text-neutral-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
                         >
                             <option value="local">Local Storage (FileSystem)</option>
                             <option value="cloudinary">Cloudinary (Recommended)</option>
@@ -71,12 +71,12 @@ const AssetSettings = () => {
                 </div>
 
                 {backend === 'cloudinary' && (
-                    <div className="space-y-6 p-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div className="space-y-6 p-6 bg-neutral-50 dark:bg-mauve-900/50 rounded-2xl border border-zinc-100 dark:border-mauve-800 animate-in fade-in slide-in-from-top-4 duration-300">
                         <div className="flex items-center gap-3 mb-2">
                             <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
                                 <i className="ri-cloud-line text-indigo-600 text-xl"></i>
                             </div>
-                            <h4 className="font-semibold text-zinc-900 dark:text-white">Cloudinary Settings</h4>
+                            <h4 className="font-semibold text-neutral-900 dark:text-white">Cloudinary Settings</h4>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -115,12 +115,12 @@ const AssetSettings = () => {
                 )}
 
                 {backend === 's3' && (
-                    <div className="space-y-6 p-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div className="space-y-6 p-6 bg-neutral-50 dark:bg-mauve-900/50 rounded-2xl border border-zinc-100 dark:border-mauve-800 animate-in fade-in slide-in-from-top-4 duration-300">
                         <div className="flex items-center gap-3 mb-2">
                             <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
                                 <i className="ri-amazon-line text-amber-600 text-xl"></i>
                             </div>
-                            <h4 className="font-semibold text-zinc-900 dark:text-white">AWS S3 Credentials</h4>
+                            <h4 className="font-semibold text-neutral-900 dark:text-white">AWS S3 Credentials</h4>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -162,7 +162,7 @@ const AssetSettings = () => {
                 )}
             </div>
 
-            <div className="flex justify-end pt-6 border-t border-zinc-100 dark:border-zinc-800">
+            <div className="flex justify-end pt-6 border-t border-zinc-100 dark:border-mauve-800">
                 <Button
                     type="submit"
                     isLoading={updateStorageSettings.isPending}

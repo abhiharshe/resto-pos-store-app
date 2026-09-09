@@ -50,6 +50,9 @@ import KdsPage from './features/kds/pages/Kds';
 import AssetLibrary from './features/assets/pages/AssetLibrary';
 import PermissionsManagement from './features/permissions/pages/PermissionsManagement';
 import ApprovalList from './features/approvals/pages/ApprovalList';
+import FloorTableManagement from './features/tables/pages/FloorTableManagement';
+import ReservationList from './features/reservations/pages/ReservationList';
+import WeeklyPlanSettings from './features/reservations/pages/WeeklyPlanSettings';
 import ProtectedRoute from './features/auth/components/ProtectedRoute';
 import PublicRoute from './features/auth/components/PublicRoute';
 import KdsLayout from './components/layouts/KdsLayout';
@@ -150,6 +153,30 @@ const router = createBrowserRouter([
             },
             { path: 'stores/new', element: <StoreCreate /> },
             { path: 'stores/edit/:id', element: <StoreEdit /> },
+            {
+                path: 'tables',
+                element: (
+                    <ProtectedRoute requiredPermission="floors:manage">
+                        <FloorTableManagement />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'reservations',
+                element: (
+                    <ProtectedRoute requiredPermission={['reservations:manage', 'reservations:view']}>
+                        <ReservationList />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: 'reservations/settings',
+                element: (
+                    <ProtectedRoute requiredPermission="reservations:manage">
+                        <WeeklyPlanSettings />
+                    </ProtectedRoute>
+                ),
+            },
             {
                 path: 'orders',
                 element: (

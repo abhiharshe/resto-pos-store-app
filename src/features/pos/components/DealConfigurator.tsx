@@ -189,22 +189,22 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
     };
 
     return (
-        <div className="flex flex-col h-full bg-white dark:bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border border-zinc-100 dark:border-zinc-800">
+        <div className="flex flex-col h-full bg-white dark:bg-mauve-900 rounded-3xl overflow-hidden shadow-2xl border border-zinc-100 dark:border-mauve-800">
             {/* Header */}
-            <div className="p-2 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 flex items-center justify-between">
+            <div className="p-2 border-b border-zinc-100 dark:border-mauve-800 bg-neutral-50 dark:bg-neutral-800/50 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <IconButton
                         icon="ri-arrow-left-line"
                         onClick={onBack}
                         variant="ghost"
-                        className="hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                        className="hover:bg-neutral-200 dark:hover:bg-neutral-700"
                     />
                     <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center rounded-xl">
                             <i className="ri-magic-line text-2xl"></i>
                         </div>
                         <div>
-                            <h3 className="text-xl font-black text-zinc-900 dark:text-white leading-tight">{deal.title}</h3>
+                            <h3 className="text-xl font-black text-neutral-900 dark:text-white leading-tight">{deal.title}</h3>
                             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">{deal.selection_groups.length} Selection Groups</p>
                         </div>
                     </div>
@@ -217,7 +217,7 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
                     <div key={group.id} className="space-y-4">
                         <div className="flex items-center justify-between">
                             <div className="flex flex-col">
-                                <h4 className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                                <h4 className="text-sm font-black text-neutral-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                                     {group.name}
                                     {group.is_required && <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-black">REQUIRED</span>}
                                 </h4>
@@ -242,12 +242,12 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
                                         onClick={() => handleToggleOption(group, option)}
                                         className={`p-4 rounded-2xl border-2 transition-all duration-200 cursor-pointer relative group flex flex-col gap-3 ${isSelected
                                             ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-500 shadow-md shadow-emerald-500/10'
-                                            : 'bg-white dark:bg-zinc-800 border-zinc-100 dark:border-zinc-800 hover:border-zinc-200'
+                                            : 'bg-white dark:bg-neutral-800 border-zinc-100 dark:border-mauve-800 hover:border-mauve-200'
                                             }`}
                                     >
                                         <div className="flex justify-between items-start">
                                             <div className="flex-1 min-w-0 pr-2">
-                                                <p className="font-black text-sm text-zinc-900 dark:text-white truncate">
+                                                <p className="font-black text-sm text-neutral-900 dark:text-white truncate">
                                                     {option.menu_item?.name}
                                                     {isSelected && optState && optState.variantName !== 'Default' && (
                                                         <span className="ml-1 text-xs text-emerald-600">({optState.variantName})</span>
@@ -262,7 +262,7 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
                                                     <i className="ri-check-line text-sm font-semibold"></i>
                                                 </div>
                                             ) : (
-                                                <div className="w-6 h-6 border-2 border-zinc-200 dark:border-zinc-700 rounded-full shrink-0" />
+                                                <div className="w-6 h-6 border-2 border-mauve-200 dark:border-zinc-700 rounded-full shrink-0" />
                                             )}
                                         </div>
 
@@ -292,11 +292,11 @@ const DealConfigurator: React.FC<DealConfiguratorProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="p-4 flex flex-row items-center justify-between border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/20">
+            <div className="p-4 flex flex-row items-center justify-between border-t border-zinc-100 dark:border-mauve-800 bg-neutral-50 dark:bg-neutral-800/20">
                 <div className="flex flex-col items-start gap-1">
                     <p className="text-xs text-zinc-400 font-semibold uppercase tracking-widest">Deal Price Breakdown</p>
                     <div className="flex items-baseline gap-2">
-                        <span className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">₹{totalPrice.toFixed(2)}</span>
+                        <span className="text-3xl font-black text-neutral-900 dark:text-white tracking-tighter">₹{totalPrice.toFixed(2)}</span>
                         <div className="flex items-center gap-1.5 text-xs text-zinc-500 font-medium">
                             <span>(Base ₹{storePrice.toFixed(2)}</span>
                             {selectionUpchargesTotal > 0 && (

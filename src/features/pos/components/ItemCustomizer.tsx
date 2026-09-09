@@ -141,18 +141,18 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
     const allGroupsValid = item.addon_groups?.every(isGroupValid) ?? true;
 
     return (
-        <div className="flex flex-col h-full bg-white dark:bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border border-zinc-100 dark:border-zinc-800">
+        <div className="flex flex-col h-full bg-white dark:bg-mauve-900 rounded-3xl overflow-hidden shadow-2xl border border-zinc-100 dark:border-mauve-800">
             {/* Header */}
-            <div className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/50">
+            <div className="px-6 py-4 border-b border-zinc-100 dark:border-mauve-800 flex items-center justify-between bg-neutral-50 dark:bg-neutral-800/50">
                 <div className="flex items-center gap-3">
                     <IconButton
                         icon="ri-arrow-left-line"
                         onClick={onBack}
                         variant="ghost"
-                        className="hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                        className="hover:bg-neutral-200 dark:hover:bg-neutral-700"
                     />
                     <div>
-                        <h2 className="text-xl font-black text-zinc-900 dark:text-white leading-tight">{item.name}</h2>
+                        <h2 className="text-xl font-black text-neutral-900 dark:text-white leading-tight">{item.name}</h2>
                         <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest">{title}</p>
                     </div>
                 </div>
@@ -164,7 +164,7 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                 {item.variants && item.variants.length > 0 && (
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h3 className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-widest">Select Variant/Size</h3>
+                            <h3 className="text-sm font-black text-neutral-900 dark:text-white uppercase tracking-widest">Select Variant/Size</h3>
                             <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-black">REQUIRED</span>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -176,7 +176,7 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                                         key={variant.id}
                                         className={`flex items-center justify-between p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${isSelected
                                             ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600'
-                                            : 'border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 shadow-sm'
+                                            : 'border-zinc-100 dark:border-mauve-800 hover:border-mauve-200 dark:hover:border-zinc-700 shadow-sm'
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
@@ -207,7 +207,7 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                 {item.addon_groups?.map((group) => (
                     <div key={group.id} className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h3 className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-widest">{group.name}</h3>
+                            <h3 className="text-sm font-black text-neutral-900 dark:text-white uppercase tracking-widest">{group.name}</h3>
                             <span className={`text-[10px] px-2 py-0.5 rounded-full font-black ${isGroupValid(group) ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
                                 {group.min_selection > 0 ? `Required: ${group.min_selection}` : 'Optional'}
                             </span>
@@ -220,7 +220,7 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
                                         key={addon.id}
                                         className={`flex flex-col p-4 border-2 rounded-2xl transition-all duration-200 ${isSelected
                                             ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/10 text-emerald-600'
-                                            : 'border-zinc-100 dark:border-zinc-800 shadow-sm'
+                                            : 'border-zinc-100 dark:border-mauve-800 shadow-sm'
                                             }`}
                                     >
                                         <label className="flex items-center justify-between cursor-pointer">
@@ -269,19 +269,19 @@ const ItemCustomizer: React.FC<ItemCustomizerProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="p-6 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900">
+            <div className="p-6 border-t border-zinc-100 dark:border-mauve-800 bg-neutral-50 dark:bg-mauve-900">
                 <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-4 bg-white dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl px-3 py-2 shadow-inner">
+                    <div className="flex items-center gap-4 bg-white dark:bg-neutral-800 border-2 border-zinc-100 dark:border-mauve-800 rounded-2xl px-3 py-2 shadow-inner">
                         <button
                             onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                            className="w-10 h-10 flex items-center justify-center text-indigo-600 hover:bg-indigo-50 dark:hover:bg-zinc-700 rounded-xl transition-colors"
+                            className="w-10 h-10 flex items-center justify-center text-indigo-600 hover:bg-indigo-50 dark:hover:bg-neutral-700 rounded-xl transition-colors"
                         >
                             <i className="ri-subtract-line text-xl font-semibold"></i>
                         </button>
                         <span className="font-black text-xl min-w-8 text-center">{quantity}</span>
                         <button
                             onClick={() => setQuantity(q => q + 1)}
-                            className="w-10 h-10 flex items-center justify-center text-indigo-600 hover:bg-indigo-50 dark:hover:bg-zinc-700 rounded-xl transition-colors"
+                            className="w-10 h-10 flex items-center justify-center text-indigo-600 hover:bg-indigo-50 dark:hover:bg-neutral-700 rounded-xl transition-colors"
                         >
                             <i className="ri-add-line text-xl font-semibold"></i>
                         </button>

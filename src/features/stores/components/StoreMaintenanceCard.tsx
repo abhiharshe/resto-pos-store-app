@@ -52,16 +52,16 @@ export const StoreMaintenanceCard: React.FC<StoreMaintenanceCardProps> = ({ stor
     };
 
     return (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-8 shadow-sm">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="bg-white dark:bg-mauve-900 border border-mauve-200 dark:border-mauve-800 rounded-2xl p-6 sm:p-8 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-100 dark:border-mauve-800">
                 <div className="space-y-1">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400">
                             <i className="ri-tools-line text-xl" />
                         </div>
                         <div>
-                            <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Store Maintenance Mode</h3>
-                            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
+                            <h3 className="text-lg font-bold text-neutral-900 dark:text-white">Store Maintenance Mode</h3>
+                            <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
                                 Temporarily restrict POS, Orders, and Kitchen access for store staff.
                             </p>
                         </div>
@@ -71,11 +71,10 @@ export const StoreMaintenanceCard: React.FC<StoreMaintenanceCardProps> = ({ stor
                 {/* Status indicator badge */}
                 <div className="flex items-center gap-2">
                     <span
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
-                            isEnabled
-                                ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300 dark:border-amber-800'
-                                : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
-                        }`}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${isEnabled
+                            ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300 dark:border-amber-800'
+                            : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
+                            }`}
                     >
                         <span className={`w-2 h-2 rounded-full ${isEnabled ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
                         {isEnabled ? 'Maintenance Active' : 'Store Operational'}
@@ -85,12 +84,12 @@ export const StoreMaintenanceCard: React.FC<StoreMaintenanceCardProps> = ({ stor
 
             <form onSubmit={handleSave} className="space-y-6 pt-6">
                 {/* Toggle */}
-                <div className="flex items-center justify-between p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/60">
+                <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 border border-mauve-200 dark:border-zinc-700/60">
                     <div className="space-y-0.5 pr-4">
-                        <label className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 cursor-pointer" htmlFor="maintenance-mode-toggle">
+                        <label className="text-sm font-semibold text-neutral-900 dark:text-zinc-100 cursor-pointer" htmlFor="maintenance-mode-toggle">
                             Enable Maintenance Mode
                         </label>
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
                             When turned on, non-admin users (Cashier, Kitchen, Manager) will see a blocking maintenance screen.
                         </p>
                     </div>
@@ -101,14 +100,12 @@ export const StoreMaintenanceCard: React.FC<StoreMaintenanceCardProps> = ({ stor
                         role="switch"
                         aria-checked={isEnabled}
                         onClick={() => setIsEnabled(!isEnabled)}
-                        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
-                            isEnabled ? 'bg-amber-500' : 'bg-zinc-300 dark:bg-zinc-700'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${isEnabled ? 'bg-amber-500' : 'bg-neutral-300 dark:bg-neutral-700'
+                            }`}
                     >
                         <span
-                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                                isEnabled ? 'translate-x-5' : 'translate-x-0'
-                            }`}
+                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${isEnabled ? 'translate-x-5' : 'translate-x-0'
+                                }`}
                         />
                     </button>
                 </div>
@@ -126,7 +123,7 @@ export const StoreMaintenanceCard: React.FC<StoreMaintenanceCardProps> = ({ stor
                                 rows={3}
                                 maxLength={500}
                                 placeholder="e.g., We are currently performing routine kitchen equipment maintenance. Panels will be accessible again shortly."
-                                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white placeholder-zinc-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors text-sm"
+                                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder-zinc-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors text-sm"
                             />
                             <div className="flex justify-between items-center mt-1 text-[11px] text-zinc-400">
                                 <span>Shown to staff trying to access the store panels.</span>
@@ -144,7 +141,7 @@ export const StoreMaintenanceCard: React.FC<StoreMaintenanceCardProps> = ({ stor
                                     type="datetime-local"
                                     value={startTime}
                                     onChange={(e) => setStartTime(e.target.value)}
-                                    className="w-full px-3.5 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
+                                    className="w-full px-3.5 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
                                 />
                             </div>
 
@@ -156,7 +153,7 @@ export const StoreMaintenanceCard: React.FC<StoreMaintenanceCardProps> = ({ stor
                                     type="datetime-local"
                                     value={endTime}
                                     onChange={(e) => setEndTime(e.target.value)}
-                                    className="w-full px-3.5 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
+                                    className="w-full px-3.5 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
                                 />
                             </div>
                         </div>

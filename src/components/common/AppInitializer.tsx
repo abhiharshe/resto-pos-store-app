@@ -10,13 +10,13 @@ export const AppInitializer: React.FC<{ children: React.ReactNode }> = ({ childr
     const dispatch = useAppDispatch();
     const { accessToken, user } = useAppSelector((state) => state.auth);
     const branding = useAppSelector(selectBranding);
-    
+
     // Fetch global settings
     const { data: settings } = useGetSettingsQuery();
-    
+
     // Fetch user profile if token exists but user is null (e.g., after refresh)
-    const { 
-        data: profile, 
+    const {
+        data: profile,
         isSuccess: isProfileSuccess,
         isError: isProfileError,
         isLoading: isProfileLoading
@@ -32,7 +32,7 @@ export const AppInitializer: React.FC<{ children: React.ReactNode }> = ({ childr
     useEffect(() => {
         if (branding.isInitialized || branding.siteName) {
             document.title = branding.siteName;
-            
+
             // Update Favicon
             const favicon = document.querySelector('link[rel="icon"]');
             if (favicon) {
@@ -54,7 +54,7 @@ export const AppInitializer: React.FC<{ children: React.ReactNode }> = ({ childr
     // Show a loading screen while restoring session to prevent RBAC flicker
     if (!!accessToken && !user && isProfileLoading) {
         return (
-            <div className="h-screen w-screen flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+            <div className="h-screen w-screen flex flex-col items-center justify-center bg-neutral-50 dark:bg-neutral-950">
                 <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
                 <p className="text-zinc-500 font-medium animate-pulse uppercase tracking-widest text-xs">Restoring Session...</p>
             </div>

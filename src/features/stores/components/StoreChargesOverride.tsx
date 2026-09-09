@@ -194,11 +194,11 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
             {/* 1. STORE DELIVERY CHARGES OVERRIDE CARD */}
             {/* ========================================================= */}
             <Card className="space-y-6 p-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 dark:border-zinc-700 pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-mauve-200 dark:border-zinc-700 pb-4">
                     <div>
                         <div className="flex items-center gap-2">
                             <i className="ri-e-bike-2-line text-xl text-indigo-600 dark:text-indigo-400" />
-                            <h4 className="text-base font-semibold text-zinc-900 dark:text-white">Delivery Charges</h4>
+                            <h4 className="text-base font-semibold text-neutral-900 dark:text-white">Delivery Charges</h4>
                         </div>
                         <p className="text-xs text-zinc-500 mt-0.5">
                             Inherit global delivery rates or define custom delivery charges for this store.
@@ -209,8 +209,8 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
                         <span className="text-xs font-semibold text-zinc-500">Currently using:</span>
                         <span
                             className={`px-3 py-1 text-xs font-extrabold rounded-full ${deliveryConfig?.is_override
-                                    ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300 dark:border-amber-700'
-                                    : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
+                                ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300 dark:border-amber-700'
+                                : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
                                 }`}
                         >
                             {deliveryConfig?.is_override ? '● Store-Specific Override' : '● Global Configuration'}
@@ -251,7 +251,7 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
 
                 {/* If Overriding: Show Branch Form */}
                 {deliveryMode === 'OVERRIDE' ? (
-                    <div className="p-5 bg-zinc-50 dark:bg-zinc-800/60 rounded-2xl border border-zinc-200 dark:border-zinc-700 space-y-4 animate-in fade-in">
+                    <div className="p-5 bg-neutral-50 dark:bg-neutral-800/60 rounded-2xl border border-mauve-200 dark:border-zinc-700 space-y-4 animate-in fade-in">
                         <div className="space-y-2">
                             <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
                                 Branch Calculation Type
@@ -261,8 +261,8 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
                                     type="button"
                                     onClick={() => setChargeType('FIXED')}
                                     className={`p-3 rounded-xl border text-left flex items-center justify-between transition-all ${chargeType === 'FIXED'
-                                            ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 font-semibold text-indigo-700 dark:text-indigo-300'
-                                            : 'border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300'
+                                        ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 font-semibold text-indigo-700 dark:text-indigo-300'
+                                        : 'border-mauve-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300'
                                         }`}
                                 >
                                     <span>Fixed Delivery Charge</span>
@@ -272,8 +272,8 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
                                     type="button"
                                     onClick={() => setChargeType('PER_KM')}
                                     className={`p-3 rounded-xl border text-left flex items-center justify-between transition-all ${chargeType === 'PER_KM'
-                                            ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 font-semibold text-indigo-700 dark:text-indigo-300'
-                                            : 'border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300'
+                                        ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/40 font-semibold text-indigo-700 dark:text-indigo-300'
+                                        : 'border-mauve-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300'
                                         }`}
                                 >
                                     <span>Per KM Distance Charge</span>
@@ -319,7 +319,7 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
                             </div>
                         )}
 
-                        <div className="max-w-md pt-2 border-t border-zinc-200 dark:border-zinc-700">
+                        <div className="max-w-md pt-2 border-t border-mauve-200 dark:border-zinc-700">
                             <Input
                                 label="Free Delivery Above (₹)"
                                 type="number"
@@ -369,11 +369,11 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
             {/* 2. STORE PACKAGING CHARGES OVERRIDE CARD */}
             {/* ========================================================= */}
             <Card className="space-y-6 p-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 dark:border-zinc-700 pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-mauve-200 dark:border-zinc-700 pb-4">
                     <div>
                         <div className="flex items-center gap-2">
                             <i className="ri-box-3-line text-xl text-indigo-600 dark:text-indigo-400" />
-                            <h4 className="text-base font-semibold text-zinc-900 dark:text-white">Packaging Charges</h4>
+                            <h4 className="text-base font-semibold text-neutral-900 dark:text-white">Packaging Charges</h4>
                         </div>
                         <p className="text-xs text-zinc-500 mt-0.5">
                             Inherit global packaging slabs or customize order value tiers for this store.
@@ -384,8 +384,8 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
                         <span className="text-xs font-semibold text-zinc-500">Currently using:</span>
                         <span
                             className={`px-3 py-1 text-xs font-extrabold rounded-full ${packagingConfig?.is_override
-                                    ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300 dark:border-amber-700'
-                                    : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
+                                ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300 dark:border-amber-700'
+                                : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
                                 }`}
                         >
                             {packagingConfig?.is_override ? '● Store-Specific Override' : '● Global Configuration'}
@@ -426,10 +426,10 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
 
                 {/* If Overriding: Slabs Table */}
                 {packagingMode === 'OVERRIDE' ? (
-                    <div className="p-5 bg-zinc-50 dark:bg-zinc-800/60 rounded-2xl border border-zinc-200 dark:border-zinc-700 space-y-4 animate-in fade-in">
+                    <div className="p-5 bg-neutral-50 dark:bg-neutral-800/60 rounded-2xl border border-mauve-200 dark:border-zinc-700 space-y-4 animate-in fade-in">
                         <div className="flex justify-between items-center">
                             <div>
-                                <h5 className="font-semibold text-sm text-zinc-900 dark:text-white">Store Packaging Slabs</h5>
+                                <h5 className="font-semibold text-sm text-neutral-900 dark:text-white">Store Packaging Slabs</h5>
                                 <p className="text-xs text-zinc-500">Custom slabs applied to delivery and takeaway orders</p>
                             </div>
                             <Button
@@ -443,9 +443,9 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
                             </Button>
                         </div>
 
-                        <div className="overflow-x-auto bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+                        <div className="overflow-x-auto bg-white dark:bg-neutral-800 rounded-xl border border-mauve-200 dark:border-zinc-700">
                             <table className="w-full text-left text-sm">
-                                <thead className="bg-zinc-100 dark:bg-zinc-700/50 text-zinc-600 dark:text-zinc-300 text-xs font-semibold uppercase">
+                                <thead className="bg-neutral-100 dark:bg-neutral-700/50 text-zinc-600 dark:text-zinc-300 text-xs font-semibold uppercase">
                                     <tr>
                                         <th className="p-3 pl-4">Min Order Value (₹)</th>
                                         <th className="p-3">Max Order Value (₹)</th>
@@ -470,7 +470,7 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
                                                         step="0.01"
                                                         value={rule.min_order_value}
                                                         onChange={(e) => handlePackagingRuleChange(idx, 'min_order_value', e.target.value)}
-                                                        className="w-28 px-2.5 py-1.5 rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white text-sm outline-none"
+                                                        className="w-28 px-2.5 py-1.5 rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white text-sm outline-none"
                                                         placeholder="0.00"
                                                         required
                                                     />
@@ -482,7 +482,7 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
                                                         step="0.01"
                                                         value={rule.max_order_value ?? ''}
                                                         onChange={(e) => handlePackagingRuleChange(idx, 'max_order_value', e.target.value)}
-                                                        className="w-28 px-2.5 py-1.5 rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white text-sm outline-none"
+                                                        className="w-28 px-2.5 py-1.5 rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white text-sm outline-none"
                                                         placeholder="No Limit"
                                                     />
                                                 </td>
@@ -493,7 +493,7 @@ export const StoreChargesOverride: React.FC<StoreChargesOverrideProps> = ({ stor
                                                         step="0.01"
                                                         value={rule.charge}
                                                         onChange={(e) => handlePackagingRuleChange(idx, 'charge', e.target.value)}
-                                                        className="w-24 px-2.5 py-1.5 rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white text-sm font-semibold outline-none"
+                                                        className="w-24 px-2.5 py-1.5 rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white text-sm font-semibold outline-none"
                                                         placeholder="10.00"
                                                         required
                                                     />

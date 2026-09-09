@@ -42,7 +42,7 @@ const CategoryEdit = () => {
     if (!category) {
         return (
             <div className="text-center py-12">
-                <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">Category not found</h2>
+                <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">Category not found</h2>
                 <button
                     onClick={() => navigate('/menu/categories')}
                     className="mt-4 text-indigo-600 hover:text-indigo-700"

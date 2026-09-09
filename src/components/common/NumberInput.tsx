@@ -35,7 +35,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(({
                         ${icon ? 'pl-10' : 'px-4'}
                         ${error
                             ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                            : 'border-zinc-200 dark:border-zinc-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-zinc-500 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-zinc-800'
+                            : 'border-mauve-200 dark:border-zinc-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-zinc-500 focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-neutral-800'
                         }
                         ${className}
                     `}

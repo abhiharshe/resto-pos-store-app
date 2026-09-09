@@ -29,7 +29,7 @@ const DealCard: React.FC<DealCardProps> = ({ deal, onSelect }) => {
     return (
         <div
             onClick={handleAddClick}
-            className="group border border-emerald-100 dark:border-emerald-900/30 rounded-lg p-3 flex flex-col gap-3 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-emerald-50 dark:hover:shadow-none bg-white dark:bg-zinc-900 border-opacity-60 relative overflow-hidden"
+            className="group border border-emerald-100 dark:border-emerald-900/30 rounded-lg p-3 flex flex-col gap-3 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-emerald-50 dark:hover:shadow-none bg-white dark:bg-mauve-900 border-opacity-60 relative overflow-hidden"
         >
             {/* Deal Badge */}
             <div className="absolute top-0 right-0 bg-emerald-500 text-white text-xs font-semibold px-2 py-0.5 rounded-bl-2xl z-10 uppercase shadow-sm">
@@ -48,10 +48,10 @@ const DealCard: React.FC<DealCardProps> = ({ deal, onSelect }) => {
                     />
                 </div>
                 <div className="flex-1 min-w-0 flex flex-col justify-center">
-                    <h2 className="font-semibold text-md text-zinc-900 dark:text-zinc-100 truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                    <h2 className="font-semibold text-md text-neutral-900 dark:text-zinc-100 truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                         {deal.title}
                     </h2>
-                    <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1 line-clamp-2 leading-tight font-medium">
+                    <p className="text-[10px] text-neutral-500 dark:text-neutral-400 mt-1 line-clamp-2 leading-tight font-medium">
                         {deal.description || "An incredible value bundle curated by our chefs for your satisfaction."}
                     </p>
                     <div className="mt-2 flex items-baseline gap-1">

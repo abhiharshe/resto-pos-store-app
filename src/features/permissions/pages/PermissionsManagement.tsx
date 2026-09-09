@@ -6,17 +6,17 @@ const PermissionsManagement: React.FC = () => {
     return (
         <Container>
             <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-zinc-200 dark:border-zinc-800">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-mauve-200 dark:border-mauve-800">
                     <div>
                         <div className="flex items-center gap-2">
                             <span className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400">
                                 <i className="ri-shield-keyhole-line text-xl" />
                             </span>
-                            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                            <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">
                                 Access Control & Permissions
                             </h2>
                         </div>
-                        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+                        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
                             Dynamically configure module and endpoint access rights for each staff role.
                         </p>
                     </div>

@@ -56,10 +56,10 @@ const DeliverySettings: React.FC = () => {
 
     return (
         <form onSubmit={handleSave} className="space-y-6 max-w-4xl">
-            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-700 pb-4">
+            <div className="flex items-center justify-between border-b border-mauve-200 dark:border-zinc-700 pb-4">
                 <div>
-                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">Global Delivery Charges</h3>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">Global Delivery Charges</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
                         Configure the default delivery fee structure applied to all stores without custom overrides.
                     </p>
                 </div>
@@ -69,8 +69,8 @@ const DeliverySettings: React.FC = () => {
                         type="button"
                         onClick={() => setIsActive(!isActive)}
                         className={`px-3 py-1 text-xs font-semibold rounded-full transition-colors ${isActive
-                                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'
-                                : 'bg-zinc-200 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400'
+                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'
+                            : 'bg-neutral-200 text-zinc-600 dark:bg-neutral-700 dark:text-zinc-400'
                             }`}
                     >
                         {isActive ? '● Active' : '○ Inactive'}
@@ -87,8 +87,8 @@ const DeliverySettings: React.FC = () => {
                     <div
                         onClick={() => setChargeType('FIXED')}
                         className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 ${chargeType === 'FIXED'
-                                ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/20 dark:border-indigo-500'
-                                : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
+                            ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/20 dark:border-indigo-500'
+                            : 'border-mauve-200 dark:border-zinc-700 hover:border-zinc-300'
                             }`}
                     >
                         <div className="mt-0.5">
@@ -101,8 +101,8 @@ const DeliverySettings: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <span className="font-semibold text-sm text-zinc-900 dark:text-white block">Fixed Delivery Fee</span>
-                            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                            <span className="font-semibold text-sm text-neutral-900 dark:text-white block">Fixed Delivery Fee</span>
+                            <span className="text-xs text-neutral-500 dark:text-neutral-400">
                                 Flat fee charged on all delivery orders regardless of distance (e.g. ₹50).
                             </span>
                         </div>
@@ -111,8 +111,8 @@ const DeliverySettings: React.FC = () => {
                     <div
                         onClick={() => setChargeType('PER_KM')}
                         className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 ${chargeType === 'PER_KM'
-                                ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/20 dark:border-indigo-500'
-                                : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300'
+                            ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/20 dark:border-indigo-500'
+                            : 'border-mauve-200 dark:border-zinc-700 hover:border-zinc-300'
                             }`}
                     >
                         <div className="mt-0.5">
@@ -125,8 +125,8 @@ const DeliverySettings: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <span className="font-semibold text-sm text-zinc-900 dark:text-white block">Distance Based (Per KM)</span>
-                            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                            <span className="font-semibold text-sm text-neutral-900 dark:text-white block">Distance Based (Per KM)</span>
+                            <span className="text-xs text-neutral-500 dark:text-neutral-400">
                                 Delivery fee calculated dynamically based on delivery distance (e.g. ₹12 / km with min charge).
                             </span>
                         </div>
@@ -135,7 +135,7 @@ const DeliverySettings: React.FC = () => {
             </div>
 
             {/* Form Inputs based on selected type */}
-            <div className="p-5 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-200 dark:border-zinc-700/80 space-y-4">
+            <div className="p-5 bg-neutral-50 dark:bg-neutral-800/50 rounded-2xl border border-mauve-200 dark:border-zinc-700/80 space-y-4">
                 {chargeType === 'FIXED' ? (
                     <div className="max-w-md">
                         <Input
@@ -176,7 +176,7 @@ const DeliverySettings: React.FC = () => {
                     </div>
                 )}
 
-                <div className="pt-2 border-t border-zinc-200 dark:border-zinc-700">
+                <div className="pt-2 border-t border-mauve-200 dark:border-zinc-700">
                     <div className="max-w-md">
                         <Input
                             label="Free Delivery Minimum Order Value (₹)"

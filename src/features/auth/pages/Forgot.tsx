@@ -90,7 +90,7 @@ const Forgot = () => {
             </div>
 
             {/* Mode Selector Tabs */}
-            <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-2xl">
+            <div className="flex bg-neutral-100 dark:bg-neutral-800 p-1 rounded-2xl">
                 <button
                     type="button"
                     onClick={() => {
@@ -98,8 +98,8 @@ const Forgot = () => {
                         setError(null);
                     }}
                     className={`flex-1 py-2 text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-1.5 ${mode === 'admin_request'
-                            ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                            : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                        ? 'bg-white dark:bg-mauve-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white'
                         }`}
                 >
                     <i className="ri-shield-user-line" />
@@ -112,8 +112,8 @@ const Forgot = () => {
                         setError(null);
                     }}
                     className={`flex-1 py-2 text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-1.5 ${mode === 'email_link'
-                            ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                            : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                        ? 'bg-white dark:bg-mauve-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white'
                         }`}
                 >
                     <i className="ri-mail-send-line" />

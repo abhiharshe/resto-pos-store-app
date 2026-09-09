@@ -55,59 +55,59 @@ const OrderSettings = () => {
     return (
         <form onSubmit={formik.handleSubmit} className="space-y-8 max-w-3xl">
             <div className="space-y-4">
-                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Order Configurations</h3>
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-zinc-100">Order Configurations</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input 
-                        label="Order Number Prefix" 
+                    <Input
+                        label="Order Number Prefix"
                         name="order_prefix"
                         value={formik.values.order_prefix}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        placeholder="e.g. ORD-" 
-                        helper="Prepended to order receipts." 
+                        placeholder="e.g. ORD-"
+                        helper="Prepended to order receipts."
                     />
-                    <Input 
-                        label="Order Success Email" 
-                        type="email" 
+                    <Input
+                        label="Order Success Email"
+                        type="email"
                         name="order_success_email"
                         value={formik.values.order_success_email}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        placeholder="admin@store.com" 
-                        helper="Admin email to receive copy on every order." 
+                        placeholder="admin@store.com"
+                        helper="Admin email to receive copy on every order."
                     />
                 </div>
             </div>
 
-            <div className="border-t border-zinc-200 dark:border-zinc-700 pt-8 space-y-4">
-                <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Receipt Printing</h3>
+            <div className="border-t border-mauve-200 dark:border-zinc-700 pt-8 space-y-4">
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-zinc-100">Receipt Printing</h3>
 
                 <div>
                     <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Receipt Logo (Black & White ideal)</label>
                     <div className="flex items-center gap-4">
                         {formik.values.receipt_logo_url && (
-                            <img src={getMediaURL(formik.values.receipt_logo_url)} alt="Receipt Logo" className="h-16 w-16 object-contain bg-zinc-100 rounded border" />
+                            <img src={getMediaURL(formik.values.receipt_logo_url)} alt="Receipt Logo" className="h-16 w-16 object-contain bg-neutral-100 rounded border" />
                         )}
                         <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm" />
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input 
-                        label="Receipt Header Text" 
+                    <Input
+                        label="Receipt Header Text"
                         name="receipt_header"
                         value={formik.values.receipt_header}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        placeholder="Welcome to our store!" 
+                        placeholder="Welcome to our store!"
                     />
-                    <Input 
-                        label="Receipt Footer Text" 
+                    <Input
+                        label="Receipt Footer Text"
                         name="receipt_footer"
                         value={formik.values.receipt_footer}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        placeholder="Thank you for visiting!" 
+                        placeholder="Thank you for visiting!"
                     />
                 </div>
             </div>

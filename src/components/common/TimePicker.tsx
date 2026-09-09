@@ -49,7 +49,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         value={safeValue}
         onChange={handleChange}
         disabled={disabled}
-        className="w-32 rounded-md border border-zinc-300 bg-white dark:bg-zinc-800 px-2 py-1 text-sm text-zinc-900 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-600 disabled:opacity-50"
+        className="w-32 rounded-md border border-zinc-300 bg-white dark:bg-neutral-800 px-2 py-1 text-sm text-neutral-900 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-600 disabled:opacity-50"
         // Enforce 24‑hour clock; browsers respect the locale but the pattern enforces format.
         pattern="^([01]\d|2[0-3]):[0-5]\d$"
         step={60} // minute granularity

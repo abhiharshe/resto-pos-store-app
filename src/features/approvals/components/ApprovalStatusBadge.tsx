@@ -51,7 +51,7 @@ export const ApprovalStatusBadge: React.FC<ApprovalStatusBadgeProps> = ({
     if (normStatus === 'DRAFT') {
         return (
             <span
-                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 ${className}`}
+                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-neutral-100 text-zinc-600 dark:bg-neutral-800 dark:text-zinc-300 border border-mauve-200 dark:border-zinc-700 ${className}`}
             >
                 <i className="ri-draft-line text-xs" />
                 Draft

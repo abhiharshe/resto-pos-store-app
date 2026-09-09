@@ -55,8 +55,8 @@ const AssetCard: React.FC<{
     return (
         <div
             className={`
-                group relative bg-white dark:bg-zinc-900 border rounded-2xl overflow-hidden transition-all duration-300
-                ${isSelected ? 'ring-2 ring-indigo-500 border-indigo-500 shadow-lg' : 'border-zinc-200 dark:border-zinc-800 hover:shadow-md'}
+                group relative bg-white dark:bg-mauve-900 border rounded-2xl overflow-hidden transition-all duration-300
+                ${isSelected ? 'ring-2 ring-indigo-500 border-indigo-500 shadow-lg' : 'border-mauve-200 dark:border-mauve-800 hover:shadow-md'}
                 ${selectionMode ? 'cursor-pointer' : ''}
             `}
             onClick={() => selectionMode && onSelect()}
@@ -70,7 +70,7 @@ const AssetCard: React.FC<{
 
             {/* Thumbnail/Icon */}
             <div
-                className="aspect-square bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden cursor-zoom-in"
+                className="aspect-square bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center overflow-hidden cursor-zoom-in"
                 onClick={(e) => {
                     if (selectionMode) return;
                     e.stopPropagation();
@@ -124,10 +124,10 @@ const AssetCard: React.FC<{
 
             {/* Content */}
             <div className="p-4">
-                <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate mb-1" title={asset.original_name}>
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate mb-1" title={asset.original_name}>
                     {asset.original_name}
                 </p>
-                <div className="flex justify-between items-center text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
+                <div className="flex justify-between items-center text-[11px] text-neutral-500 dark:text-neutral-400 font-medium">
                     <span>{formatSize(asset.file_size)}</span>
                     <span>{dayjs(asset.created_at).format('MMM D, YYYY')}</span>
                 </div>
@@ -213,7 +213,7 @@ const AssetGallery: React.FC<AssetGalleryProps> = ({
         return (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {[...Array(8)].map((_, i) => (
-                    <div key={i} className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden p-0">
+                    <div key={i} className="bg-white dark:bg-mauve-900 border border-mauve-200 dark:border-mauve-800 rounded-2xl overflow-hidden p-0">
                         <Skeleton className="aspect-square rounded-none" />
                         <div className="p-4 space-y-2">
                             <Skeleton className="h-4 w-3/4" />
@@ -227,12 +227,12 @@ const AssetGallery: React.FC<AssetGalleryProps> = ({
 
     if (!data?.items?.length) {
         return (
-            <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-zinc-50 dark:bg-zinc-900/50 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-800">
-                <div className="w-20 h-20 bg-white dark:bg-zinc-800 rounded-2xl shadow-sm flex items-center justify-center mb-6">
+            <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-neutral-50 dark:bg-mauve-900/50 rounded-3xl border-2 border-dashed border-mauve-200 dark:border-mauve-800">
+                <div className="w-20 h-20 bg-white dark:bg-neutral-800 rounded-2xl shadow-sm flex items-center justify-center mb-6">
                     <i className="ri-image-2-line text-4xl text-zinc-300"></i>
                 </div>
-                <h3 className="text-xl font-black text-zinc-900 dark:text-white mb-2">No assets found</h3>
-                <p className="text-zinc-500 dark:text-zinc-400 max-w-xs">This entity doesn't have any uploaded assets yet.</p>
+                <h3 className="text-xl font-black text-neutral-900 dark:text-white mb-2">No assets found</h3>
+                <p className="text-neutral-500 dark:text-neutral-400 max-w-xs">This entity doesn't have any uploaded assets yet.</p>
             </div>
         );
     }
@@ -274,7 +274,7 @@ const AssetGallery: React.FC<AssetGalleryProps> = ({
                                     w-10 h-10 rounded-xl text-sm font-semibold transition-all
                                     ${page === i + 1
                                         ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200'
-                                        : 'text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800'}
+                                        : 'text-zinc-600 hover:bg-neutral-100 dark:text-zinc-400 dark:hover:bg-neutral-800'}
                                 `}
                             >
                                 {i + 1}

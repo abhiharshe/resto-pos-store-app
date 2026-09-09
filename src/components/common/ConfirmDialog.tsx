@@ -89,7 +89,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className={`relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 border-t-4 ${style.accentColor}`}
+                        className={`relative w-full max-w-md bg-white dark:bg-mauve-900 rounded-2xl shadow-2xl overflow-hidden border border-zinc-100 dark:border-mauve-800 border-t-4 ${style.accentColor}`}
                     >
                         <div className="p-6">
                             <div className="flex items-start gap-4">

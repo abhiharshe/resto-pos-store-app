@@ -48,7 +48,7 @@ const DealList = () => {
             id: 'banner',
             header: 'Banner',
             cell: (info) => (
-                <div className="w-16 h-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-200 dark:border-zinc-700">
+                <div className="w-16 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center overflow-hidden border border-mauve-200 dark:border-zinc-700">
                     {info.row.original.featured_image ? (
                         <img src={getMediaURL(info.row.original.featured_image)} alt="Deal" className="w-full h-full object-cover" />
                     ) : (
@@ -62,7 +62,7 @@ const DealList = () => {
             header: 'Deal Name',
             cell: (info) => (
                 <div className="flex flex-col">
-                    <span className="font-semibold text-zinc-900 dark:text-white">{info.getValue() as string}</span>
+                    <span className="font-semibold text-neutral-900 dark:text-white">{info.getValue() as string}</span>
                     <span className="text-xs text-zinc-500 line-clamp-1">{info.row.original.description || 'No description'}</span>
                 </div>
             )
@@ -131,7 +131,7 @@ const DealList = () => {
                             variant="outline"
                             size="sm"
                             onClick={() => navigate(`/deals/edit/${deal.id}`)}
-                            className="h-8 py-0 px-3 border-zinc-200 dark:border-zinc-700 hover:border-blue-500 hover:text-blue-500"
+                            className="h-8 py-0 px-3 border-mauve-200 dark:border-zinc-700 hover:border-blue-500 hover:text-blue-500"
                         >
                             <i className="ri-edit-line mr-1 text-sm" />
                             {deal.approval_status === 'REJECTED' ? 'Edit & Resubmit' : 'Edit'}
@@ -140,7 +140,7 @@ const DealList = () => {
                             variant="outline"
                             size="sm"
                             onClick={() => navigate(`/deals/items/${deal.id}`)}
-                            className="h-8 py-0 px-3 border-zinc-200 dark:border-zinc-700 hover:border-indigo-500 hover:text-indigo-500"
+                            className="h-8 py-0 px-3 border-mauve-200 dark:border-zinc-700 hover:border-indigo-500 hover:text-indigo-500"
                         >
                             <i className="ri-list-settings-line mr-1 text-sm" /> Items
                         </Button>
@@ -163,8 +163,8 @@ const DealList = () => {
         <Container>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Deals & Combos</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">Manage meal bundles and special choice-based offers.</p>
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">Deals & Combos</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Manage meal bundles and special choice-based offers.</p>
                 </div>
                 <Button
                     onClick={() => navigate('/deals/new')}
@@ -175,7 +175,7 @@ const DealList = () => {
             </div>
 
             {/* Filters */}
-            <div className="bg-white/20 dark:bg-zinc-900/20 backdrop-blur-md p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm">
+            <div className="bg-white/20 dark:bg-mauve-900/20 backdrop-blur-md p-6 rounded-lg border border-mauve-200 dark:border-mauve-800 shadow-sm">
                 <div className="max-w-md">
                     <Input
                         label="Search Deals"
@@ -188,7 +188,7 @@ const DealList = () => {
             </div>
 
 
-            <div className='border border-zinc-200 dark:border-zinc-700 rounded-lg'>
+            <div className='border border-mauve-200 dark:border-zinc-700 rounded-lg'>
                 <DataTable
                     data={deals || []}
                     columns={columns}
@@ -198,11 +198,11 @@ const DealList = () => {
 
 
             {deals?.length === 0 && !isLoading && (
-                <div className="p-12 text-center bg-zinc-50 dark:bg-zinc-800/20 rounded-xl border border-zinc-300 dark:border-zinc-800">
-                    <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="p-12 text-center bg-neutral-50 dark:bg-neutral-800/20 rounded-xl border border-zinc-300 dark:border-mauve-800">
+                    <div className="w-16 h-16 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i className="ri-percent-line text-3xl text-zinc-400"></i>
                     </div>
-                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-2">No deals found</h3>
+                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">No deals found</h3>
                     <p className="text-zinc-500 mb-6 max-w-sm mx-auto">
                         {searchTerm ? `No deals matching "${searchTerm}"` : "Create your first combo deal to offer more value to your customers."}
                     </p>

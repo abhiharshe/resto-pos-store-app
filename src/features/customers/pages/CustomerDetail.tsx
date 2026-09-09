@@ -73,9 +73,9 @@ const CustomerDetail = () => {
     return (
         <div className="p-4 space-y-4 lg:p-8 mx-auto">
             {/* Header */}
-            <div className="flex items-center justify-between bg-zinc-100 dark:bg-zinc-800 p-4 rounded-3xl text-white shadow-xl">
+            <div className="flex items-center justify-between bg-neutral-100 dark:bg-neutral-800 p-4 rounded-3xl text-white shadow-xl">
                 <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 bg-zinc-200 dark:bg-zinc-700 rounded-2xl flex items-center justify-center text-3xl text-zinc-600 dark:text-zinc-300 font-semibold">
+                    <div className="w-16 h-16 bg-neutral-200 dark:bg-neutral-700 rounded-2xl flex items-center justify-center text-3xl text-zinc-600 dark:text-zinc-300 font-semibold">
                         {customer.full_name?.charAt(0) || 'G'}
                     </div>
                     <div>
@@ -84,7 +84,7 @@ const CustomerDetail = () => {
                             <i className="ri-phone-line text-indigo-400"></i> {customer.phone}
                             {customer.email && (
                                 <span className="flex items-center gap-2">
-                                    <span className="w-1 h-1 bg-zinc-700 rounded-full"></span>
+                                    <span className="w-1 h-1 bg-neutral-700 rounded-full"></span>
                                     <i className="ri-mail-line text-indigo-400"></i> {customer.email}
                                 </span>
                             )}
@@ -109,7 +109,7 @@ const CustomerDetail = () => {
                         <i className="ri-calendar-todo-line text-5xl"></i>
                     </div>
                     <p className="text-zinc-500 text-xs font-semibold uppercase tracking-wider mb-2">Orders This Month</p>
-                    <h2 className="text-3xl text-zinc-600 dark:text-zinc-200 font-semibold text-zinc-900 dark:text-white">{stats?.current_month_orders}</h2>
+                    <h2 className="text-3xl text-zinc-600 dark:text-zinc-200 font-semibold text-neutral-900 dark:text-white">{stats?.current_month_orders}</h2>
                     <div className="flex items-center gap-1 mt-1">
                         <span className={`text-[10px] font-semibold ${(stats?.current_month_orders || 0) >= (stats?.last_month_orders || 0) ? 'text-emerald-500' : 'text-red-500'}`}>
                             vs {stats?.last_month_orders} last month
@@ -126,9 +126,9 @@ const CustomerDetail = () => {
                     <p className="text-[10px] text-zinc-400 mt-1">Based on current month sales</p>
                 </Card>
 
-                <Card className="relative overflow-hidden group bg-zinc-50 dark:bg-zinc-800/50">
+                <Card className="relative overflow-hidden group bg-neutral-50 dark:bg-neutral-800/50">
                     <p className="text-zinc-500 text-xs font-semibold uppercase tracking-wider mb-2">Last Month AOV</p>
-                    <h2 className="text-2xl text-zinc-600 dark:text-zinc-200 font-semibold text-zinc-900 dark:text-white">₹{stats?.last_month_aov?.toFixed(2)}</h2>
+                    <h2 className="text-2xl text-zinc-600 dark:text-zinc-200 font-semibold text-neutral-900 dark:text-white">₹{stats?.last_month_aov?.toFixed(2)}</h2>
                     <div className="flex items-center mt-2">
                         {stats && stats.current_month_aov > stats.last_month_aov ? (
                             <span className="text-[10px] font-semibold text-emerald-500 flex items-center gap-1">
@@ -146,20 +146,20 @@ const CustomerDetail = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {/* Top 10 Products */}
                 <Card className="lg:col-span-1 p-0 overflow-hidden h-fit">
-                    <div className="p-6 border-b dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/50">
-                        <h4 className="text-sm text-zinc-600 dark:text-zinc-200 font-semibold uppercase tracking-widest text-zinc-900 dark:text-white flex items-center gap-2">
+                    <div className="p-6 border-b dark:border-mauve-800 bg-neutral-50/50 dark:bg-neutral-800/50">
+                        <h4 className="text-sm text-zinc-600 dark:text-zinc-200 font-semibold uppercase tracking-widest text-neutral-900 dark:text-white flex items-center gap-2">
                             <i className="ri-fire-line text-orange-500"></i> Top 10 Favorite Products
                         </h4>
                     </div>
                     <div className="divide-y dark:divide-zinc-800 max-h-[500px] overflow-y-auto">
                         {stats?.top_products.length ? stats.top_products.map((product, idx) => (
-                            <div key={product.menu_item_id} className="p-4 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
+                            <div key={product.menu_item_id} className="p-4 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors">
                                 <div className="flex items-center gap-4">
-                                    <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold ${idx < 3 ? 'bg-indigo-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400'}`}>
+                                    <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold ${idx < 3 ? 'bg-indigo-600 text-white' : 'bg-neutral-100 dark:bg-neutral-800 text-zinc-400'}`}>
                                         {idx + 1}
                                     </span>
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-semibold text-zinc-900 dark:text-white">{product.name}</span>
+                                        <span className="text-sm font-semibold text-neutral-900 dark:text-white">{product.name}</span>
                                         <span className="text-[10px] text-zinc-400">Total Revenue: ₹{product.total_revenue.toFixed(2)}</span>
                                     </div>
                                 </div>
@@ -180,8 +180,8 @@ const CustomerDetail = () => {
                 {/* Order History */}
                 <div className="lg:col-span-2 space-y-6">
                     <Card className="p-0 overflow-hidden">
-                        <div className="p-6 border-b dark:border-zinc-800">
-                            <h4 className="text-sm text-zinc-600 dark:text-zinc-200 font-semibold uppercase tracking-widest text-zinc-900 dark:text-white">Order History</h4>
+                        <div className="p-6 border-b dark:border-mauve-800">
+                            <h4 className="text-sm text-zinc-600 dark:text-zinc-200 font-semibold uppercase tracking-widest text-neutral-900 dark:text-white">Order History</h4>
                         </div>
                         <DataTable
                             data={orders || []}

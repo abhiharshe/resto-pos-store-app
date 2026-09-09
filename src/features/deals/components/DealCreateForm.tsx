@@ -110,9 +110,9 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
 
     return (
         <div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 pb-6 border-b border-zinc-100 dark:border-zinc-800 gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 pb-6 border-b border-zinc-100 dark:border-mauve-800 gap-4">
                 <div>
-                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
+                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white">{title}</h3>
                     <p className="text-sm text-zinc-500 font-medium">Step {currentStep}: {steps[currentStep - 1].label}</p>
                 </div>
 
@@ -122,13 +122,13 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                             <div
                                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 ${currentStep >= s.id
                                     ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
-                                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400'
+                                    : 'bg-neutral-100 dark:bg-neutral-800 text-zinc-400'
                                     }`}
                             >
                                 <i className={s.icon}></i>
                             </div>
                             {idx < steps.length - 1 && (
-                                <div className={`w-8 h-[2px] ${currentStep > s.id ? 'bg-indigo-600' : 'bg-zinc-100 dark:bg-zinc-800'}`}></div>
+                                <div className={`w-8 h-[2px] ${currentStep > s.id ? 'bg-indigo-600' : 'bg-neutral-100 dark:bg-neutral-800'}`}></div>
                             )}
                         </React.Fragment>
                     ))}
@@ -170,7 +170,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                             <label className="block text-sm text-zinc-700 dark:text-zinc-300 mb-2 font-medium">Description (Optional)</label>
                                             <textarea
                                                 name="description"
-                                                className="w-full h-32 px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none text-zinc-900 dark:text-white"
+                                                className="w-full h-32 px-4 py-3 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-mauve-200 dark:border-zinc-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none text-neutral-900 dark:text-white"
                                                 placeholder="Describe what makes this combo special..."
                                                 value={values.description}
                                                 onChange={handleChange}
@@ -183,23 +183,23 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                 onClick={() => setFieldValue('is_active', !values.is_active)}
                                                 className={`w-full flex items-center justify-between gap-4 p-4 rounded-xl border-2 transition-all duration-300 ${values.is_active
                                                     ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-300 dark:border-emerald-700'
-                                                    : 'bg-zinc-50 dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-700'
+                                                    : 'bg-neutral-50 dark:bg-neutral-800/40 border-mauve-200 dark:border-zinc-700'
                                                     }`}
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${values.is_active ? 'bg-emerald-500 text-white' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-400'
+                                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${values.is_active ? 'bg-emerald-500 text-white' : 'bg-neutral-200 dark:bg-neutral-700 text-zinc-400'
                                                         }`}>
                                                         <i className={values.is_active ? 'ri-checkbox-circle-fill' : 'ri-close-circle-line'}></i>
                                                     </div>
                                                     <div className="text-left">
-                                                        <p className="text-sm font-semibold text-zinc-900 dark:text-white">Deal Status</p>
+                                                        <p className="text-sm font-semibold text-neutral-900 dark:text-white">Deal Status</p>
                                                         <p className="text-xs text-zinc-500">
                                                             {values.is_active ? 'This deal is active and visible to customers' : 'This deal is inactive and hidden from customers'}
                                                         </p>
                                                     </div>
                                                 </div>
                                                 {/* Toggle pill */}
-                                                <div className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${values.is_active ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-600'}`}>
+                                                <div className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${values.is_active ? 'bg-emerald-500' : 'bg-neutral-300 dark:bg-neutral-600'}`}>
                                                     <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${values.is_active ? 'translate-x-5' : 'translate-x-0'}`} />
                                                 </div>
                                             </button>
@@ -213,12 +213,12 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                             </label>
                                         </div>
 
-                                        <div className="p-6 border-2 border-dashed border-zinc-200 dark:border-zinc-700 rounded-3xl bg-zinc-50/50 dark:bg-zinc-900/20 flex flex-col items-center justify-center gap-2">
+                                        <div className="p-6 border-2 border-dashed border-mauve-200 dark:border-zinc-700 rounded-3xl bg-neutral-50/50 dark:bg-mauve-900/20 flex flex-col items-center justify-center gap-2">
                                             <div className="w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center">
                                                 <i className="ri-image-add-line text-2xl text-indigo-500"></i>
                                             </div>
                                             <div className="text-center">
-                                                <p className="text-sm font-semibold text-zinc-900 dark:text-white">Media Gallery</p>
+                                                <p className="text-sm font-semibold text-neutral-900 dark:text-white">Media Gallery</p>
                                                 <p className="text-xs text-zinc-500 max-w-[240px] mx-auto mt-1">
                                                     Media gallery will be available after you create the combo deal.
                                                 </p>
@@ -249,17 +249,17 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                     key={store.id}
                                                     className={`p-5 rounded-2xl border transition-all duration-300 ${isActive
                                                         ? 'bg-indigo-50/50 dark:bg-indigo-900/5 border-indigo-200 dark:border-indigo-800 ring-1 ring-indigo-500/10'
-                                                        : 'bg-zinc-50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 opacity-70'
+                                                        : 'bg-neutral-50 dark:bg-mauve-900/50 border-mauve-200 dark:border-mauve-800 opacity-70'
                                                         }`}
                                                 >
                                                     <div className="flex items-center justify-between gap-4 mb-4">
                                                         <div className="flex items-center gap-3">
-                                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-400'
+                                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'bg-neutral-200 dark:bg-neutral-700 text-zinc-400'
                                                                 }`}>
                                                                 <i className="ri-store-2-line"></i>
                                                             </div>
                                                             <div>
-                                                                <h4 className="font-semibold text-zinc-900 dark:text-white">{store.name}</h4>
+                                                                <h4 className="font-semibold text-neutral-900 dark:text-white">{store.name}</h4>
                                                                 <span className="text-[10px] uppercase font-black tracking-widest text-zinc-500">{store.address || 'Default Location'}</span>
                                                             </div>
                                                         </div>
@@ -336,11 +336,11 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                         const groupTouched = (touched.selection_groups as any)?.[gIndex];
 
                                                         return (
-                                                            <div key={gIndex} className={`p-6 bg-zinc-50 dark:bg-zinc-800/40 rounded-3xl border transition-all duration-300 relative group animate-in slide-in-from-bottom-2 duration-200 ${groupErrors ? 'border-red-200 dark:border-red-900/30' : 'border-zinc-200 dark:border-zinc-700'}`}>
+                                                            <div key={gIndex} className={`p-6 bg-neutral-50 dark:bg-neutral-800/40 rounded-3xl border transition-all duration-300 relative group animate-in slide-in-from-bottom-2 duration-200 ${groupErrors ? 'border-red-200 dark:border-red-900/30' : 'border-mauve-200 dark:border-zinc-700'}`}>
                                                                 <button
                                                                     type="button"
                                                                     onClick={() => remove(gIndex)}
-                                                                    className="absolute -top-3 -right-3 w-8 h-8 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors shadow-sm active:scale-90"
+                                                                    className="absolute -top-3 -right-3 w-8 h-8 bg-white dark:bg-neutral-800 border border-mauve-200 dark:border-zinc-700 rounded-full flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors shadow-sm active:scale-90"
                                                                 >
                                                                     <i className="ri-close-line"></i>
                                                                 </button>
@@ -376,14 +376,14 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                                         required
                                                                     />
 
-                                                                    <div className="md:col-span-4 flex items-center justify-between p-3 bg-white dark:bg-zinc-900/40 rounded-xl border border-zinc-100 dark:border-zinc-800/50 mt-1">
+                                                                    <div className="md:col-span-4 flex items-center justify-between p-3 bg-white dark:bg-mauve-900/40 rounded-xl border border-zinc-100 dark:border-mauve-800/50 mt-1">
                                                                         <div className="flex items-center gap-3">
                                                                             <i className="ri-shield-check-line text-indigo-500"></i>
                                                                             <span className="text-sm font-semibold text-zinc-700 dark:text-white">Customer must make a selection</span>
                                                                         </div>
                                                                         <div
                                                                             onClick={() => setFieldValue(`selection_groups.${gIndex}.is_required`, !group.is_required)}
-                                                                            className={`w-10 h-5 rounded-full transition-all relative cursor-pointer ${group.is_required ? 'bg-indigo-500' : 'bg-zinc-300 dark:bg-zinc-700'}`}
+                                                                            className={`w-10 h-5 rounded-full transition-all relative cursor-pointer ${group.is_required ? 'bg-indigo-500' : 'bg-neutral-300 dark:bg-neutral-700'}`}
                                                                         >
                                                                             <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${group.is_required ? 'left-5.5' : 'left-0.5'}`} />
                                                                         </div>
@@ -393,7 +393,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                                 <div className="space-y-3">
                                                                     <div className="flex items-center justify-between mb-2 px-1">
                                                                         <span className="text-xs font-black text-zinc-400 uppercase tracking-widest">Selectable Items</span>
-                                                                        <span className="h-[1px] flex-1 mx-4 bg-zinc-200 dark:bg-zinc-700 opacity-30"></span>
+                                                                        <span className="h-[1px] flex-1 mx-4 bg-neutral-200 dark:bg-neutral-700 opacity-30"></span>
                                                                     </div>
 
                                                                     <FieldArray name={`selection_groups.${gIndex}.options`}>
@@ -404,7 +404,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                                                     const optionTouched = groupTouched?.options?.[oIndex];
 
                                                                                     return (
-                                                                                        <div key={oIndex} className={`flex flex-col lg:flex-row gap-3 items-start lg:items-end bg-white dark:bg-zinc-900/50 p-4 rounded-2xl border transition-all hover:border-indigo-500/30 ${optionErrors ? 'border-red-200 dark:border-red-900/30' : 'border-zinc-100 dark:border-zinc-800/50'} shadow-sm relative`}>
+                                                                                        <div key={oIndex} className={`flex flex-col lg:flex-row gap-3 items-start lg:items-end bg-white dark:bg-mauve-900/50 p-4 rounded-2xl border transition-all hover:border-indigo-500/30 ${optionErrors ? 'border-red-200 dark:border-red-900/30' : 'border-zinc-100 dark:border-mauve-800/50'} shadow-sm relative`}>
                                                                                             <div className="flex-1 w-full">
                                                                                                 <Select
                                                                                                     label="Menu Item"
@@ -469,7 +469,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                                     })}
                                                     <Button
                                                         type="button"
-                                                        className="w-full py-6 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-500 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3"
+                                                        className="w-full py-6 rounded-3xl border-2 border-dashed border-mauve-200 dark:border-zinc-700 bg-transparent text-zinc-500 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3"
                                                         onClick={() => push({ name: '', min_selection: 1, max_selection: 1, is_required: true, options: [{ menu_item_id: '', variant_id: '', additional_price: 0, is_default: false }] })}
                                                     >
                                                         <i className="ri-add-line text-lg"></i>
@@ -487,7 +487,7 @@ export const DealCreateForm: React.FC<DealCreateFormProps> = ({
                                 </div>
                             )}
 
-                            <div className="flex justify-between items-center pt-8 border-t dark:border-zinc-800">
+                            <div className="flex justify-between items-center pt-8 border-t dark:border-mauve-800">
                                 <Button
                                     type="button"
                                     variant="ghost"

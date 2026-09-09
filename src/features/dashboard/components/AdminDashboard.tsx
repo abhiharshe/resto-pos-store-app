@@ -3,7 +3,7 @@ import Card from '../../../components/common/Card';
 import { Dropdown } from '../../../components/common/Dropdown';
 import { useStores } from '../../stores/api/storesApi';
 import { useAppSelector } from '../../../app/hooks';
-import Datepicker from "react-tailwindcss-datepicker";
+import { DateRangePicker } from '../../../components/common/DateRangePicker';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/common/Button';
 import { StatusBadge } from '../../../components/common/StatusBadge';
@@ -61,12 +61,12 @@ const AdminDashboard = () => {
     }, [dashboard?.revenue_trend]);
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 pb-10">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h3 className="text-2xl font-semibold text-zinc-900 dark:text-white">Dashboard</h3>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">
+                    <h3 className="text-2xl font-semibold text-neutral-900 dark:text-white">Dashboard</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
                         Real-time analytics across {summary?.active_stores ?? stores?.length ?? 0} active locations
                         {isFetching && <span className="ml-2 inline-block text-xs text-indigo-500 animate-pulse font-semibold">Updating...</span>}
                     </p>
@@ -102,8 +102,8 @@ const AdminDashboard = () => {
 
             {/* Filters Bar */}
             {isFilterVisible && (
-                <div className="p-4 flex flex-wrap items-center gap-4 bg-gray-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-200 dark:border-zinc-700 animate-in slide-in-from-top-2 duration-200">
-                    <div className="w-56">
+                <div className="p-4 flex flex-wrap items-center gap-4 bg-gray-50 dark:bg-neutral-800/50 rounded-2xl border border-mauve-200 dark:border-zinc-700 animate-in slide-in-from-top-2 duration-200">
+                    <div className="w-80">
                         <Dropdown
                             label="Store Location"
                             options={storeOptions}
@@ -111,33 +111,30 @@ const AdminDashboard = () => {
                             onChange={(val) => setSelectedStore(val)}
                         />
                     </div>
-                    <div className="w-72">
-                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
-                            Date Range
-                        </label>
-                        <Datepicker
-                            value={dateValue as any}
-                            onChange={(newValue: any) => setDateValue(newValue)}
+                    <div className="w-80">
+                        <DateRangePicker
+                            label="Date Range"
+                            value={dateValue}
+                            onChange={(newValue) => setDateValue(newValue)}
                             showShortcuts={true}
-                            primaryColor={"indigo"}
-                            toggleClassName="absolute top-0 right-0 h-full px-3 text-zinc-400 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed"
-                            containerClassName="relative w-full text-zinc-700 dark:text-zinc-200"
-                            inputClassName="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                         />
                     </div>
                     {(selectedStore !== 'all' || dateValue.startDate) && (
-                        <div className="flex items-end pb-0.5">
+                        <div className="w-72">
                             <Button
-                                variant="ghost"
-                                size="sm"
+                                styleType="outline"
+                                variant="danger"
+                                size="md"
                                 onClick={() => {
                                     setSelectedStore('all');
                                     setDateValue({ startDate: null, endDate: null });
                                 }}
+                                className='md:mt-6'
                             >
                                 Clear Filters
                             </Button>
                         </div>
+
                     )}
                 </div>
             )}
@@ -149,7 +146,7 @@ const AdminDashboard = () => {
             />
 
             {/* Key Metric KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                     label="Total Revenue"
                     value={isLoading ? "..." : `${currency}${summary?.total_revenue?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? '0.00'}`}
@@ -182,14 +179,14 @@ const AdminDashboard = () => {
 
             {/* Financial Breakdown Badges */}
             {summary?.revenue_breakdown && (
-                <div className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 rounded-2xl p-4 shadow-sm">
+                <div className="bg-white dark:bg-neutral-800 border border-mauve-200 dark:border-zinc-700/60 rounded-lg p-4 shadow-sm">
                     <div className="flex items-center justify-between mb-3">
                         <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                             Revenue Stream Breakdown
                         </span>
                         <span className="text-xs text-zinc-500 font-medium">Current Period</span>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                         <BreakdownItem label="Items Subtotal" amount={summary.revenue_breakdown.subtotal} currency={currency} />
                         <BreakdownItem label="Taxes" amount={summary.revenue_breakdown.tax_amount} currency={currency} />
                         <BreakdownItem label="Service Charges" amount={summary.revenue_breakdown.service_charge} currency={currency} />
@@ -201,15 +198,15 @@ const AdminDashboard = () => {
             )}
 
             {/* Charts & Store Leaderboard */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {/* Revenue Trend Chart */}
                 <Card className="lg:col-span-2">
                     <div className="flex items-center justify-between mb-6">
                         <div>
-                            <h4 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider">
+                            <h4 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider">
                                 Daily Revenue Trend
                             </h4>
-                            <p className="text-xs text-zinc-500 dark:text-zinc-400">Aggregated sales volume over time</p>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400">Aggregated sales volume over time</p>
                         </div>
                     </div>
 
@@ -223,7 +220,7 @@ const AdminDashboard = () => {
                             <span>No sales data found for the selected period</span>
                         </div>
                     ) : (
-                        <div className="h-64 flex items-end justify-between gap-2 px-2 pt-6 border-b border-zinc-100 dark:border-zinc-800 pb-2">
+                        <div className="h-64 flex items-end justify-between gap-2 px-2 pt-6 border-b border-zinc-100 dark:border-mauve-800 pb-2">
                             {dashboard.revenue_trend.map((pt, i) => {
                                 const heightPct = Math.max(Math.round((pt.revenue / maxTrendRevenue) * 100), 6);
                                 const dateLabel = new Date(pt.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
@@ -233,7 +230,7 @@ const AdminDashboard = () => {
                                             className="w-full bg-indigo-500/20 group-hover:bg-indigo-600 rounded-t-lg transition-all duration-200 relative min-h-[12px]"
                                             style={{ height: `${heightPct}%` }}
                                         >
-                                            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-[11px] py-1.5 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg z-20 pointer-events-none">
+                                            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-[11px] py-1.5 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg z-20 pointer-events-none">
                                                 <div className="font-semibold">{currency}{pt.revenue.toLocaleString('en-IN')}</div>
                                                 <div className="text-[9px] opacity-75">{pt.order_count} orders</div>
                                             </div>
@@ -251,7 +248,7 @@ const AdminDashboard = () => {
                 {/* Top Performing Stores */}
                 <Card>
                     <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider">
+                        <h4 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider">
                             Store Leaderboard
                         </h4>
                         <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">By Revenue</span>
@@ -266,13 +263,13 @@ const AdminDashboard = () => {
                             {dashboard.top_stores.map((st, i) => (
                                 <div
                                     key={st.store_id}
-                                    className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/60 transition-all hover:border-zinc-300 dark:hover:border-zinc-600"
+                                    className="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 border border-zinc-100 dark:border-zinc-700/60 transition-all hover:border-zinc-300 dark:hover:border-zinc-600"
                                 >
                                     <div className="flex items-center justify-between mb-1.5">
                                         <div className="flex items-center gap-2.5">
                                             <span className={`w-6 h-6 rounded-md flex items-center justify-center text-xs font-semibold ${i === 0 ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' :
-                                                i === 1 ? 'bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300' :
-                                                    'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+                                                i === 1 ? 'bg-neutral-200 text-zinc-700 dark:bg-neutral-700 dark:text-zinc-300' :
+                                                    'bg-neutral-100 text-zinc-600 dark:bg-neutral-800 dark:text-zinc-400'
                                                 }`}>
                                                 #{i + 1}
                                             </span>
@@ -284,7 +281,7 @@ const AdminDashboard = () => {
                                             </div>
                                         </div>
                                         <div className="text-right">
-                                            <span className="text-sm font-black text-zinc-900 dark:text-white">
+                                            <span className="text-sm font-black text-neutral-900 dark:text-white">
                                                 {currency}{st.total_revenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                                             </span>
                                             <p className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400">
@@ -293,7 +290,7 @@ const AdminDashboard = () => {
                                         </div>
                                     </div>
                                     {/* Share bar */}
-                                    <div className="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-1.5 overflow-hidden">
+                                    <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-1.5 overflow-hidden">
                                         <div
                                             className="bg-indigo-600 h-1.5 rounded-full"
                                             style={{ width: `${Math.min(st.contribution_pct, 100)}%` }}
@@ -307,10 +304,10 @@ const AdminDashboard = () => {
             </div>
 
             {/* Sales Distribution & Top Selling Items */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {/* Sales by Order Type */}
                 <Card>
-                    <h4 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider mb-4">
+                    <h4 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider mb-4">
                         Order Types
                     </h4>
                     {isLoading ? (
@@ -327,7 +324,7 @@ const AdminDashboard = () => {
                                         <span className="text-xs text-zinc-400 font-medium">({ot.count})</span>
                                     </div>
                                     <div className="text-right">
-                                        <span className="font-semibold text-zinc-900 dark:text-white">{currency}{ot.revenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
+                                        <span className="font-semibold text-neutral-900 dark:text-white">{currency}{ot.revenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
                                         <span className="ml-2 text-xs font-semibold text-zinc-400">{ot.percentage}%</span>
                                     </div>
                                 </div>
@@ -338,7 +335,7 @@ const AdminDashboard = () => {
 
                 {/* Sales by Payment Method */}
                 <Card>
-                    <h4 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider mb-4">
+                    <h4 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider mb-4">
                         Payment Methods
                     </h4>
                     {isLoading ? (
@@ -355,7 +352,7 @@ const AdminDashboard = () => {
                                         <span className="text-xs text-zinc-400 font-medium">({pm.count})</span>
                                     </div>
                                     <div className="text-right">
-                                        <span className="font-semibold text-zinc-900 dark:text-white">{currency}{pm.revenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
+                                        <span className="font-semibold text-neutral-900 dark:text-white">{currency}{pm.revenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
                                         <span className="ml-2 text-xs font-semibold text-zinc-400">{pm.percentage}%</span>
                                     </div>
                                 </div>
@@ -366,7 +363,7 @@ const AdminDashboard = () => {
 
                 {/* Top Selling Items */}
                 <Card>
-                    <h4 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider mb-4">
+                    <h4 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider mb-4">
                         Top Selling Menu Items
                     </h4>
                     {isLoading ? (
@@ -381,7 +378,7 @@ const AdminDashboard = () => {
                                         <p className="font-semibold text-zinc-800 dark:text-zinc-200 truncate">{item.menu_item_name}</p>
                                         <p className="text-[11px] text-zinc-400">{item.category_name || 'Item'} · {item.quantity_sold} sold</p>
                                     </div>
-                                    <span className="font-semibold text-zinc-900 dark:text-white">
+                                    <span className="font-semibold text-neutral-900 dark:text-white">
                                         {currency}{item.total_revenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                                     </span>
                                 </div>
@@ -395,10 +392,10 @@ const AdminDashboard = () => {
             <Card>
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <h4 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider">
+                        <h4 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider">
                             Recent Order Activities
                         </h4>
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400">Latest transactions across stores</p>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400">Latest transactions across stores</p>
                     </div>
                     <Button variant="ghost" size="sm" onClick={() => navigate('/orders')}>
                         View All Orders
@@ -413,7 +410,7 @@ const AdminDashboard = () => {
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse text-sm">
                             <thead>
-                                <tr className="border-b border-zinc-100 dark:border-zinc-800 text-zinc-400 text-xs uppercase font-semibold">
+                                <tr className="border-b border-zinc-100 dark:border-mauve-800 text-zinc-400 text-xs uppercase font-semibold">
                                     <th className="py-3 px-3">Order #</th>
                                     <th className="py-3 px-3">Store</th>
                                     <th className="py-3 px-3">Guest / Customer</th>
@@ -425,25 +422,25 @@ const AdminDashboard = () => {
                             </thead>
                             <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/60 font-medium">
                                 {dashboard.recent_orders.map((ord) => (
-                                    <tr key={ord.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/40 transition-colors">
-                                        <td className="py-3 px-3 font-semibold text-zinc-900 dark:text-white">
+                                    <tr key={ord.id} className="hover:bg-neutral-50/50 dark:hover:bg-neutral-800/40 transition-colors">
+                                        <td className="py-3 px-3 font-semibold text-neutral-900 dark:text-white">
                                             {ord.order_number}
                                         </td>
                                         <td className="py-3 px-3 text-zinc-600 dark:text-zinc-300">
                                             {ord.store_name}
                                         </td>
-                                        <td className="py-3 px-3 text-zinc-500 dark:text-zinc-400">
+                                        <td className="py-3 px-3 text-neutral-500 dark:text-neutral-400">
                                             {ord.guest_name || 'Walk-in Guest'}
                                         </td>
                                         <td className="py-3 px-3">
-                                            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-zinc-700 dark:text-zinc-300">
                                                 {ord.order_type.replace('_', ' ')}
                                             </span>
                                         </td>
                                         <td className="py-3 px-3">
                                             <StatusBadge status={ord.status} />
                                         </td>
-                                        <td className="py-3 px-3 font-semibold text-zinc-900 dark:text-white">
+                                        <td className="py-3 px-3 font-semibold text-neutral-900 dark:text-white">
                                             {currency}{ord.total_amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                                         </td>
                                         <td className="py-3 px-3 text-right text-xs text-zinc-400">
@@ -497,7 +494,7 @@ const StatCard = ({ label, value, trendPct, icon, color }: StatCardProps) => {
     const trendDisplay = trendPct !== undefined && trendPct !== null ? `${isPositive ? '+' : ''}${trendPct}%` : null;
 
     return (
-        <Card className="flex flex-col relative overflow-hidden group shadow-sm">
+        <Card className="flex flex-col relative overflow-hidden group shadow-sm hover:-translate-y-1 transition-transform duration-300">
             <div className={`absolute top-0 right-0 w-24 h-24 ${c.bg} rounded-full -mr-8 -mt-8 group-hover:scale-110 transition-transform duration-500`} />
             <div className="flex items-center gap-3 mb-4">
                 <div className={`w-10 h-10 rounded-xl ${c.iconBg} flex items-center justify-center ${c.iconText}`}>
@@ -519,7 +516,7 @@ const StatCard = ({ label, value, trendPct, icon, color }: StatCardProps) => {
 };
 
 const BreakdownItem = ({ label, amount, currency, isDiscount }: { label: string; amount: number; currency: string; isDiscount?: boolean }) => (
-    <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-700/50">
+    <div className="p-2.5 rounded-xl bg-neutral-50 dark:bg-neutral-800/40 border border-zinc-100 dark:border-zinc-700/50">
         <span className="text-[11px] text-zinc-400 font-medium block truncate">{label}</span>
         <span className={`text-sm font-semibold block mt-0.5 ${isDiscount && amount > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-zinc-800 dark:text-zinc-100'}`}>
             {isDiscount && amount > 0 ? `-${currency}${amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}` : `${currency}${amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`}

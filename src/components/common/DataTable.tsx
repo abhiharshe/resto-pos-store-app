@@ -40,21 +40,21 @@ export function DataTable<T extends object>({ data, columns, isLoading }: DataTa
             <div className="w-full overflow-hidden rounded-lg animate-pulse">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-zinc-50 dark:bg-zinc-800/50">
+                        <thead className="bg-neutral-50 dark:bg-neutral-800/50">
                             <tr>
                                 {Array.from({ length: columns.length }).map((_, idx) => (
-                                    <th key={idx} className="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800">
-                                        <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-3/4"></div>
+                                    <th key={idx} className="px-4 py-3 border-b border-zinc-100 dark:border-mauve-800">
+                                        <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4"></div>
                                     </th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 bg-white dark:bg-zinc-800">
+                        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 bg-white dark:bg-neutral-800">
                             {Array.from({ length: 5 }).map((_, rowIdx) => (
                                 <tr key={rowIdx}>
                                     {Array.from({ length: columns.length }).map((_, colIdx) => (
                                         <td key={colIdx} className="px-4 py-4">
-                                            <div className="h-4 bg-zinc-100 dark:bg-zinc-700/50 rounded w-full"></div>
+                                            <div className="h-4 bg-neutral-100 dark:bg-neutral-700/50 rounded w-full"></div>
                                         </td>
                                     ))}
                                 </tr>
@@ -62,35 +62,35 @@ export function DataTable<T extends object>({ data, columns, isLoading }: DataTa
                         </tbody>
                     </table>
                 </div>
-                <div className="px-4 py-3 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 flex justify-between items-center">
+                <div className="px-4 py-3 border-t border-zinc-100 dark:border-mauve-800 bg-neutral-50 dark:bg-neutral-800/50 flex justify-between items-center">
                     <div className="flex gap-2">
-                        <div className="h-8 w-20 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
-                        <div className="h-8 w-20 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
+                        <div className="h-8 w-20 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
+                        <div className="h-8 w-20 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
                     </div>
-                    <div className="h-4 w-24 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
+                    <div className="h-4 w-24 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="w-full overflow-hidden rounded-lg border border-zinc-100 dark:border-zinc-800">
+        <div className="w-full overflow-hidden rounded-lg border border-zinc-100 dark:border-mauve-800">
             <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                    <thead className="bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 uppercase text-xs font-semibold">
+                    <thead className="bg-neutral-50 dark:bg-neutral-800/50 text-neutral-500 dark:text-neutral-400 uppercase text-xs font-semibold">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <tr key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <th key={header.id} className="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800">
+                                    <th key={header.id} className="px-4 py-3 border-b border-zinc-100 dark:border-mauve-800">
                                         {flexRender(header.column.columnDef.header, header.getContext())}
                                     </th>
                                 ))}
                             </tr>
                         ))}
                     </thead>
-                    <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 bg-white dark:bg-zinc-800">
+                    <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 bg-white dark:bg-neutral-800">
                         {table.getRowModel().rows.map((row) => (
-                            <tr key={row.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors">
+                            <tr key={row.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors">
                                 {row.getVisibleCells().map((cell) => (
                                     <td key={cell.id} className="px-4 py-3 text-zinc-700 dark:text-zinc-300">
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -110,7 +110,7 @@ export function DataTable<T extends object>({ data, columns, isLoading }: DataTa
             </div>
 
             {/* Pagination */}
-            <div className="px-4 py-3 flex items-center justify-between border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50">
+            <div className="px-4 py-3 flex items-center justify-between border-t border-zinc-100 dark:border-mauve-800 bg-neutral-50 dark:bg-neutral-800/50">
                 <div className="flex gap-2">
                     <Button
                         variant='outline'

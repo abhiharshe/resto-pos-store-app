@@ -44,7 +44,7 @@ const ItemEdit = () => {
     if (!item) {
         return (
             <div className="text-center py-12">
-                <h3 className="text-lg font-medium text-zinc-900 dark:text-white">Item not found</h3>
+                <h3 className="text-lg font-medium text-neutral-900 dark:text-white">Item not found</h3>
                 <button onClick={() => navigate('/menu/items')} className="mt-4 text-indigo-600 hover:text-indigo-700">Go back to list</button>
             </div>
         );

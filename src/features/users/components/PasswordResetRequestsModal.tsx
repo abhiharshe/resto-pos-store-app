@@ -65,14 +65,14 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
         >
             <div className="p-6 space-y-5">
                 {/* Header Filter Tabs */}
-                <div className="flex items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                    <div className="flex gap-1.5 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl">
+                <div className="flex items-center justify-between gap-2 border-b border-zinc-100 dark:border-mauve-800 pb-3">
+                    <div className="flex gap-1.5 bg-neutral-100 dark:bg-neutral-800 p-1 rounded-xl">
                         <button
                             type="button"
                             onClick={() => setStatusFilter('PENDING')}
                             className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 ${statusFilter === 'PENDING'
-                                    ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                                    : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                                ? 'bg-white dark:bg-mauve-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                                : 'text-zinc-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white'
                                 }`}
                         >
                             <span>Pending</span>
@@ -86,8 +86,8 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                             type="button"
                             onClick={() => setStatusFilter('COMPLETED')}
                             className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${statusFilter === 'COMPLETED'
-                                    ? 'bg-white dark:bg-zinc-900 text-green-600 dark:text-green-400 shadow-sm'
-                                    : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                                ? 'bg-white dark:bg-mauve-900 text-green-600 dark:text-green-400 shadow-sm'
+                                : 'text-zinc-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white'
                                 }`}
                         >
                             Completed
@@ -96,8 +96,8 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                             type="button"
                             onClick={() => setStatusFilter('REJECTED')}
                             className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${statusFilter === 'REJECTED'
-                                    ? 'bg-white dark:bg-zinc-900 text-red-600 dark:text-red-400 shadow-sm'
-                                    : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                                ? 'bg-white dark:bg-mauve-900 text-red-600 dark:text-red-400 shadow-sm'
+                                : 'text-zinc-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white'
                                 }`}
                         >
                             Rejected
@@ -106,15 +106,15 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                             type="button"
                             onClick={() => setStatusFilter('ALL')}
                             className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${statusFilter === 'ALL'
-                                    ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-sm'
-                                    : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                                ? 'bg-white dark:bg-mauve-900 text-neutral-900 dark:text-white shadow-sm'
+                                : 'text-zinc-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white'
                                 }`}
                         >
                             All
                         </button>
                     </div>
 
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                    <span className="text-xs text-neutral-500 dark:text-neutral-400">
                         {requests?.length || 0} {requests?.length === 1 ? 'request' : 'requests'}
                     </span>
                 </div>
@@ -127,7 +127,7 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                     </div>
                 ) : !requests || requests.length === 0 ? (
                     <div className="py-12 text-center text-zinc-400 dark:text-zinc-500">
-                        <div className="w-14 h-14 mx-auto rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-2xl mb-3">
+                        <div className="w-14 h-14 mx-auto rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-2xl mb-3">
                             <i className="ri-shield-keyhole-line" />
                         </div>
                         <p className="font-semibold text-sm text-zinc-700 dark:text-zinc-300">No reset requests found</p>
@@ -138,14 +138,14 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                         {requests.map((req) => (
                             <div
                                 key={req.id}
-                                className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-zinc-200 dark:hover:border-zinc-700"
+                                className="p-4 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-zinc-100 dark:border-mauve-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-mauve-200 dark:hover:border-zinc-700"
                             >
                                 <div className="space-y-1.5 min-w-0">
                                     <div className="flex items-center gap-2 flex-wrap">
-                                        <span className="font-semibold text-sm text-zinc-900 dark:text-white">
+                                        <span className="font-semibold text-sm text-neutral-900 dark:text-white">
                                             {req.user?.full_name || 'Staff User'}
                                         </span>
-                                        <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                                        <span className="text-xs text-neutral-500 dark:text-neutral-400">
                                             ({req.user?.email || 'No email'})
                                         </span>
                                         <StatusBadge
@@ -160,7 +160,7 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                                         />
                                     </div>
 
-                                    <div className="flex items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400 flex-wrap">
+                                    <div className="flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400 flex-wrap">
                                         {req.store?.name && (
                                             <span className="flex items-center gap-1">
                                                 <i className="ri-store-2-line" /> {req.store.name}
@@ -177,7 +177,7 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                                     </div>
 
                                     {req.reason && (
-                                        <p className="text-xs bg-white dark:bg-zinc-900/80 p-2 rounded-lg border border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300 italic">
+                                        <p className="text-xs bg-white dark:bg-mauve-900/80 p-2 rounded-lg border border-zinc-100 dark:border-mauve-800 text-zinc-600 dark:text-zinc-300 italic">
                                             "{req.reason}"
                                         </p>
                                     )}
@@ -207,7 +207,7 @@ export const PasswordResetRequestsModal: React.FC<PasswordResetRequestsModalProp
                     </div>
                 )}
 
-                <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex justify-end">
+                <div className="pt-3 border-t border-zinc-100 dark:border-mauve-800 flex justify-end">
                     <Button variant="outline" onClick={onClose}>
                         Close
                     </Button>

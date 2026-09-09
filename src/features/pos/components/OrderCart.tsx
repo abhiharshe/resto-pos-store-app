@@ -118,11 +118,11 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onEdit }) => {
 
                 <div className="mt-2 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className={`flex items-center gap-2 rounded-lg p-1 border ${item.isPromoItem ? 'bg-indigo-100/50 dark:bg-indigo-900/30 border-indigo-200/50' : 'bg-gray-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700'}`}>
+                        <div className={`flex items-center gap-2 rounded-lg p-1 border ${item.isPromoItem ? 'bg-indigo-100/50 dark:bg-indigo-900/30 border-indigo-200/50' : 'bg-gray-100 dark:bg-neutral-800 border-mauve-200 dark:border-zinc-700'}`}>
                             <button
                                 onClick={() => !item.isPromoItem && dispatch(decrementQuantity(item.cartId))}
                                 disabled={item.isPromoItem}
-                                className={`w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-zinc-900 shadow-sm text-indigo-600 dark:text-indigo-400 transition-colors ${item.isPromoItem ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50 dark:hover:bg-zinc-800'}`}
+                                className={`w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-mauve-900 shadow-sm text-indigo-600 dark:text-indigo-400 transition-colors ${item.isPromoItem ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50 dark:hover:bg-neutral-800'}`}
                             >
                                 <i className="ri-subtract-line text-xs"></i>
                             </button>
@@ -130,7 +130,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onEdit }) => {
                             <button
                                 onClick={() => !item.isPromoItem && dispatch(incrementQuantity(item.cartId))}
                                 disabled={item.isPromoItem}
-                                className={`w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-zinc-900 shadow-sm text-indigo-600 dark:text-indigo-400 transition-colors ${item.isPromoItem ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50 dark:hover:bg-zinc-800'}`}
+                                className={`w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-mauve-900 shadow-sm text-indigo-600 dark:text-indigo-400 transition-colors ${item.isPromoItem ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50 dark:hover:bg-neutral-800'}`}
                             >
                                 <i className="ri-add-line text-xs"></i>
                             </button>
@@ -177,7 +177,7 @@ const CartDealCard: React.FC<{ deal: any }> = ({ deal }) => {
                                 {item.selectedAddons?.length > 0 && (
                                     <div className="ml-3.5 flex flex-wrap gap-1 text-[10px] text-zinc-500">
                                         {item.selectedAddons.map((addon: any, aIdx: number) => (
-                                            <span key={aIdx} className="bg-white/80 dark:bg-zinc-800/80 px-1.5 py-0.5 rounded border border-emerald-100 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
+                                            <span key={aIdx} className="bg-white/80 dark:bg-neutral-800/80 px-1.5 py-0.5 rounded border border-emerald-100 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
                                                 +{addon.name} (+₹{addon.price})
                                             </span>
                                         ))}
@@ -194,17 +194,17 @@ const CartDealCard: React.FC<{ deal: any }> = ({ deal }) => {
             </div>
 
             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 rounded-lg p-1 bg-white/50 dark:bg-zinc-800 border border-emerald-100 dark:border-emerald-900/30">
+                <div className="flex items-center gap-2 rounded-lg p-1 bg-white/50 dark:bg-neutral-800 border border-emerald-100 dark:border-emerald-900/30">
                     <button
                         onClick={() => dispatch(decrementDealQuantity(deal.cartId))}
-                        className="w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-zinc-900 shadow-sm text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 transition-colors"
+                        className="w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-mauve-900 shadow-sm text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 transition-colors"
                     >
                         <i className="ri-subtract-line text-xs"></i>
                     </button>
                     <span className="text-xs font-black min-w-6 text-center text-emerald-600 dark:text-emerald-400">{deal.quantity}</span>
                     <button
                         onClick={() => dispatch(incrementDealQuantity(deal.cartId))}
-                        className="w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-zinc-900 shadow-sm text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 transition-colors"
+                        className="w-6 h-6 flex items-center justify-center rounded bg-white dark:bg-mauve-900 shadow-sm text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 transition-colors"
                     >
                         <i className="ri-add-line text-xs"></i>
                     </button>
@@ -308,11 +308,11 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                 <div className="flex items-center justify-between p-2">
                     <button
                         onClick={() => setIsCartOpen(false)}
-                        className="w-8 h-8 hover:bg-gray-100 dark:hover:bg-zinc-800 md:hidden rounded-full"
+                        className="w-8 h-8 hover:bg-gray-100 dark:hover:bg-neutral-800 md:hidden rounded-full"
                     >
                         <i className="ri-close-line text-2xl"></i>
                     </button>
-                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-300">Your Order ({cartCount})</h3>
+                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-zinc-300">Your Order ({cartCount})</h3>
                 </div>
                 <div className="flex items-center gap-1">
                     <IconButton
@@ -396,7 +396,7 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                         <div className="flex items-center gap-2 min-w-0">
                             <i className="ri-user-star-line text-indigo-600 dark:text-indigo-400"></i>
                             <div className="min-w-0">
-                                <p className="text-xs font-semibold text-zinc-900 dark:text-white truncate">
+                                <p className="text-xs font-semibold text-neutral-900 dark:text-white truncate">
                                     {customerName || 'Guest Customer'}
                                 </p>
                                 {customerPhone && (
@@ -411,13 +411,13 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                 <div className="grid grid-cols-1 gap-3">
                     <div className="space-y-2">
                         <h3 className="text-sm font-medium text-gray-400 uppercase tracking-widest ml-1">Order Type</h3>
-                        <div className="flex gap-1 bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl border dark:border-zinc-700">
+                        <div className="flex gap-1 bg-gray-100 dark:bg-neutral-800 p-1 rounded-xl border dark:border-zinc-700">
                             {(['DINE_IN', 'PICKUP', 'DELIVERY'] as const).map((type) => (
                                 <button
                                     key={type}
                                     onClick={() => dispatch(setOrderType(type))}
                                     className={`flex-1 py-1.5 text-xs font-medium rounded-lg capitalize transition-all ${orderType === type
-                                        ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border dark:border-zinc-700'
+                                        ? 'bg-white dark:bg-mauve-900 text-indigo-600 dark:text-indigo-400 shadow-sm border dark:border-zinc-700'
                                         : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                                         }`}
                                 >
@@ -429,13 +429,13 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
 
                     <div className="space-y-2">
                         <h3 className="text-sm font-medium text-gray-400 uppercase tracking-widest ml-1">Payment</h3>
-                        <div className="flex gap-1 bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl border dark:border-zinc-700">
+                        <div className="flex gap-1 bg-gray-100 dark:bg-neutral-800 p-1 rounded-xl border dark:border-zinc-700">
                             {(['CASH', 'ONLINE', 'CARD'] as const).map((mode) => (
                                 <button
                                     key={mode}
                                     onClick={() => dispatch(setPaymentMode(mode))}
                                     className={`flex-1 py-1.5 text-xs font-medium rounded-lg capitalize transition-all ${paymentMode === mode
-                                        ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border dark:border-zinc-700'
+                                        ? 'bg-white dark:bg-mauve-900 text-indigo-600 dark:text-indigo-400 shadow-sm border dark:border-zinc-700'
                                         : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                                         }`}
                                 >
@@ -447,14 +447,14 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                 </div>
 
                 {/* Summary */}
-                <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl space-y-1.5 border border-zinc-100 dark:border-zinc-800">
+                <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-2xl space-y-1.5 border border-zinc-100 dark:border-mauve-800">
                     <div className="flex justify-between text-md text-gray-500 font-medium">
                         <span>Subtotal</span>
-                        <span className="text-zinc-900 dark:text-zinc-300">₹{subtotal}</span>
+                        <span className="text-neutral-900 dark:text-zinc-300">₹{subtotal}</span>
                     </div>
                     <div className="flex justify-between text-md text-gray-500 font-medium">
                         <span>Tax (5%)</span>
-                        <span className="text-zinc-900 dark:text-zinc-300">₹{tax.toFixed(2)}</span>
+                        <span className="text-neutral-900 dark:text-zinc-300">₹{tax.toFixed(2)}</span>
                     </div>
                     {discountAmount > 0 && (
                         <div className="flex justify-between text-md text-emerald-600 font-semibold italic group relative">
@@ -471,7 +471,7 @@ const OrderCart: React.FC<{ setIsCartOpen: (open: boolean) => void, onCustomerCl
                             <span>- ₹{discountAmount.toFixed(2)}</span>
                         </div>
                     )}
-                    <div className="flex justify-between font-black text-lg text-zinc-900 dark:text-white pt-1.5 mt-1 border-t border-zinc-200 dark:border-zinc-700">
+                    <div className="flex justify-between font-black text-lg text-neutral-900 dark:text-white pt-1.5 mt-1 border-t border-mauve-200 dark:border-zinc-700">
                         <span>Total</span>
                         <span className="text-indigo-600 dark:text-indigo-400">₹{total.toFixed(2)}</span>
                     </div>

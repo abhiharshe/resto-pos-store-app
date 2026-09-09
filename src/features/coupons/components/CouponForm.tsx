@@ -60,8 +60,8 @@ export const CouponForm: React.FC<CouponFormProps> = ({ title, initialData, onSu
         <div>
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-xl font-semibold text-zinc-900 dark:text-white">{title}</h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">
+                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white">{title}</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">
                         {initialData ? `Editing coupon ${initialData.code}` : 'Create a new promotional discount'}
                     </p>
                 </div>
@@ -119,8 +119,8 @@ export const CouponForm: React.FC<CouponFormProps> = ({ title, initialData, onSu
                             </div>
 
                             {/* Discount Rules */}
-                            <div className="border-t border-zinc-100 dark:border-zinc-800 pt-8">
-                                <h4 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <div className="border-t border-zinc-100 dark:border-mauve-800 pt-8">
+                                <h4 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
                                     <i className="ri-percent-line text-indigo-500"></i>
                                     Discount Configuration
                                 </h4>
@@ -163,8 +163,8 @@ export const CouponForm: React.FC<CouponFormProps> = ({ title, initialData, onSu
                             </div>
 
                             {/* Limits & Dates */}
-                            <div className="border-t border-zinc-100 dark:border-zinc-800 pt-8">
-                                <h4 className="text-sm font-semibold text-zinc-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <div className="border-t border-zinc-100 dark:border-mauve-800 pt-8">
+                                <h4 className="text-sm font-semibold text-neutral-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
                                     <i className="ri-timer-2-line text-indigo-500"></i>
                                     Validity & Limits
                                 </h4>
@@ -203,7 +203,7 @@ export const CouponForm: React.FC<CouponFormProps> = ({ title, initialData, onSu
                             </div>
 
                             {/* Toggles */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-neutral-50 dark:bg-neutral-800/50 p-4 rounded-xl border border-zinc-100 dark:border-mauve-800">
                                 <label className="flex items-center gap-3 cursor-pointer group">
                                     <div className="relative flex items-center">
                                         <input
@@ -212,10 +212,10 @@ export const CouponForm: React.FC<CouponFormProps> = ({ title, initialData, onSu
                                             checked={values.is_first_order_only}
                                             onChange={(e) => setFieldValue('is_first_order_only', e.target.checked)}
                                         />
-                                        <div className="w-10 h-6 bg-zinc-200 peer-focus:outline-none dark:bg-zinc-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                        <div className="w-10 h-6 bg-neutral-200 peer-focus:outline-none dark:bg-neutral-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                                     </div>
                                     <div>
-                                        <p className="text-sm font-semibold text-zinc-900 dark:text-white">First Order Only</p>
+                                        <p className="text-sm font-semibold text-neutral-900 dark:text-white">First Order Only</p>
                                         <p className="text-xs text-zinc-500">Only for new customers</p>
                                     </div>
                                 </label>
@@ -228,16 +228,16 @@ export const CouponForm: React.FC<CouponFormProps> = ({ title, initialData, onSu
                                             checked={values.is_active}
                                             onChange={(e) => setFieldValue('is_active', e.target.checked)}
                                         />
-                                        <div className="w-10 h-6 bg-zinc-200 peer-focus:outline-none dark:bg-zinc-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                        <div className="w-10 h-6 bg-neutral-200 peer-focus:outline-none dark:bg-neutral-700 peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
                                     </div>
                                     <div>
-                                        <p className="text-sm font-semibold text-zinc-900 dark:text-white">Active Status</p>
+                                        <p className="text-sm font-semibold text-neutral-900 dark:text-white">Active Status</p>
                                         <p className="text-xs text-zinc-500">Enable/Disable coupon</p>
                                     </div>
                                 </label>
                             </div>
 
-                            <div className="flex gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                            <div className="flex gap-4 pt-4 border-t border-zinc-100 dark:border-mauve-800">
                                 <Button type="submit" isLoading={isLoading} icon="ri-save-line">
                                     {initialData ? 'Update Coupon' : 'Create Coupon'}
                                 </Button>
