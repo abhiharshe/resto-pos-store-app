@@ -3,7 +3,7 @@ import { store } from '../app/store';
 import { logOut, updateAccessToken } from '../features/auth/slices/authSlice';
 
 const getBaseURL = () => {
-    let url = import.meta.env.VITE_APP_API_URL || 'http://127.0.0.1:8000/api/v1';
+    let url = import.meta.env.VITE_APP_TRAM_LINK || 'http://127.0.0.1:8000/api/v1';
     if (!url.endsWith('/')) {
         url += '/';
     }
